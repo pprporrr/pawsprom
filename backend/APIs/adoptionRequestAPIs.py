@@ -48,13 +48,13 @@ async def read_adoption_request_details(request: Request):
         await db_connector.connect()
         data = await request.json()
         
-        requestID = data.get("requestID")
+        pet_petID = data.get("petID")
         
-        if requestID is None:
-            return create_error_response("missing 'requestID' in the request data")
+        if pet_petID is None:
+            return create_error_response("missing 'pet_petID' in the request data")
         
-        query = "SELECT * FROM adoptionRequest WHERE requestID = %s"
-        result = await db_connector.execute_query(query, requestID)
+        query = "SELECT * FROM adoptionRequest WHERE pet_petID = %s"
+        result = await db_connector.execute_query(query, pet_petID)
         
         if not result:
             return create_error_response("adoption request not found")
@@ -73,7 +73,7 @@ async def read_adoption_request_details(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.put("/adoptionrequest/", response_model=dict)
+@router.put("/adoptionrequest/update_status/", response_model=dict)
 async def update_adoption_request(request: Request):
     try:
         await db_connector.connect()

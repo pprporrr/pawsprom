@@ -10,6 +10,7 @@ services:
       - db
     environment:
       - ENV_VAR_NAME=VALUE
+    restart: always
   
   db:
     image: mysql:latest
@@ -18,6 +19,7 @@ services:
       - MYSQL_DATABASE=project
       - MYSQL_USER=project
       - MYSQL_PASSWORD=project
+    restart: always
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -26,6 +28,7 @@ services:
     environment:
       - PMA_HOST=db
       - MYSQL_ROOT_PASSWORD=rootpw
+    restart: always
   
   nginx:
     image: nginx:latest
@@ -35,3 +38,4 @@ services:
       - "80:80"
     depends_on:
       - app
+    restart: always

@@ -75,10 +75,9 @@ async def update_pet_image(request: Request):
         data = await request.json()
         
         imageID = data.get("imageID")
-        pet_petID = data.get("petID")
         imageURL = data.get("imageURL")
         
-        if None in (imageID, pet_petID, imageURL):
+        if None in (imageID, imageURL):
             return create_error_response("missing required fields")
         
         query = "SELECT * FROM petImages WHERE imageID = %s"
@@ -87,10 +86,10 @@ async def update_pet_image(request: Request):
         if not result:
             return create_error_response("pet image not found")
         
-        query = "UPDATE petImages SET pet_petID = %s, imageURL = %s WHERE imageID = %s"
+        query = "UPDATE petImages SET imageURL = %s WHERE imageID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (pet_petID, imageURL, imageID))
+                await cursor.execute(query, (imageURL, imageID))
         
         return create_success_response("pet image updated")
     except Exception as e:

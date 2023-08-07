@@ -90,6 +90,120 @@ async def read_pet_details(request: Request):
     finally:
         await db_connector.disconnect()
 
+@router.get("/pet/list/", response_model=dict)
+async def read_pet_details_list(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        limit = data.get("limitNumber")
+        
+        if limit is None:
+            return create_error_response("missing 'limitNumber' in the request data")
+        
+        query = "SELECT * FROM shelter LIMIT %s"
+        results = await db_connector.execute_query(query, limit)
+        
+        pets = []
+        
+        if not results:
+            return create_error_response("pet not found")
+        
+        for result in results:
+            petDetails = {
+            "petID": result[0][0],
+            "petName": result[0][1],
+            "species": result[0][2],
+            "breed": result[0][3],
+            "age": result[0][4],
+            "gender": result[0][5],
+            "weight": result[0][6],
+            "color": result[0][7],
+            "dateofbirth": result[0][8].isoformat(),
+            "description": result[0][9],
+            "availabilityStatus": result[0][10],
+            "shelters_shelterID": result[0][11]
+            }
+            pets.append(petDetails)
+        
+        return create_success_response(pets)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.get("/pet/search/", response_model=dict)
+async def search_pets(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        searchParams = data.get("searchParams")
+        
+        if searchParams is None:
+            return create_error_response("missing 'searchParams' in the request data")
+        
+        query = "SELECT * FROM pet WHERE "
+        
+        conditions = []
+        values = []
+        
+        if "petName" in searchParams:
+            conditions.append("petName = %s")
+            values.append(searchParams["petName"])
+        if "species" in searchParams:
+            conditions.append("species = %s")
+            values.append(searchParams["species"])
+        if "breed" in searchParams:
+            conditions.append("breed = %s")
+            values.append(searchParams["breed"])
+        if "age" in searchParams:
+            conditions.append("age = %s")
+            values.append(searchParams["age"])
+        if "gender" in searchParams:
+            conditions.append("gender = %s")
+            values.append(searchParams["gender"])
+        if "weight" in searchParams:
+            conditions.append("weight = %s")
+            values.append(searchParams["weight"])
+        if "color" in searchParams:
+            conditions.append("color = %s")
+            values.append(searchParams["color"])
+        
+        if not conditions:
+            return create_error_response("at least one search parameter is required")
+        
+        query += " AND ".join(conditions)
+        
+        results = await db_connector.execute_query(query, tuple(values))
+        
+        if not results:
+            return create_error_response("no matching pets found")
+        
+        pets = []
+        for result in results:
+            petDetails = {
+                "petID": result[0],
+                "petName": result[1],
+                "species": result[2],
+                "breed": result[3],
+                "age": result[4],
+                "gender": result[5],
+                "weight": result[6],
+                "color": result[7],
+                "dateofbirth": result[8].isoformat(),
+                "description": result[9],
+                "availabilityStatus": result[10],
+                "shelters_shelterID": result[11]
+            }
+            pets.append(petDetails)
+        
+        return create_success_response(pets)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 @router.put("/pet/", response_model=dict)
 async def update_pet(request: Request):
     try:

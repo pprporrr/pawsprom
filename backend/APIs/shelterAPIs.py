@@ -76,6 +76,42 @@ async def read_shelter_details(request: Request):
     finally:
         await db_connector.disconnect()
 
+@router.get("/shelter/list", response_model=list)
+async def read_shelter_details_list(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        limit = data.get("limitNumber")
+        
+        if limit is None:
+            return create_error_response("missing 'limitNumber' in the request data")
+        
+        query = "SELECT * FROM shelter LIMIT %s"
+        results = await db_connector.execute_query(query, limit)
+        
+        shelters = []
+        
+        if not results:
+            return create_error_response("shelter not found")
+        
+        for result in results:
+            shelterDetails = {
+                "shelterID": result[0],
+                "shelterName": result[1],
+                "location": result[2],
+                "contactInfo": result[3],
+                "phoneNumber": result[4],
+                "imageURL": result[5]
+            }
+            shelters.append(shelterDetails)
+        
+        return create_success_response(shelters)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 @router.put("/shelter/", response_model=dict)
 async def update_shelter(request: Request):
     try:

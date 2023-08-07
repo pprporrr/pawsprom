@@ -41,19 +41,49 @@ async def create_pet_ownership(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/ownership/", response_model=dict)
+@router.get("/ownership/byOwner/", response_model=dict)
 async def read_pet_ownership_details(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        ownershipID = data.get("ownershipID")
+        user_userID = data.get("userID")
         
-        if ownershipID is None:
-            return create_error_response("missing 'ownershipID' in the request data")
+        if user_userID is None:
+            return create_error_response("missing 'user_userID' in the request data")
         
-        query = "SELECT * FROM petOwnership WHERE ownershipID = %s"
-        result = await db_connector.execute_query(query, ownershipID)
+        query = "SELECT * FROM petOwnership WHERE user_userID = %s"
+        result = await db_connector.execute_query(query, user_userID)
+        
+        if not result:
+            return create_error_response("pet ownership record not found")
+        
+        ownershipDetails = {
+            "ownershipID": result[0][0],
+            "petID": result[0][1],
+            "userID": result[0][2],
+            "adoptionDate": result[0][3].isoformat() if result[0][3] else None,
+        }
+        
+        return create_success_response(ownershipDetails)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.get("/ownership/byPet/", response_model=dict)
+async def read_pet_ownership_details(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        pet_petID = data.get("petID")
+        
+        if pet_petID is None:
+            return create_error_response("missing 'pet_petID' in the request data")
+        
+        query = "SELECT * FROM petOwnership WHERE pet_petID = %s"
+        result = await db_connector.execute_query(query, pet_petID)
         
         if not result:
             return create_error_response("pet ownership record not found")
