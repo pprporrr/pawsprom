@@ -32,7 +32,7 @@ class DBConnector:
 
 def get_db_connector():
     db_config = {
-        "host": "db",
+        "host": "mysql",
         "port": 3306,
         "user": "project",
         "password": "project",
