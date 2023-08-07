@@ -2,3 +2,5 @@ aiomysql==0.2.0
 fastapi==0.100.1
 uvicorn==0.23.1
 cryptography==3.4.7
+aioredis==2.0.1
+prometheus-fastapi-instrumentator==6.1.0

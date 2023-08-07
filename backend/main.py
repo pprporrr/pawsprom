@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from APIs.userAPIs import router as user_router
 from APIs.shelterAPIs import router as shelter_router
 from APIs.petAPIs import router as pet_router
@@ -22,6 +24,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+instrumentator = Instrumentator()
+instrumentator.instrument(app).expose(app)
 
 app.include_router(user_router, prefix="/userAPI", tags=["userAPI"])
 app.include_router(shelter_router, prefix="/shelterAPI", tags=["shelterAPI"])
