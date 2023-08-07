@@ -76,7 +76,7 @@ async def read_shelter_details(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/shelter/list", response_model=list)
+@router.get("/shelter/list/", response_model=dict)
 async def read_shelter_details_list(request: Request):
     try:
         await db_connector.connect()
@@ -86,6 +86,11 @@ async def read_shelter_details_list(request: Request):
         
         if limit is None:
             return create_error_response("missing 'limitNumber' in the request data")
+        
+        try:
+            limit = int(limit)
+        except ValueError:
+            return create_error_response("'limitNumber' must be an integer")
         
         query = "SELECT * FROM shelter LIMIT %s"
         results = await db_connector.execute_query(query, limit)
