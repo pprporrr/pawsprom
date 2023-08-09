@@ -11,6 +11,8 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
+###########################CRUD###########################
+
 @router.post("/adoptionrequest/", response_model=dict)
 async def create_adoption_request(request: Request):
     try:
