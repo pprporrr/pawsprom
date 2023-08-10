@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, File, UploadFile
 from APIs.dbConnector import DBConnector, get_db_connector
 
 router = APIRouter()
@@ -23,16 +23,16 @@ async def create_shelter(request: Request):
         shelterAddress = data.get("address")
         contactInfo = data.get("contactInfo")
         phoneNumber = data.get("phoneNumber")
-        imageURL = data.get("imageURL")
+        shelterImage = data.get("shelterImage")
         
         if None in (shelterName, shelterAddress, contactInfo, phoneNumber):
             return create_error_response("missing required fields")
         
-        query = "INSERT INTO shelter (shelterName, shelterAddress, contactInfo, phoneNumber, imageURL) " \
+        query = "INSERT INTO shelter (shelterName, shelterAddress, contactInfo, phoneNumber, shelterImage) " \
                 "VALUES (%s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (shelterName, shelterAddress, contactInfo, phoneNumber, imageURL))
+                await cursor.execute(query, (shelterName, shelterAddress, contactInfo, phoneNumber, shelterImage))
         
         query = "SELECT * FROM shelter WHERE shelterID = LAST_INSERT_ID()"
         result = await db_connector.execute_query(query)
@@ -69,7 +69,7 @@ async def read_shelter_details(request: Request):
             "shelterAddress": result[0][2],
             "contactInfo": result[0][3],
             "phoneNumber": result[0][4],
-            "imageURL": result[0][5]
+            "shelterImage": result[0][5]
         }
         
         return create_success_response(shelterDetails)
@@ -86,7 +86,7 @@ async def update_shelter(request: Request):
         
         shelterID = data.get("shelterID")
         shelterName = data.get("shelterName")
-        shelterAddress = data.get("shelterAddress")
+        shelterAddress = data.get("address")
         contactInfo = data.get("contactInfo")
         phoneNumber = data.get("phoneNumber")
         
@@ -171,7 +171,7 @@ async def read_shelter_details_list(request: Request):
                 "shelterAddress": result[2],
                 "contactInfo": result[3],
                 "phoneNumber": result[4],
-                "imageURL": result[5]
+                "shelterImage": result[5]
             }
             shelters.append(shelterDetails)
         
@@ -181,17 +181,10 @@ async def read_shelter_details_list(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.put("/shelter/update_image/", response_model=dict)
-async def update_shelter_image(request: Request):
+@router.post("/shelter/update_image/{shelterID}/", response_model=dict)
+async def update_shelter_image(shelterID: int, imageFile: UploadFile = File(...)):
     try:
         await db_connector.connect()
-        data = await request.json()
-        
-        shelterID = data.get("shelterID")
-        imageURL = data.get("imageURL")
-        
-        if None in (shelterID, imageURL):
-            return create_error_response("missing required fields")
         
         query = "SELECT * FROM shelter WHERE shelterID = %s"
         result = await db_connector.execute_query(query, shelterID)
@@ -199,10 +192,16 @@ async def update_shelter_image(request: Request):
         if not result:
             return create_error_response("shelter not found")
         
-        query = "UPDATE shelter SET imageURL = %s WHERE shelterID = %s"
+        with open(imageFile.filename, "wb") as shelterImage:
+            shelterImage.write(imageFile.file.read())
+        
+        if shelterImage is None:
+            return create_error_response("missing imageFile fields")
+        
+        query = "UPDATE shelter SET shelterImage = %s WHERE shelterID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (imageURL, shelterID))
+                await cursor.execute(query, (shelterImage, shelterID))
         
         return create_success_response("shelter image updated")
     except Exception as e:

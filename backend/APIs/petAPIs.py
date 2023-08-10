@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, UploadFile, File
 from typing import List
 import json
 from APIs.dbConnector import DBConnector, get_db_connector
@@ -87,7 +87,7 @@ async def read_pet_details(request: Request):
             "description": result[0][9],
             "features": json.loads(result[0][10]),
             "availabilityStatus": result[0][11],
-            "shelters_shelterID": result[0][12]
+            "shelters_shelterID": result[0][13]
         }
         
         return create_success_response(petDetails)
@@ -166,6 +166,61 @@ async def delete_pet(request: Request):
 
 ##########################################################
 
+@router.post("/pet/create-profile/byUser/", response_model=dict)
+async def create_pet_profile(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        petName = data.get("petName")
+        species = data.get("species")
+        breed = data.get("breed")
+        age = data.get("age")
+        gender = data.get("gender")
+        weight = data.get("weight")
+        color = data.get("color")
+        dateofbirth = data.get("dateofbirth")
+        availabilityStatus = data.get("availabilityStatus")
+        description = data.get("description")
+        features = json.dumps(data.get("features"))
+        user_userID = data.get("userID")
+        
+        if None in (petName, species, breed, gender, color, dateofbirth, availabilityStatus, features):
+            return create_error_response("missing required fields")
+        
+        query = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
+                "features, availabilityStatus) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(query, (petName, species, breed, age, gender, weight, color, dateofbirth,
+                                             description, features, availabilityStatus))
+        
+        query = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
+        result = await db_connector.execute_query(query)
+        
+        if not result:
+            return create_error_response("failed to create pet")
+        
+        pet_petID = int(result[0][0])
+        
+        query = "INSERT INTO petOwnership (pet_petID, user_userID, adoptionDate) VALUES (%s, %s, %s)"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(query, (pet_petID, user_userID, None))
+        
+        query = "SELECT * FROM petOwnership WHERE ownershipID = LAST_INSERT_ID()"
+        result = await db_connector.execute_query(query)
+        
+        if not result:
+            return create_error_response("failed to create pet ownership record")
+        
+        return create_success_response("pet created")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 @router.get("/pet/info-short/", response_model=dict)
 async def read_pet_details_short(request: Request):
     try:
@@ -188,16 +243,17 @@ async def read_pet_details_short(request: Request):
         
         if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
-            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][12])
+            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][13])
             
             petInfo = {
                 "petName": petDetailsresult[0][1],
                 "species": petDetailsresult[0][2],
                 "breed": petDetailsresult[0][3],
-                "address": petAddressresult[0][2],
                 "availabilityStatus": petDetailsresult[0][11],
-                "imageURLs": [row[2] for row in petImagesresult],
-                "features": json.loads(petDetailsresult[0][10])
+                "vaccinationRecord": petDetailsresult[0][12],
+                "image": [row[2] for row in petImagesresult],
+                "features": json.loads(petDetailsresult[0][10]),
+                "address": petAddressresult[0][2]
             }
         elif petDetailsresult[0][11] == "Adopted" or petDetailsresult[0][11] == "Owned":
             petOwnerquery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
@@ -210,10 +266,11 @@ async def read_pet_details_short(request: Request):
                 "petName": petDetailsresult[0][1],
                 "species": petDetailsresult[0][2],
                 "breed": petDetailsresult[0][3],
-                "address": ownerAddressresult[0][6],
                 "availabilityStatus": petDetailsresult[0][11],
-                "imageURLs": [row[2] for row in petImagesresult],
-                "features": json.loads(petDetailsresult[0][10])
+                "vaccinationRecord": petDetailsresult[0][12],
+                "image": [row[2] for row in petImagesresult],
+                "features": json.loads(petDetailsresult[0][10]),
+                "address": ownerAddressresult[0][6]
             }
         
         return create_success_response(petInfo)
@@ -247,7 +304,7 @@ async def read_pet_details_long(request: Request):
         
         if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
-            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][11])
+            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][13])
             
             petInfo = {
             "petName": petDetailsresult[0][1],
@@ -259,10 +316,11 @@ async def read_pet_details_long(request: Request):
             "color": petDetailsresult[0][7],
             "dateofbirth": petDetailsresult[0][8].isoformat(),
             "description": petDetailsresult[0][9],
+            "image": [row[2] for row in petImagesresult],
             "features": json.loads(petDetailsresult[0][10]),
             "availabilityStatus": petDetailsresult[0][11],
-            "shelterID": petDetailsresult[0][12],
-            "imageURLs": [row[2] for row in petImagesresult],
+            "vaccinationRecord": petDetailsresult[0][12],
+            "shelterID": petDetailsresult[0][13],
             "vaccinationName": [row[2] for row in petVaccinesresult],
             "vaccinationDate": [row[3] for row in petVaccinesresult],
             "address": petAddressresult[0][2]
@@ -278,10 +336,10 @@ async def read_pet_details_long(request: Request):
             "color": petDetailsresult[0][7],
             "dateofbirth": petDetailsresult[0][8].isoformat(),
             "description": petDetailsresult[0][9],
+            "image": [row[2] for row in petImagesresult],
             "features": json.loads(petDetailsresult[0][10]),
             "availabilityStatus": petDetailsresult[0][11],
-            "shelterID": petDetailsresult[0][12],
-            "imageURLs": [row[2] for row in petImagesresult],
+            "vaccinationRecord": petDetailsresult[0][12],
             "vaccinationName": [row[2] for row in petVaccinesresult],
             "vaccinationDate": [row[3] for row in petVaccinesresult]
             }
@@ -325,8 +383,11 @@ async def search_pet(request: Request):
         if not results:
             return create_error_response("no matching pets found")
         
+        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        
         pets = []
         for result in results:
+            petImagesresult = await db_connector.execute_query(petImagesquery, result[0])
             petDetails = {
                 "petID": result[0],
                 "petName": result[1],
@@ -338,11 +399,14 @@ async def search_pet(request: Request):
                 "color": result[7],
                 "dateofbirth": result[8].isoformat(),
                 "description": result[9],
+                "image": [row[2] for row in petImagesresult],
                 "features": json.loads(result[10]),
                 "availabilityStatus": result[11],
-                "shelters_shelterID": result[12]
+                "vaccinationRecord": result[12],
+                "shelterID": result[13],
             }
-            pets.append(petDetails)
+            if result[11] == "Available":
+                pets.append(petDetails)
         
         return create_success_response(pets)
     except Exception as e:
@@ -372,8 +436,11 @@ async def search_pet_by_features(request: Request):
         if not results:
             return create_error_response("no matching pets found")
         
+        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        
         pets = []
         for result in results:
+            petImagesresult = await db_connector.execute_query(petImagesquery, result[0])
             petDetails = {
                 "petID": result[0],
                 "petName": result[1],
@@ -385,11 +452,14 @@ async def search_pet_by_features(request: Request):
                 "color": result[7],
                 "dateofbirth": result[8].isoformat(),
                 "description": result[9],
+                "image": [row[2] for row in petImagesresult],
                 "features": json.loads(result[10]),
                 "availabilityStatus": result[11],
-                "shelters_shelterID": result[12]
+                "vaccinationRecord": result[12],
+                "shelterID": result[13],
             }
-            pets.append(petDetails)
+            if result[11] == "Available":
+                pets.append(petDetails)
         
         return create_success_response(pets)
     except Exception as e:
@@ -416,7 +486,10 @@ async def read_pet_details_list_in_shelter(request: Request):
         if not results:
             return create_error_response("pet not found")
         
+        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        
         for result in results:
+            petImagesresult = await db_connector.execute_query(petImagesquery, result[0])
             petDetails = {
             "petID": result[0],
             "petName": result[1],
@@ -428,11 +501,14 @@ async def read_pet_details_list_in_shelter(request: Request):
             "color": result[7],
             "dateofbirth": result[8].isoformat(),
             "description": result[9],
+            "image": [row[2] for row in petImagesresult],
             "features": json.loads(result[10]),
             "availabilityStatus": result[11],
-            "shelters_shelterID": result[12]
+            "vaccinationRecord": result[12],
+            "shelterID": result[13],
             }
-            pets.append(petDetails)
+            if result[11] == "Available":
+                pets.append(petDetails)
         
         return create_success_response(pets)
     except Exception as e:

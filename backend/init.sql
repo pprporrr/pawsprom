@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Aug 09, 2023 at 09:49 AM
+-- Generation Time: Aug 10, 2023 at 01:43 PM
 -- Server version: 8.0.34
 -- PHP Version: 8.2.8
 
@@ -67,6 +67,7 @@ CREATE TABLE `pet` (
   `description` varchar(512) DEFAULT NULL,
   `features` json NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
+  `vaccinationRecord` mediumblob,
   `shelters_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -79,7 +80,7 @@ CREATE TABLE `pet` (
 CREATE TABLE `petImages` (
   `imageID` int NOT NULL,
   `pet_petID` int NOT NULL,
-  `imageURL` varchar(512) NOT NULL
+  `image` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -120,7 +121,7 @@ CREATE TABLE `shelter` (
   `shelterAddress` varchar(512) NOT NULL,
   `contactInfo` varchar(512) NOT NULL,
   `phoneNumber` varchar(16) NOT NULL,
-  `imageURL` varchar(512) DEFAULT NULL
+  `shelterImage` mediumblob
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -138,7 +139,7 @@ CREATE TABLE `user` (
   `phoneNumber` varchar(16) NOT NULL,
   `address` varchar(512) NOT NULL,
   `role` varchar(16) NOT NULL,
-  `imageURL` varchar(512) DEFAULT NULL,
+  `image` mediumblob,
   `shelter_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -223,7 +224,7 @@ ALTER TABLE `adoptionRequest`
 -- AUTO_INCREMENT for table `pet`
 --
 ALTER TABLE `pet`
-  MODIFY `petID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `petID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `petImages`
@@ -247,13 +248,13 @@ ALTER TABLE `petVaccinations`
 -- AUTO_INCREMENT for table `shelter`
 --
 ALTER TABLE `shelter`
-  MODIFY `shelterID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `shelterID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=501;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 
 --
 -- Constraints for dumped tables

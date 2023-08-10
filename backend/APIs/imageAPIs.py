@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, UploadFile, File
 from APIs.dbConnector import DBConnector, get_db_connector
+from fastapi.responses import StreamingResponse
+import io
 
 router = APIRouter()
 
@@ -13,115 +15,56 @@ def create_error_response(error_msg):
 
 ###########################CRUD###########################
 
-@router.post("/image/", response_model=dict)
-async def create_pet_image(request: Request):
+@router.post("/image/{petID}/")
+async def upload_image(petID: int, imageFile: UploadFile = File(...)):
     try:
         await db_connector.connect()
-        data = await request.json()
         
-        pet_petID = data.get("petID")
-        imageURL = data.get("imageURL")
+        if petID is None:
+                return create_error_response("pet not found")
         
-        if None in (pet_petID, imageURL):
-            return create_error_response("missing required fields")
+        with open(imageFile.filename, "wb") as image:
+            image.write(imageFile.file.read())
         
-        query = "INSERT INTO petImages (pet_petID, imageURL) VALUES (%s, %s)"
+        if image is None:
+                return create_error_response("missing imageFile fields")
+        
+        query = "INSERT INTO petImages (pet_petID, image) VALUES (%s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (pet_petID, imageURL))
+                await cursor.execute(query, (petID, image))
         
         query = "SELECT * FROM petImages WHERE imageID = LAST_INSERT_ID()"
         result = await db_connector.execute_query(query)
         
         if not result:
             return create_error_response("failed to create pet image")
-        
+            
         return create_success_response("pet image created")
     except Exception as e:
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
 
-@router.get("/image/", response_model=dict)
-async def read_pet_image_details(request: Request):
+@router.get("/image/{petID}/")
+async def get_pet_image(petID: int):
     try:
         await db_connector.connect()
-        data = await request.json()
         
-        pet_petID = data.get("petID")
-        
-        if pet_petID is None:
+        if petID is None:
             return create_error_response("missing 'petID' in the request data")
         
-        query = "SELECT * FROM petImages WHERE pet_petID = %s"
-        result = await db_connector.execute_query(query, pet_petID)
+        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        petImagesresult = await db_connector.execute_query(petImagesquery, petID)
         
-        if not result:
-            return create_error_response("pet image not found")
+        if not petImagesresult:
+            return create_error_response("image not found")
         
-        imageDetails = {
-            "petID": pet_petID,
-            "imageURLs": [row[2] for row in result]
+        petImages = {
+                "image": [row[2] for row in petImagesresult]
         }
         
-        return create_success_response(imageDetails)
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.put("/image/", response_model=dict)
-async def update_pet_image(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        imageID = data.get("imageID")
-        imageURL = data.get("imageURL")
-        
-        if None in (imageID, imageURL):
-            return create_error_response("missing required fields")
-        
-        query = "SELECT * FROM petImages WHERE imageID = %s"
-        result = await db_connector.execute_query(query, imageID)
-        
-        if not result:
-            return create_error_response("pet image not found")
-        
-        query = "UPDATE petImages SET imageURL = %s WHERE imageID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (imageURL, imageID))
-        
-        return create_success_response("pet image updated")
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.delete("/image/", response_model=dict)
-async def delete_pet_image(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        imageID = data.get("imageID")
-        
-        if imageID is None:
-            return create_error_response("missing 'image_id' in the request data")
-        
-        query = "SELECT * FROM petImages WHERE imageID = %s"
-        result = await db_connector.execute_query(query, imageID)
-        
-        if not result:
-            return create_error_response("pet image not found")
-        
-        query = "DELETE FROM petImages WHERE imageID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, imageID)
-        
-        return create_success_response("pet image deleted")
+        return create_success_response(petImages)
     except Exception as e:
         return create_error_response(str(e))
     finally:

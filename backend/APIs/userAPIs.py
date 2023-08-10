@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, File, UploadFile
 from APIs.dbConnector import DBConnector, get_db_connector
 from datetime import datetime, timedelta
 import jwt, bcrypt
@@ -31,7 +31,6 @@ async def create_user(request: Request):
         phoneNumber = data.get("phoneNumber")
         address = data.get("address")
         role = data.get("role")
-        imageURL = data.get("imageURL")
         shelter_shelterID = data.get("shelterID")
         
         if None in (username, password, firstName, lastName, phoneNumber, address, role):
@@ -45,11 +44,11 @@ async def create_user(request: Request):
         
         hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         
-        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role, imageURL, shelter_shelterID) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role, shelter_shelterID) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role, imageURL, shelter_shelterID))
+                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role, shelter_shelterID))
         
         query = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
         result = await db_connector.execute_query(query)
@@ -88,7 +87,7 @@ async def read_user_details(request: Request):
             "phoneNumber": result[0][5],
             "address": result[0][6],
             "role": result[0][7],
-            "imageURL": result[0][8],
+            "image": result[0][8],
             "shelterID": result[0][9]
         }
         
@@ -172,7 +171,6 @@ async def register_user(request: Request):
         phoneNumber = data.get("phoneNumber")
         address = data.get("address")
         role = "User"
-        imageURL = data.get("imageURL")
         
         if None in (username, password, firstName, lastName, phoneNumber, address, role):
             return create_error_response("missing required fields")
@@ -185,11 +183,11 @@ async def register_user(request: Request):
         
         hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         
-        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role, imageURL) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role, imageURL))
+                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role))
         
         query = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
         result = await db_connector.execute_query(query)
@@ -237,17 +235,10 @@ async def login_user(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.put("/user/update_image/", response_model=dict)
-async def update_user_image(request: Request):
+@router.post("/user/update_image/{userID}/", response_model=dict)
+async def update_user_image(userID: int, imageFile: UploadFile = File(...)):
     try:
         await db_connector.connect()
-        data = await request.json()
-        
-        userID = data.get("userID")
-        imageURL = data.get("imageURL")
-        
-        if None in (userID, imageURL):
-            return create_error_response("missing required fields")
         
         query = "SELECT * FROM user WHERE userID = %s"
         result = await db_connector.execute_query(query, userID)
@@ -255,39 +246,16 @@ async def update_user_image(request: Request):
         if not result:
             return create_error_response("user not found")
         
-        query = "UPDATE user SET imageURL = %s WHERE userID = %s"
+        with open(imageFile.filename, "wb") as image:
+            image.write(imageFile.file.read())
+        
+        if image is None:
+            return create_error_response("missing imageFile fields")
+        
+        query = "UPDATE user SET image = %s WHERE userID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (imageURL, userID))
-        
-        return create_success_response("user image updated")
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.put("/user/update_role/", response_model=dict)
-async def update_user_role(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        userID = data.get("userID")
-        role = data.get("role")
-        
-        if None in (userID, role):
-            return create_error_response("missing required fields")
-        
-        query = "SELECT * FROM user WHERE userID = %s"
-        result = await db_connector.execute_query(query, userID)
-        
-        if not result:
-            return create_error_response("user not found")
-        
-        query = "UPDATE user SET role = %s WHERE userID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (role, userID))
+                await cursor.execute(query, (image, userID))
         
         return create_success_response("user image updated")
     except Exception as e:

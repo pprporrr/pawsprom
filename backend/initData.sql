@@ -84,6 +84,7 @@ CREATE TABLE `pet` (
   `description` varchar(512) DEFAULT NULL,
   `features` json NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
+  `vaccinationRecord` MEDIUMBLOB DEFAULT NULL,
   `shelters_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -91,13 +92,13 @@ CREATE TABLE `pet` (
 -- Dumping data for table `pet`
 --
 
-INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `shelters_shelterID`) VALUES
-(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 1}', 'Available', 501),
-(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 1}', 'Adopted', 502),
-(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": 0, "feature2": 0, "feature3": 0}', 'Available', 503),
-(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 0}', 'Available', 501),
-(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 0}', 'Owned', NULL),
-(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": 1, "feature2": 0, "feature3": 1}', 'Available', 502);
+INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`,`shelters_shelterID`) VALUES
+(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 1}', 'Available', NULL,501),
+(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 1}', 'Adopted', NULL, 502),
+(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": 0, "feature2": 0, "feature3": 0}', 'Available', NULL, 503),
+(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 0}', 'Available', NULL, 501),
+(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 0}', 'Owned', NULL, NULL),
+(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": 1, "feature2": 0, "feature3": 1}', 'Available', NULL, 502);
 
 -- --------------------------------------------------------
 
@@ -108,22 +109,8 @@ INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `wei
 CREATE TABLE `petImages` (
   `imageID` int NOT NULL,
   `pet_petID` int NOT NULL,
-  `imageURL` varchar(512) NOT NULL
+  `image` MEDIUMBLOB NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `petImages`
---
-
-INSERT INTO `petImages` (`imageID`, `pet_petID`, `imageURL`) VALUES
-(1, 101, 'https://cdn.britannica.com/82/232782-050-8062ACFA/Black-labrador-retriever-dog.jpg'),
-(2, 101, 'https://www.petfinder.com/static/a71810ac65cbcac54a326e68ac309e6e/3f509/Labrador-600x260-sm.jpg'),
-(3, 102, 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Siam_lilacpoint.jpg/640px-Siam_lilacpoint.jpg'),
-(4, 103, 'https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg'),
-(5, 104, 'https://labradorlovingsouls.com/wp-content/uploads/2019/06/dog-1210559_1280-1-1-1-1-1.jpg'),
-(6, 101, 'https://canem.dk/cache/2/1/6/9/6/3/2/labrador-retriever-fit-2000x2000x80.webp'),
-(7, 105, 'https://catastic.b-cdn.net/wp-content/uploads/2023/03/siamese-cat-price.jpg'),
-(8, 106, 'https://germanshepherdshop.com/cdn/shop/articles/everything-you-need-to-know-about-the-black-german-shepherd-476400.jpg?v=1621276651');
 
 -- --------------------------------------------------------
 
@@ -183,17 +170,17 @@ CREATE TABLE `shelter` (
   `shelterAddress` varchar(512) NOT NULL,
   `contactInfo` varchar(512) NOT NULL,
   `phoneNumber` varchar(16) NOT NULL,
-  `imageURL` varchar(512) DEFAULT NULL
+  `shelterImage` MEDIUMBLOB DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `shelter`
 --
 
-INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `contactInfo`, `phoneNumber`, `imageURL`) VALUES
-(501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '+123456789', 'https://www.usatoday.com/gcdn/presto/2020/03/26/PWES/b54dc23e-34f6-460e-8931-26ccc2f8677f-sh032620coronapets005.JPG?crop=6213,3495,x0,y389&width=3200&height=1801&format=pjpg&auto=webp'),
+INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `contactInfo`, `phoneNumber`, `shelterImage`) VALUES
+(501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '+123456789', NULL),
 (502, 'Kitty Haven', '456 Park Ave, Town', 'info@kittyhaven.com', '+987654321', NULL),
-(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '+234567890', 'https://www.sa.gov/files/assets/main/acs/images/stop-animal-cruelty.jpg?w=1200');
+(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '+234567890', NULL);
 
 -- --------------------------------------------------------
 
@@ -210,7 +197,7 @@ CREATE TABLE `user` (
   `phoneNumber` varchar(16) NOT NULL,
   `address` varchar(512) NOT NULL,
   `role` varchar(16) NOT NULL,
-  `imageURL` varchar(512) DEFAULT NULL,
+  `image` MEDIUMBLOB DEFAULT NULL,
   `shelter_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -218,11 +205,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `phoneNumber`, `address`, `role`, `imageURL`, `shelter_shelterID`) VALUES
+INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `phoneNumber`, `address`, `role`, `image`, `shelter_shelterID`) VALUES
 (201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '+1122334455', '123 Elm St, City', 'User', NULL, NULL),
-(202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '+9988776655', '456 Maple Ave, Town', 'User', 'https://img.freepik.com/premium-vector/cute-dog-cat-friend-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-flat_138676-4548.jpg', NULL),
-(203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '+7435312302', '123 Main St, City', 'ShelterStaff', 'https://static.vecteezy.com/system/resources/previews/000/290/610/original/administration-vector-icon.jpg', 501),
-(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '+7654321890', '789 Oakwood Dr, Village', 'ShelterStaff', 'https://static.vecteezy.com/system/resources/previews/000/290/610/original/administration-vector-icon.jpg', 503);
+(202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '+9988776655', '456 Maple Ave, Town', 'User', NULL, NULL),
+(203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '+7435312302', '123 Main St, City', 'ShelterStaff', NULL, 501),
+(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '+7654321890', '789 Oakwood Dr, Village', 'ShelterStaff', NULL, 503);
 
 --
 -- Indexes for dumped tables
@@ -311,7 +298,7 @@ ALTER TABLE `pet`
 -- AUTO_INCREMENT for table `petImages`
 --
 ALTER TABLE `petImages`
-  MODIFY `imageID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `imageID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `petOwnership`
