@@ -186,20 +186,20 @@ async def read_pet_details_short(request: Request):
         if not petDetailsresult:
             return create_error_response("pet not found")
         
-        if petDetailsresult[0][10] == "Available":
+        if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
-            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][11])
+            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][12])
             
             petInfo = {
                 "petName": petDetailsresult[0][1],
                 "species": petDetailsresult[0][2],
                 "breed": petDetailsresult[0][3],
                 "address": petAddressresult[0][2],
-                "availabilityStatus": petDetailsresult[0][10],
+                "availabilityStatus": petDetailsresult[0][11],
                 "imageURLs": [row[2] for row in petImagesresult],
                 "features": json.loads(petDetailsresult[0][10])
             }
-        elif petDetailsresult[0][10] == "Adopted" or petDetailsresult[0][10] == "Owned":
+        elif petDetailsresult[0][11] == "Adopted" or petDetailsresult[0][11] == "Owned":
             petOwnerquery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
             petOwnerresult = await db_connector.execute_query(petOwnerquery, petID)
             
@@ -211,16 +211,7 @@ async def read_pet_details_short(request: Request):
                 "species": petDetailsresult[0][2],
                 "breed": petDetailsresult[0][3],
                 "address": ownerAddressresult[0][6],
-                "availabilityStatus": petDetailsresult[0][10],
-                "imageURLs": [row[2] for row in petImagesresult],
-                "features": json.loads(petDetailsresult[0][10])
-            }
-        else:
-            petInfo = {
-                "petName": petDetailsresult[0][1],
-                "species": petDetailsresult[0][2],
-                "breed": petDetailsresult[0][3],
-                "availabilityStatus": petDetailsresult[0][10],
+                "availabilityStatus": petDetailsresult[0][11],
                 "imageURLs": [row[2] for row in petImagesresult],
                 "features": json.loads(petDetailsresult[0][10])
             }
@@ -254,7 +245,7 @@ async def read_pet_details_long(request: Request):
         if not petDetailsresult:
             return create_error_response("pet not found")
         
-        if petDetailsresult[0][10] == "Available":
+        if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
             petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][11])
             
@@ -276,7 +267,7 @@ async def read_pet_details_long(request: Request):
             "vaccinationDate": [row[3] for row in petVaccinesresult],
             "address": petAddressresult[0][2]
             }
-        elif petDetailsresult[0][10] == "Adopted" or petDetailsresult[0][10] == "Owned":
+        elif petDetailsresult[0][11] == "Adopted" or petDetailsresult[0][11] == "Owned":
             petInfo = {
             "petName": petDetailsresult[0][1],
             "species": petDetailsresult[0][2],
