@@ -61,11 +61,11 @@ CREATE TABLE `pet` (
   `breed` varchar(45) NOT NULL,
   `age` int NOT NULL,
   `gender` varchar(45) NOT NULL,
-  `weight` varchar(45) NOT NULL,
+  `weight` int NOT NULL,
   `color` varchar(45) NOT NULL,
   `dateofbirth` date NOT NULL,
   `description` varchar(512) DEFAULT NULL,
-  `features` json DEFAULT NULL,
+  `features` json NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
   `shelters_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

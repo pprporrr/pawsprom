@@ -78,11 +78,11 @@ CREATE TABLE `pet` (
   `breed` varchar(45) NOT NULL,
   `age` int NOT NULL,
   `gender` varchar(45) NOT NULL,
-  `weight` varchar(45) NOT NULL,
+  `weight` int NOT NULL,
   `color` varchar(45) NOT NULL,
   `dateofbirth` date NOT NULL,
   `description` varchar(512) DEFAULT NULL,
-  `features` json DEFAULT NULL,
+  `features` json NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
   `shelters_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -92,12 +92,12 @@ CREATE TABLE `pet` (
 --
 
 INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `shelters_shelterID`) VALUES
-(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25 kg', 'Black', '2020-05-12', 'Friendly and playful', '[\"Can live with children of any age\", \"Can live with other dogs\"]', 'Available', 501),
-(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4 kg', 'White', '2021-01-05', 'Shy but affectionate', NULL, 'Adopted', 502),
-(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30 kg', 'Brown', '2019-10-20', 'Energetic and loyal', '[\"Microchipped\"]', 'Available', 503),
-(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25 lbs', 'Golden', '2020-03-15', 'Friendly and playful', NULL, 'Available', 501),
-(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8 lbs', 'White', '2021-01-10', 'Shy but affectionate', '[\"Microchipped\", \"Purebred\", \"Behavioral Issues\"]', 'Owned', NULL),
-(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30 lbs', 'Black', '2019-12-05', 'Active and loves outdoor play', NULL, 'Available', 502);
+(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 1}', 'Available', 501),
+(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 1}', 'Adopted', 502),
+(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": 0, "feature2": 0, "feature3": 0}', 'Available', 503),
+(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 0}', 'Available', 501),
+(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 0}', 'Owned', NULL),
+(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": 1, "feature2": 0, "feature3": 1}', 'Available', 502);
 
 -- --------------------------------------------------------
 

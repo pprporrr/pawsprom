@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request
 from typing import List
+import json
 from APIs.dbConnector import DBConnector, get_db_connector
 
 router = APIRouter()
@@ -30,10 +31,10 @@ async def create_pet(request: Request):
         dateofbirth = data.get("dateofbirth")
         availabilityStatus = data.get("availabilityStatus")
         description = data.get("description")
-        features = data.get("features")
+        features = json.dumps(data.get("features"))
         shelters_shelterID = data.get("shelterID")
         
-        if None in (petName, species, breed, age, gender, weight, color, dateofbirth, availabilityStatus):
+        if None in (petName, species, breed, age, gender, weight, color, dateofbirth, availabilityStatus, features):
             return create_error_response("missing required fields")
         
         query = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
@@ -84,7 +85,7 @@ async def read_pet_details(request: Request):
             "color": result[0][7],
             "dateofbirth": result[0][8].isoformat(),
             "description": result[0][9],
-            "features": result[0][10],
+            "features": json.loads(result[0][10]),
             "availabilityStatus": result[0][11],
             "shelters_shelterID": result[0][12]
         }
@@ -111,7 +112,7 @@ async def update_pet(request: Request):
         color = data.get("color")
         dateofbirth = data.get("dateofbirth")
         description = data.get("description")
-        features = data.get("features")
+        features = json.dumps(data.get("features"))
         
         if None in (petName, species, breed, age, gender, weight, color, dateofbirth):
             return create_error_response("missing required fields")
@@ -196,7 +197,7 @@ async def read_pet_details(request: Request):
                 "address": petAddressresult[0][2],
                 "availabilityStatus": petDetailsresult[0][10],
                 "imageURLs": [row[2] for row in petImagesresult],
-                "features": petDetailsresult[0][10]
+                "features": json.loads(petDetailsresult[0][10])
             }
         elif petDetailsresult[0][10] == "Adopted" or petDetailsresult[0][10] == "Owned":
             petOwnerquery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
@@ -212,7 +213,7 @@ async def read_pet_details(request: Request):
                 "address": ownerAddressresult[0][6],
                 "availabilityStatus": petDetailsresult[0][10],
                 "imageURLs": [row[2] for row in petImagesresult],
-                "features": petDetailsresult[0][10]
+                "features": json.loads(petDetailsresult[0][10])
             }
         else:
             petInfo = {
@@ -221,7 +222,7 @@ async def read_pet_details(request: Request):
                 "breed": petDetailsresult[0][3],
                 "availabilityStatus": petDetailsresult[0][10],
                 "imageURLs": [row[2] for row in petImagesresult],
-                "features": petDetailsresult[0][10]
+                "features": json.loads(petDetailsresult[0][10])
             }
         
         return create_success_response(petInfo)
@@ -263,7 +264,7 @@ async def read_pet_details(request: Request):
             "color": petDetailsresult[0][7],
             "dateofbirth": petDetailsresult[0][8].isoformat(),
             "description": petDetailsresult[0][9],
-            "features": petDetailsresult[0][10],
+            "features": json.loads(petDetailsresult[0][10]),
             "availabilityStatus": petDetailsresult[0][11],
             "shelterID": petDetailsresult[0][12],
             "imageURLs": [row[2] for row in petImagesresult],
@@ -277,45 +278,102 @@ async def read_pet_details(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/pet/list/", response_model=dict)
-async def read_pet_details_list(request: Request):
+@router.post("/pet/search/", response_model=dict)
+async def search_pet(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        limit = data.get("limitNumber")
+        petName = data.get("petName")
+        breed = data.get("breed")
+        ageRange = data.get("ageRange")
+        weightRange = data.get("weightRange")
+        gender = data.get("gender")
+        color = data.get("color")
         
-        if limit is None:
-            return create_error_response("missing 'limitNumber' in the request data")
+        query = "SELECT * FROM pet WHERE 1"
         
-        try:
-            limit = int(limit)
-        except ValueError:
-            return create_error_response("'limitNumber' must be an integer")
+        if petName:
+            query += f" AND petName LIKE '%{petName}%'"
+        if breed:
+            query += f" AND breed = '{breed}'"
+        if ageRange:
+            query += f" AND age >= {ageRange[0]} AND age <= {ageRange[1]}"
+        if weightRange:
+            query += f" AND weight >= {weightRange[0]} AND weight <= {weightRange[1]}"
+        if gender:
+            query += f" AND gender = '{gender}'"
+        if color:
+            query += f" AND color = '{color}'"
         
-        query = "SELECT * FROM pet LIMIT %s"
-        results = await db_connector.execute_query(query, limit)
-        
-        pets = []
+        results = await db_connector.execute_query(query)
         
         if not results:
-            return create_error_response("pet not found")
+            return create_error_response("no matching pets found")
         
+        pets = []
         for result in results:
             petDetails = {
-            "petID": result[0],
-            "petName": result[1],
-            "species": result[2],
-            "breed": result[3],
-            "age": result[4],
-            "gender": result[5],
-            "weight": result[6],
-            "color": result[7],
-            "dateofbirth": result[8].isoformat(),
-            "description": result[9],
-            "features": result[10],
-            "availabilityStatus": result[11],
-            "shelters_shelterID": result[12]
+                "petID": result[0],
+                "petName": result[1],
+                "species": result[2],
+                "breed": result[3],
+                "age": result[4],
+                "gender": result[5],
+                "weight": result[6],
+                "color": result[7],
+                "dateofbirth": result[8].isoformat(),
+                "description": result[9],
+                "features": json.loads(result[10]),
+                "availabilityStatus": result[11],
+                "shelters_shelterID": result[12]
+            }
+            pets.append(petDetails)
+        
+        return create_success_response(pets)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.post("/pet/search_by_features/", response_model=dict)
+async def search_pet_by_features(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        features = data.get("features")
+        feature_conditions = []
+        
+        for feature, value in features.items():
+            feature_conditions.append(f'features->>"$.{feature}" = {value}')
+        
+        query = "SELECT * FROM pet WHERE 1"
+        
+        if feature_conditions:
+            query += " AND " + " AND ".join(feature_conditions)
+        
+        results = await db_connector.execute_query(query)
+        
+        if not results:
+            return create_error_response("no matching pets found")
+        
+        pets = []
+        for result in results:
+            petDetails = {
+                "petID": result[0],
+                "petName": result[1],
+                "species": result[2],
+                "breed": result[3],
+                "age": result[4],
+                "gender": result[5],
+                "weight": result[6],
+                "color": result[7],
+                "dateofbirth": result[8].isoformat(),
+                "description": result[9],
+                "features": json.loads(result[10]),
+                "availabilityStatus": result[11],
+                "shelters_shelterID": result[12]
             }
             pets.append(petDetails)
         
@@ -356,7 +414,7 @@ async def read_pet_details_list_in_shelter(request: Request):
             "color": result[7],
             "dateofbirth": result[8].isoformat(),
             "description": result[9],
-            "features": result[10],
+            "features": json.loads(result[10]),
             "availabilityStatus": result[11],
             "shelters_shelterID": result[12]
             }
