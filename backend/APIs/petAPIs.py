@@ -166,8 +166,8 @@ async def delete_pet(request: Request):
 
 ##########################################################
 
-@router.get("/pet/infoshow/", response_model=dict)
-async def read_pet_details(request: Request):
+@router.get("/pet/info-short/", response_model=dict)
+async def read_pet_details_short(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -231,8 +231,8 @@ async def read_pet_details(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/pet/info/", response_model=dict)
-async def read_pet_details(request: Request):
+@router.get("/pet/info-long/", response_model=dict)
+async def read_pet_details_long(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -254,7 +254,30 @@ async def read_pet_details(request: Request):
         if not petDetailsresult:
             return create_error_response("pet not found")
         
-        petInfo = {
+        if petDetailsresult[0][10] == "Available":
+            petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
+            petAddressresult = await db_connector.execute_query(petAddressquery, petDetailsresult[0][11])
+            
+            petInfo = {
+            "petName": petDetailsresult[0][1],
+            "species": petDetailsresult[0][2],
+            "breed": petDetailsresult[0][3],
+            "age": petDetailsresult[0][4],
+            "gender": petDetailsresult[0][5],
+            "weight": petDetailsresult[0][6],
+            "color": petDetailsresult[0][7],
+            "dateofbirth": petDetailsresult[0][8].isoformat(),
+            "description": petDetailsresult[0][9],
+            "features": json.loads(petDetailsresult[0][10]),
+            "availabilityStatus": petDetailsresult[0][11],
+            "shelterID": petDetailsresult[0][12],
+            "imageURLs": [row[2] for row in petImagesresult],
+            "vaccinationName": [row[2] for row in petVaccinesresult],
+            "vaccinationDate": [row[3] for row in petVaccinesresult],
+            "address": petAddressresult[0][2]
+            }
+        elif petDetailsresult[0][10] == "Adopted" or petDetailsresult[0][10] == "Owned":
+            petInfo = {
             "petName": petDetailsresult[0][1],
             "species": petDetailsresult[0][2],
             "breed": petDetailsresult[0][3],
@@ -270,7 +293,7 @@ async def read_pet_details(request: Request):
             "imageURLs": [row[2] for row in petImagesresult],
             "vaccinationName": [row[2] for row in petVaccinesresult],
             "vaccinationDate": [row[3] for row in petVaccinesresult]
-        }
+            }
         
         return create_success_response(petInfo)
     except Exception as e:
