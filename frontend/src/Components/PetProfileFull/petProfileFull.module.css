@@ -1,0 +1,89 @@
+
+/* =========== Grid =========== */
+
+.cardWrapper {
+    width: 86%;
+    /* height: rem; */
+    position: absolute;
+    background-color: bisque;
+    top: 20%;
+    left:7%;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 1.875rem;
+    /* grid-auto-rows: minmax(20px, auto); */
+    grid-auto-rows: min-content;
+    /* border: 2px solid red; */
+    border-radius: 1.875rem;
+    overflow: hidden;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.topContainer {
+    grid-column: 1/-1;
+    grid-row: 1;
+    background-color: aqua;
+    padding-top: 2.5rem;
+
+}
+
+.infoContainer1 {
+    min-width: 24rem;
+    grid-column: 1/9;
+    grid-row: 2;
+    background-color: rgb(69, 66, 147);
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.infoContainer2 {
+    grid-column: 9/-1;
+    grid-row: 2;
+    background-color: rgb(147, 66, 117);
+}
+
+.vaccineContainer {
+    grid-column: 1/9;
+    grid-row: 3;
+    background-color: rgb(85, 192, 35);
+}
+
+.featuresContainer {
+    grid-column: 9/-1;
+    grid-row: 3;
+    background-color: rgb(192, 166, 35);
+}
+
+.bottomContainer {
+    grid-column: 1/-1;
+    grid-row: 4;
+    background-color: rgb(142, 35, 192);
+}
+
+/* =========== Grid =========== */
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    background-color: brown;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 3.375rem;
+    padding-right: 3.375rem;
+    gap: 10px;
+}
+
+.title {
+    color: aliceblue;
+}
+
+.title:last-of-type {
+    margin-left: auto;
+}
+
+
+
+
+
