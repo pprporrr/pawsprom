@@ -252,7 +252,7 @@ async def create_pet_profile(request: Request):
         if shelters_shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
-        checkShelterQuery = "SELECT * FROM user WHERE userID = %s"
+        checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
         checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelters_shelterID)
         
         if not checkShelterResult:
