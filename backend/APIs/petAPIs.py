@@ -180,39 +180,48 @@ async def create_pet_profile(request: Request):
         weight = data.get("weight")
         color = data.get("color")
         dateofbirth = data.get("dateofbirth")
-        availabilityStatus = data.get("availabilityStatus")
+        availabilityStatus = "Owned"
         description = data.get("description")
         features = json.dumps(data.get("features"))
         user_userID = data.get("userID")
         
+        if user_userID is None:
+            return create_error_response("missing 'userID' in the request data")
+        
+        checkUserQuery = "SELECT * FROM user WHERE userID = %s"
+        checkUserResult = await db_connector.execute_query(checkUserQuery, user_userID)
+        
+        if not checkUserResult:
+            return create_error_response("don't have userID:{user_userID} in the database")
+        
         if None in (petName, species, breed, gender, color, dateofbirth, availabilityStatus, features):
             return create_error_response("missing required fields")
         
-        query = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
+        createPetQuery = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
                 "features, availabilityStatus) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (petName, species, breed, age, gender, weight, color, dateofbirth,
+                await cursor.execute(createPetQuery, (petName, species, breed, age, gender, weight, color, dateofbirth,
                                              description, features, availabilityStatus))
         
-        query = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkPetQuery = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
+        checkPetResult = await db_connector.execute_query(checkPetQuery)
         
-        if not result:
+        if not checkPetResult:
             return create_error_response("failed to create pet")
         
-        pet_petID = int(result[0][0])
+        pet_petID = int(checkPetResult[0][0])
         
-        query = "INSERT INTO petOwnership (pet_petID, user_userID, adoptionDate) VALUES (%s, %s, %s)"
+        createOwnerShipQuery = "INSERT INTO petOwnership (pet_petID, user_userID, adoptionDate) VALUES (%s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (pet_petID, user_userID, None))
+                await cursor.execute(createOwnerShipQuery, (pet_petID, user_userID, None))
         
-        query = "SELECT * FROM petOwnership WHERE ownershipID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkOwnerShipQuery = "SELECT * FROM petOwnership WHERE ownershipID = LAST_INSERT_ID()"
+        checkOwnerShipResult = await db_connector.execute_query(checkOwnerShipQuery)
         
-        if not result:
+        if not checkOwnerShipResult:
             return create_error_response("failed to create pet ownership record")
         
         return create_success_response("pet created")
@@ -221,7 +230,58 @@ async def create_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/pet/info-short/", response_model=dict)
+@router.post("/pet/create-profile/byShelter/", response_model=dict)
+async def create_pet_profile(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        petName = data.get("petName")
+        species = data.get("species")
+        breed = data.get("breed")
+        age = data.get("age")
+        gender = data.get("gender")
+        weight = data.get("weight")
+        color = data.get("color")
+        dateofbirth = data.get("dateofbirth")
+        availabilityStatus = "Available"
+        description = data.get("description")
+        features = json.dumps(data.get("features"))
+        shelters_shelterID = data.get("shelterID")
+        
+        if shelters_shelterID is None:
+            return create_error_response("missing 'shelterID' in the request data")
+        
+        checkShelterQuery = "SELECT * FROM user WHERE userID = %s"
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelters_shelterID)
+        
+        if not checkShelterResult:
+            return create_error_response("don't have shelterID:{shelters_shelterID} in the database")
+        
+        if None in (petName, species, breed, gender, color, dateofbirth, availabilityStatus, features):
+            return create_error_response("missing required fields")
+        
+        createPetQuery = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
+                "features, availabilityStatus, shelters_shelterID) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(createPetQuery, (petName, species, breed, age, gender, weight, color, dateofbirth,
+                                             description, features, availabilityStatus, shelters_shelterID))
+        
+        checkPetQuery = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
+        checkPetResult = await db_connector.execute_query(checkPetQuery)
+        
+        if not checkPetResult:
+            return create_error_response("failed to create pet")
+        
+        return create_success_response("pet created")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.post("/pet/info-short/", response_model=dict)
 async def read_pet_details_short(request: Request):
     try:
         await db_connector.connect()
@@ -279,7 +339,7 @@ async def read_pet_details_short(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/pet/info-long/", response_model=dict)
+@router.post("/pet/info-long/", response_model=dict)
 async def read_pet_details_long(request: Request):
     try:
         await db_connector.connect()
@@ -467,7 +527,7 @@ async def search_pet_by_features(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/pet/list_in_shelter/", response_model=dict)
+@router.post("/pet/list_in_shelter/", response_model=dict)
 async def read_pet_details_list_in_shelter(request: Request):
     try:
         await db_connector.connect()
