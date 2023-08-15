@@ -2,16 +2,17 @@ import styles from './petProfileFull.module.css'
 import speciesIcon from '../../assets/Icons/Pets/species-symbol.svg'
 import { ImageSlider } from '../ImageSlider/imageSlider'
 import { slides } from '../../MockData/carouselData.json'
+import { IconText } from '../IconText/iconText'
+import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 
 interface PetProfileFullProps {
     page: string
-    petID: number
 }
 
-export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, petID}) => {
+export const PetProfileFull: React.FC<PetProfileFullProps> = ({page}) => {
 
-    if (page === 'PetProfileOwned' && petID === 102) {
-        console.log(page, petID)
+    if (page === 'PetProfileOwned' ) {
+        console.log(page)
     }
 
     return (
@@ -28,14 +29,22 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, petID}) => 
                 {/* General Information Section */}
                 <section className={styles.infoContainer1}>
                     <ImageSlider data={slides}></ImageSlider>
-                    <h1>Hello</h1>
+                    <div className={styles.wrapperFlex}>
+                        <IconText></IconText>
+                        <IconText></IconText>
+                        <IconText></IconText>
+                    </div>
                 </section>
                 <section className={styles.infoContainer2}>
-                    <h1>Pet Profile</h1>
+                <div className={styles.wrapperFlex}>
+                        <IconText></IconText>
+                        <IconText></IconText>
+                        <IconText></IconText>
+                    </div>
                 </section>
                 {/* Vaccine Records Section */}
                 <section className={styles.vaccineContainer}>
-                    <h1>Pet Profile</h1>
+                    <VaccineRecords></VaccineRecords>
                 </section>
                 {/* Features Section */}
                 <section className={styles.featuresContainer}>
