@@ -7,7 +7,13 @@ import axios from 'axios';
 
 export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
-    const petID = 102;
+    const petID = 101;
+    const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
+
+    const blob = new Blob([mockBlob], { type: 'image/jpeg' })
+
+    const blobURL = URL.createObjectURL(blob);
+    
 
     // base url for api
 	const client = axios.create({
@@ -15,10 +21,10 @@ export const PetProfileOwned = () => {
 		// baseURL: "https://jsonplaceholder.typicode.com/" 
 	  });
 
-    /* GET */
-
+    /* POST */
+    
     useEffect(() => {
-  	client.get('/petAPI/pet/info-long/', { params: { petID: petID } })
+  	client.post('/petAPI/pet/info-long/',{ petID })
     .then((response) => {
   		console.log(response)
   	})
@@ -26,29 +32,10 @@ export const PetProfileOwned = () => {
 
     return (
         <div className={styles.bgContainer}>
-            <PetProfileFull page={petPage} petID={petID}></PetProfileFull>
-            {/* <div className={styles.cardBg}>
-                <div className={styles.topContainer}>
-                    <div className={styles.titleContainer}>
-                        <h2>Pet Profile</h2>
-                    </div>
-                </div>
-                <div className={styles.infoContainer1}>
-                    <h1>Pet Profile</h1>
-                </div>
-                <div className={styles.infoContainer2}>
-                    <h1>Pet Profile</h1>
-                </div>
-                <div className={styles.vaccineContainer}>
-                    <h1>Pet Profile</h1>
-                </div>
-                <div className={styles.featuresContainer}>
-                    <h1>Pet Profile</h1>
-                </div>
-                <div className={styles.bottomContainer}>
-                    <h1>Pet Profile</h1>
-                </div>
-            </div> */}
+            <PetProfileFull 
+            page={petPage} 
+            
+            ></PetProfileFull>
         </div>
     )
 }

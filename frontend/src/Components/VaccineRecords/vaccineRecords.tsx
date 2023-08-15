@@ -7,16 +7,16 @@ export const VaccineRecords = () => {
 
     return (
         <div className={styles.vaccineWrapper}>
-            {/* <div className={styles.vaccineMap}>
+            <div className={styles.vaccineMap}>
                 {vaccinationName.map((vaccine, index) => {
-                    return <p>{vaccine}</p>
+                    return <p  key={index} >{vaccine}</p>
                 })}
             </div>
             <div className={styles.dateMap}>
                 {vaccinationName.map((vaccine, index) => {
-                    return <p>{vaccine}</p>
+                    return <p  key={index} >{vaccine}</p>
                 })}
-            </div> */}
+            </div>
         </div>
     )
 }
