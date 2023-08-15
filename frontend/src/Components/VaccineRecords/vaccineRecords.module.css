@@ -1,0 +1,13 @@
+
+.vaccineWrapper {
+    display: grid;
+}
+
+.vaccineMap {
+    grid-column: 1;
+}
+
+.dateMap {
+    grid-column: 2;
+    margin-left: auto;
+}
