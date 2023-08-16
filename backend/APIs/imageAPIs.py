@@ -57,15 +57,15 @@ async def get_image(imageID: int):
         await db_connector.connect()
         
         getImageQuery = "SELECT image FROM petImages WHERE imageID = %s"
-        image_data = await db_connector.execute_query(getImageQuery, imageID)
+        imageData = await db_connector.execute_query(getImageQuery, imageID)
         
-        if not image_data:
-            return create_error_response("Image not found")
+        if not imageData:
+            return create_error_response("image not found")
         
-        image_bytes = image_data[0][0]  # Access the first element of the first row
-        image_stream = BytesIO(image_bytes)
+        imageBytes = imageData[0][0]
+        imageStream = BytesIO(imageBytes)
         
-        return StreamingResponse(content=image_stream, media_type="image/jpeg")
+        return StreamingResponse(content=imageStream, media_type="image/jpeg")
     except Exception as e:
         return create_error_response(str(e))
     finally:
@@ -76,17 +76,20 @@ async def get_pet_images(petID: int):
     try:
         await db_connector.connect()
         
-        getPetImagesQuery = "SELECT image FROM petImages WHERE pet_petID = %s"
-        image_data = await db_connector.execute_query(getPetImagesQuery, petID)
+        if petID is None:
+            return create_error_response("missing 'petID' fields")
         
-        if not image_data:
-            return create_error_response("No images found for the given petID")
+        getPetImagesQuery = "SELECT image FROM petImages WHERE pet_petID = %s"
+        imageData = await db_connector.execute_query(getPetImagesQuery, petID)
+        
+        if not imageData:
+            return create_error_response("images not found for the given petID")
         
         images = []
-        for row in image_data:
-            image_bytes = row[0]
-            image_stream = BytesIO(image_bytes)
-            images.append(image_stream)
+        for row in imageData:
+            imageBytes = row[0]
+            imageStream = BytesIO(imageBytes)
+            images.append(imageStream)
         
         return StreamingResponse(content=images, media_type="image/jpeg")
     except Exception as e:

@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request, UploadFile, File
-from typing import List
-import json
 from APIs.dbConnector import DBConnector, get_db_connector
+from fastapi.responses import StreamingResponse
+from typing import List
+from io import BytesIO
+import json
 
 router = APIRouter()
 
@@ -295,11 +297,18 @@ async def read_pet_details_short(request: Request):
         petDetailsquery = "SELECT * FROM pet WHERE petID = %s"
         petDetailsresult = await db_connector.execute_query(petDetailsquery, petID)
         
-        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        petImagesquery = "SELECT image FROM petImages WHERE pet_petID = %s"
         petImagesresult = await db_connector.execute_query(petImagesquery, petID)
         
         if not petDetailsresult:
             return create_error_response("pet not found")
+        
+        images = []
+        
+        for row in petImagesresult:
+            imageBytes = row[0]
+            imageStream = BytesIO(imageBytes)
+            images.append(imageStream)
         
         if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
@@ -311,7 +320,7 @@ async def read_pet_details_short(request: Request):
                 "breed": petDetailsresult[0][3],
                 "availabilityStatus": petDetailsresult[0][11],
                 "vaccinationRecord": petDetailsresult[0][12],
-                "image": [row[2] for row in petImagesresult],
+                "images": StreamingResponse(content=images, media_type="image/jpeg"),
                 "features": json.loads(petDetailsresult[0][10]),
                 "address": petAddressresult[0][2]
             }
@@ -328,7 +337,7 @@ async def read_pet_details_short(request: Request):
                 "breed": petDetailsresult[0][3],
                 "availabilityStatus": petDetailsresult[0][11],
                 "vaccinationRecord": petDetailsresult[0][12],
-                "image": [row[2] for row in petImagesresult],
+                "images": StreamingResponse(content=images, media_type="image/jpeg"),
                 "features": json.loads(petDetailsresult[0][10]),
                 "address": ownerAddressresult[0][6]
             }
@@ -353,7 +362,7 @@ async def read_pet_details_long(request: Request):
         petDetailsquery = "SELECT * FROM pet WHERE petID = %s"
         petDetailsresult = await db_connector.execute_query(petDetailsquery, petID)
         
-        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        petImagesquery = "SELECT image FROM petImages WHERE pet_petID = %s"
         petImagesresult = await db_connector.execute_query(petImagesquery, petID)
         
         petVaccinesquery = "SELECT * FROM petVaccinations WHERE pet_petID = %s"
@@ -361,6 +370,13 @@ async def read_pet_details_long(request: Request):
         
         if not petDetailsresult:
             return create_error_response("pet not found")
+        
+        images = []
+        
+        for row in petImagesresult:
+            imageBytes = row[0]
+            imageStream = BytesIO(imageBytes)
+            images.append(imageStream)
         
         if petDetailsresult[0][11] == "Available":
             petAddressquery = "SELECT * FROM shelter WHERE shelterID = %s"
@@ -376,7 +392,7 @@ async def read_pet_details_long(request: Request):
             "color": petDetailsresult[0][7],
             "dateofbirth": petDetailsresult[0][8].isoformat(),
             "description": petDetailsresult[0][9],
-            "image": [row[2] for row in petImagesresult],
+            "images": StreamingResponse(content=images, media_type="image/jpeg"),
             "features": json.loads(petDetailsresult[0][10]),
             "availabilityStatus": petDetailsresult[0][11],
             "vaccinationRecord": petDetailsresult[0][12],
@@ -396,7 +412,7 @@ async def read_pet_details_long(request: Request):
             "color": petDetailsresult[0][7],
             "dateofbirth": petDetailsresult[0][8].isoformat(),
             "description": petDetailsresult[0][9],
-            "image": [row[2] for row in petImagesresult],
+            "images": StreamingResponse(content=images, media_type="image/jpeg"),
             "features": json.loads(petDetailsresult[0][10]),
             "availabilityStatus": petDetailsresult[0][11],
             "vaccinationRecord": petDetailsresult[0][12],
@@ -409,7 +425,7 @@ async def read_pet_details_long(request: Request):
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
-
+"""
 @router.post("/pet/search/", response_model=dict)
 async def search_pet(request: Request):
     try:
@@ -459,7 +475,7 @@ async def search_pet(request: Request):
                 "color": result[7],
                 "dateofbirth": result[8].isoformat(),
                 "description": result[9],
-                "image": [row[2] for row in petImagesresult],
+                "images": StreamingResponse(content=images, media_type="image/jpeg"),
                 "features": json.loads(result[10]),
                 "availabilityStatus": result[11],
                 "vaccinationRecord": result[12],
@@ -604,3 +620,4 @@ async def update_pet_status(request: Request):
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
+"""
