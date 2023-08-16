@@ -1,4 +1,14 @@
 
+.iconTextWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
 p {
     font-size: 1rem;
+}
+
+.symbol {
+    height: 35px;
+    width: 35px;
 }

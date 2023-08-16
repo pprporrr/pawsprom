@@ -8,12 +8,21 @@ import axios from 'axios';
 export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
     const petID = 101;
+    const Data = { 
+      petName: 'Tor',
+      species: 'cat',
+      breed: 'Meow meow',
+      age: 2,
+      gender: 'female', 
+      weight: 5,
+      color: null,
+    }
+
     const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
 
     const blob = new Blob([mockBlob], { type: 'image/jpeg' })
 
     const blobURL = URL.createObjectURL(blob);
-    
 
     // base url for api
 	const client = axios.create({
@@ -22,7 +31,7 @@ export const PetProfileOwned = () => {
 	  });
 
     /* POST */
-    
+
     useEffect(() => {
   	client.post('/petAPI/pet/info-long/',{ petID })
     .then((response) => {
@@ -33,8 +42,8 @@ export const PetProfileOwned = () => {
     return (
         <div className={styles.bgContainer}>
             <PetProfileFull 
-            page={petPage} 
-            
+            page={petPage}
+            data= {Data} 
             ></PetProfileFull>
         </div>
     )
