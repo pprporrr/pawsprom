@@ -76,17 +76,19 @@ async def get_pet_images(petID: int):
     try:
         await db_connector.connect()
         
-        getImagesQuery = "SELECT image FROM petImages WHERE pet_petID = %s"
-        image_data = await db_connector.execute_query(getImagesQuery, petID)
+        getPetImagesQuery = "SELECT image FROM petImages WHERE pet_petID = %s"
+        image_data = await db_connector.execute_query(getPetImagesQuery, petID)
         
         if not image_data:
-            return create_error_response("Images not found")
+            return create_error_response("No images found for the given petID")
         
-        def generate_images():
-            for row in image_data:
-                yield row[0]
-                
-        return StreamingResponse(content=generate_images(), media_type="image/jpeg")
+        images = []
+        for row in image_data:
+            image_bytes = row[0]
+            image_stream = BytesIO(image_bytes)
+            images.append(image_stream)
+        
+        return StreamingResponse(content=images, media_type="image/jpeg")
     except Exception as e:
         return create_error_response(str(e))
     finally:

@@ -1,80 +1,41 @@
-// import styles from './petProfileOwned.module.css'
-// import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
-// import { useEffect } from 'react';
-// import axios from 'axios';
-
-
-
-// export const PetProfileOwned = () => {
-//     const petPage = 'PetProfileOwned';
-//     const petID = 101;
-//     const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
-
-//     const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-
-//     const blobURL = URL.createObjectURL(blob);
-    
-
-//     // base url for api
-// 	const client = axios.create({
-// 		baseURL: "http://192.168.1.7"
-// 		// baseURL: "https://jsonplaceholder.typicode.com/" 
-// 	  });
-
-//     /* POST */
-    
-//     useEffect(() => {
-//   	client.post('/petAPI/pet/info-long/',{ petID })
-//     .then((response) => {
-//   		console.log(response)
-//   	})
-//     }, [])
-
-//     return (
-//         <div className={styles.bgContainer}>
-//             <PetProfileFull 
-//             page={petPage} 
-            
-//             ></PetProfileFull>
-//         </div>
-//     )
-// }
-
 import styles from './petProfileOwned.module.css'
 import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
-import { useEffect, useState } from 'react'; // Import useState
+import { useEffect } from 'react';
 import axios from 'axios';
+
+
 
 export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
     const petID = 101;
+    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
 
-    const [images, setImages] = useState([]); // State to store images
+    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
 
+    //const blobURL = URL.createObjectURL(blob);
+    
+    
     // base url for api
-    const client = axios.create({
-        baseURL: "http://192.168.1.7"
-    });
+	const client = axios.create({
+		baseURL: "http://10.100.7.51"
+		// baseURL: "https://jsonplaceholder.typicode.com/" 
+	  });
 
-    /* GET */
+    /* POST */
     
     useEffect(() => {
-        client.get(`/image/pet/${petID}/`)
-        .then((response) => {
-            // Assuming the response.data is an array of image URLs
-            setImages(response.data);
-        })
-        .catch((error) => {
-            console.error("Error fetching images:", error);
-        });
-    }, []);
+  	client.post('/petAPI/pet/info-long/',{ petID })
+    .then((response) => {
+  		console.log(response)
+  	})
+    }, [])
 
     return (
         <div className={styles.bgContainer}>
-            <PetProfileFull
-                page={petPage}
-                images={images} // Pass the images to the PetProfileFull component
+            <PetProfileFull 
+            page={petPage} 
+            
             ></PetProfileFull>
         </div>
-    );
+    )
 }
