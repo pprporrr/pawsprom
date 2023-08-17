@@ -4,7 +4,6 @@ import { slides } from '../../MockData/carouselData.json'
 import { IconText } from '../IconText/iconText'
 import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { SpeciesSymbol } from '../../assets/Icons/Pets/speciesSymbol'
-import { EditPetSymbol } from '../../../public/editPetSymbol'
 import { LoveChildrenSymbol } from '../../assets/Icons/Features/loveChildrenSymbol'
 import { Features } from '../Features/features'
 
