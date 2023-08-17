@@ -14,6 +14,8 @@ interface ImageSliderProps {
 export const ImageSlider: React.FC<ImageSliderProps> = ({data}) => {
     // console.log(data)
 
+    //TODO: test with data from API and change from blob file to dsiplay as img
+
     const [slideIndex, setSlideIndex] = useState(0)
 
     const nextSlide = () => {
