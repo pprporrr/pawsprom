@@ -93,12 +93,12 @@ CREATE TABLE `pet` (
 --
 
 INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`,`shelters_shelterID`) VALUES
-(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '["feature1", "feature2", "feature4"]', 'Available', NULL,501),
-(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '["feature3", "feature9"]', 'Adopted', NULL, 502),
-(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '["feature10"]', 'Available', NULL, 503),
-(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '["feature2", "feature3", "feature4"]', 'Available', NULL, 501),
-(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '["feature1", "feature2"]', 'Owned', NULL, NULL),
-(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '["feature7", "feature9"]', 'Available', NULL, 502);
+(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": False, "feature2": True, "feature3": True, "feature4": False, "feature5": True, "feature6": False, "feature7": False, "feature8": True, "feature9": True, "feature10": False}', 'Available', NULL,501),
+(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": True, "feature2": False, "feature3": False, "feature4": True, "feature5": False, "feature6": True, "feature7": False, "feature8": False, "feature9": False, "feature10": False}', 'Adopted', NULL, 502),
+(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": False, "feature2": False, "feature3": True, "feature4": False, "feature5": True, "feature6": True, "feature7": False, "feature8": True, "feature9": False, "feature10": False}', 'Available', NULL, 503),
+(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": True, "feature2": True, "feature3": True, "feature4": False, "feature5": True, "feature6": True, "feature7": True, "feature8": False, "feature9": True, "feature10": False}', 'Available', NULL, 501),
+(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": False, "feature2": True, "feature3": True, "feature4": False, "feature5": False, "feature6": True, "feature7": False, "feature8": False, "feature9": True, "feature10": False}', 'Owned', NULL, NULL),
+(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": False, "feature2": True, "feature3": True, "feature4": False, "feature5": False, "feature6": False, "feature7": False, "feature8": True, "feature9": True, "feature10": False}', 'Available', NULL, 502);
 
 -- --------------------------------------------------------
 
