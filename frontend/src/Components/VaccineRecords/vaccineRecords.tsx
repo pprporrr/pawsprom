@@ -1,9 +1,15 @@
 import styles from './vaccineRecords.module.css'
 
-export const VaccineRecords = () => {
+interface VaccineRecordsProps {
+    vaccinationName: string[]
+    vaccinationDate: Date[]
+}
 
-    const vaccinationName = ['mock vaccine1', 'mock vaccine2']
-    const date = new Date(2023, 7, 15, 12, 30, 0, 0);
+export const VaccineRecords: React.FC<VaccineRecordsProps> = ({vaccinationName, vaccinationDate}) => {
+
+    // const vaccinationName = ['mock vaccine1', 'mock vaccine2']
+    // const date = new Date(2023, 7, 15, 12, 30, 0, 0);
+
 
     return (
         <div className={styles.vaccineWrapper}>
@@ -13,8 +19,12 @@ export const VaccineRecords = () => {
                 })}
             </div>
             <div className={styles.dateMap}>
-                {vaccinationName.map((vaccine, index) => {
-                    return <p  key={index} >{vaccine}</p>
+                {vaccinationDate.map((date, index) => {
+                    const formattedDate = date.toLocaleDateString('en-GB', 
+                    { day: '2-digit', month: 'short', year: 'numeric' })
+                    .split(' ').join('-')
+    
+                    return <p  key={index}>{formattedDate}</p>
                 })}
             </div>
         </div>

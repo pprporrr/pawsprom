@@ -5,8 +5,8 @@ export const Features = () => {
 
     return (
         <div className={styles.featuresWrapper}>
-            <IconText></IconText>
-            <IconText></IconText>
+            {/* <IconText></IconText>
+            <IconText></IconText> */}
         </div>
     )
 }
