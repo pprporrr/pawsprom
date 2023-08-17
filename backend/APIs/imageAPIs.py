@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Request, UploadFile, File
-from APIs.dbConnector import DBConnector, get_db_connector
+from fastapi import APIRouter, UploadFile, File
+from APIs.dbConnector import get_db_connector
 from fastapi.responses import StreamingResponse
+from typing import List
 from io import BytesIO
 
 router = APIRouter()
@@ -13,37 +14,33 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
-###########################CRUD###########################
-
 @router.post("/image/create/{petID}/", response_model=dict)
-async def upload_image(petID: int, imageFile: UploadFile = File(...)):
+async def upload_image(petID: int, imageFiles: List[UploadFile] = File(...)):
     try:
         await db_connector.connect()
         
-        if petID is None:
-            return create_error_response("missing 'petID' fields")
+        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
         
-        chechPetQuery = "SELECT * FROM pet WHERE petID = %s"
-        chechPetResult = await db_connector.execute_query(chechPetQuery, petID)
-        
-        if not chechPetResult:
+        if not checkPetResult:
             return create_error_response("pet not found")
         
-        imageData = await imageFile.read()
+        if imageFiles is None:
+            return create_error_response("missing 'imageFiles' fields")
         
-        if imageData is None:
-            return create_error_response("missing 'imageFile' fields")
-        
-        createImageQuery = "INSERT INTO petImages (pet_petID, image) VALUES (%s, %s)"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(createImageQuery, (petID, imageData))
-        
-        checkImageQuery = "SELECT * FROM petImages WHERE imageID = LAST_INSERT_ID()"
-        checkImageResult = await db_connector.execute_query(checkImageQuery)
-        
-        if not checkImageResult:
-            return create_error_response("failed to create pet image")
+        for imageFile in imageFiles:
+            imageData = await imageFile.read()
+            
+            createImageQuery = "INSERT INTO petImages (pet_petID, image) VALUES (%s, %s)"
+            async with db_connector.pool.acquire() as conn:
+                async with conn.cursor() as cursor:
+                    await cursor.execute(createImageQuery, (petID, imageData))
+            
+            checkImageQuery = "SELECT * FROM petImages WHERE imageID = LAST_INSERT_ID()"
+            checkImageResult = await db_connector.execute_query(checkImageQuery)
+            
+            if not checkImageResult:
+                return create_error_response("failed to create pet image")
         
         return create_success_response("pet image created")
     except Exception as e:
@@ -51,48 +48,44 @@ async def upload_image(petID: int, imageFile: UploadFile = File(...)):
     finally:
         await db_connector.disconnect()
 
-@router.get("/image/{imageID}/", response_model=dict)
-async def get_image(imageID: int):
+@router.get("/image/ids/{petID}/", response_model=dict)
+async def get_pet_image_ids(petID: int):
     try:
         await db_connector.connect()
         
-        getImageQuery = "SELECT image FROM petImages WHERE imageID = %s"
-        imageData = await db_connector.execute_query(getImageQuery, imageID)
+        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
         
-        if not imageData:
-            return create_error_response("image not found")
+        if not checkPetResult:
+            return create_error_response("pet not found")
         
-        imageBytes = imageData[0][0]
-        imageStream = BytesIO(imageBytes)
+        getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+        getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
         
-        return StreamingResponse(content=imageStream, media_type="image/jpeg")
+        if getPetImagesResult:
+            imageIDs = [imageID for sublist in getPetImagesResult for imageID in sublist]
+            return create_success_response({"imageIDs": imageIDs})
+        else:
+            return create_error_response("this pet don't have any image")
     except Exception as e:
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
 
-@router.get("/image/pet/{petID}/", response_model=dict)
-async def get_pet_images(petID: int):
+@router.get("/image/{imageID}/")
+async def get_pet_image(imageID: int):
     try:
         await db_connector.connect()
         
-        if petID is None:
-            return create_error_response("missing 'petID' fields")
+        getImageQuery = "SELECT image FROM petImages WHERE imageID = %s"
+        getImageResult = await db_connector.execute_query(getImageQuery, imageID)
         
-        getPetImagesQuery = "SELECT image FROM petImages WHERE pet_petID = %s"
-        imageData = await db_connector.execute_query(getPetImagesQuery, petID)
-        
-        if not imageData:
-            return create_error_response("images not found for the given petID")
-        
-        images = []
-        for row in imageData:
-            imageBytes = row[0]
-            imageStream = BytesIO(imageBytes)
-            images.append(imageStream)
-        
-        return StreamingResponse(content=images, media_type="image/jpeg")
+        if getImageResult:
+            image = getImageResult[0][0]
+            return StreamingResponse(BytesIO(image), media_type="image/jpeg")
+        else:
+            return create_error_response("pet image not found")
     except Exception as e:
-        return create_error_response(str(e))
+        raise create_error_response(str(e))
     finally:
         await db_connector.disconnect()
