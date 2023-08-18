@@ -130,6 +130,71 @@ async def create_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
+@router.put("/pet/update-profile/", response_model=dict)
+async def update_pet_profile(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        petID = data.get("petID")
+        
+        if petID is None:
+            return create_error_response("missing 'petID' in the request data")
+        
+        updateFields = {}
+        
+        if "petName" in data:
+            updateFields["petName"] = data["petName"]
+        if "species" in data:
+            updateFields["species"] = data["species"]
+        if "breed" in data:
+            updateFields["breed"] = data["breed"]
+        if "age" in data:
+            updateFields["age"] = data["age"]
+        if "gender" in data:
+            updateFields["gender"] = data["gender"]
+        if "weight" in data:
+            updateFields["weight"] = data["weight"]
+        if "color" in data:
+            updateFields["color"] = data["color"]
+        if "dateofbirth" in data:
+            updateFields["dateofbirth"] = data["dateofbirth"]
+        if "description" in data:
+            updateFields["description"] = data["description"]
+        if "features" in data:
+            updateFields["features"] = json.dumps(data.get("features"))
+        
+        if len(updateFields) == 0:
+            return create_error_response("missing data to update")
+        
+        updateQuery = "UPDATE pet SET "
+        updatePetDetailsValues = []
+        
+        for key, value in updateFields.items():
+            updateQuery += f"{key} = %s, "
+            updatePetDetailsValues.append(value)
+        
+        updatePetDetailsQuery = updateQuery.rstrip(", ")
+        updatePetDetailsQuery += " WHERE petID = %s"
+        updatePetDetailsValues.append(petID)
+        
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(updatePetDetailsQuery, updatePetDetailsValues)
+        
+        checkPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetDetailsresult = await db_connector.execute_query(checkPetDetailsQuery, petID)
+        
+        if not checkPetDetailsresult:
+            return create_error_response("failed to update pet details")
+        
+        return create_success_response("pet details updated")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+
 @router.post("/pet/info-short/", response_model=dict)
 async def read_pet_details_short(request: Request):
     try:
