@@ -16,7 +16,7 @@ def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
 @router.post("/pet/create-profile/byUser/", response_model=dict)
-async def create_pet_profile(request: Request):
+async def create_pet_profile_by_User(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -80,7 +80,7 @@ async def create_pet_profile(request: Request):
         await db_connector.disconnect()
 
 @router.post("/pet/create-profile/byShelter/", response_model=dict)
-async def create_pet_profile(request: Request):
+async def create_pet_profile_by_Shelter(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -196,7 +196,7 @@ async def update_pet_profile(request: Request):
 
 
 @router.post("/pet/info-short/", response_model=dict)
-async def read_pet_details_short(request: Request):
+async def read_pet_profile_short(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -255,7 +255,7 @@ async def read_pet_details_short(request: Request):
         await db_connector.disconnect()
 
 @router.post("/pet/info-long/", response_model=dict)
-async def read_pet_details_long(request: Request):
+async def read_pet_profile_long(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -334,7 +334,7 @@ async def read_pet_details_long(request: Request):
         await db_connector.disconnect()
 
 @router.delete("/pet/delete-profile/", response_model=dict)
-async def delete_pet(request: Request):
+async def delete_pet_profile(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()

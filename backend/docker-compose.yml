@@ -20,7 +20,7 @@ services:
       - MYSQL_USER=project
       - MYSQL_PASSWORD=project
     volumes:
-      - ./initData.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/initData.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
   
   phpmyadmin:
@@ -30,18 +30,6 @@ services:
     environment:
       - PMA_HOST=mysql
       - MYSQL_ROOT_PASSWORD=rootpw
-    restart: always
-  
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    ports:
-      - '9090:9090'
-    depends_on:
-      - fastapi
     restart: always
   
   nginx:
