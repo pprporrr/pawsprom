@@ -61,9 +61,9 @@ CREATE TABLE `adoptionRequest` (
 --
 
 INSERT INTO `adoptionRequest` (`requestID`, `pet_petID`, `user_userID`, `requestStatus`, `requestDate`) VALUES
-(1, 101, 201, 'Approved', '2023-07-10'),
-(2, 102, 202, 'Rejected', '2023-07-18'),
-(3, 103, 203, 'Pending', '2023-07-22');
+(1, 102, 201, 'Approved', '2023-07-10'),
+(2, 104, 202, 'Rejected', '2023-07-18'),
+(3, 103, 202, 'Pending', '2023-07-22');
 
 -- --------------------------------------------------------
 

@@ -15,159 +15,6 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
-###########################CRUD###########################
-
-@router.post("/pet/", response_model=dict)
-async def create_pet(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        petName = data.get("petName")
-        species = data.get("species")
-        breed = data.get("breed")
-        age = data.get("age")
-        gender = data.get("gender")
-        weight = data.get("weight")
-        color = data.get("color")
-        dateofbirth = data.get("dateofbirth")
-        availabilityStatus = data.get("availabilityStatus")
-        description = data.get("description")
-        features = json.dumps(data.get("features"))
-        shelters_shelterID = data.get("shelterID")
-        
-        if None in (petName, species, breed, age, gender, weight, color, dateofbirth, availabilityStatus, features):
-            return create_error_response("missing required fields")
-        
-        query = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
-                "features, availabilityStatus, shelters_shelterID) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (petName, species, breed, age, gender, weight, color, dateofbirth,
-                                             description, features, availabilityStatus, shelters_shelterID))
-        
-        query = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
-        
-        if not result:
-            return create_error_response("failed to create pet")
-        
-        return create_success_response("pet created")
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.get("/pet/", response_model=dict)
-async def read_pet_details(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        petID = data.get("petID")
-        
-        if petID is None:
-            return create_error_response("missing 'petID' in the request data")
-        
-        query = "SELECT * FROM pet WHERE petID = %s"
-        result = await db_connector.execute_query(query, petID)
-        
-        if not result:
-            return create_error_response("pet not found")
-        
-        petDetails = {
-            "petID": result[0][0],
-            "petName": result[0][1],
-            "species": result[0][2],
-            "breed": result[0][3],
-            "age": result[0][4],
-            "gender": result[0][5],
-            "weight": result[0][6],
-            "color": result[0][7],
-            "dateofbirth": result[0][8].isoformat(),
-            "description": result[0][9],
-            "features": json.loads(result[0][10]),
-            "availabilityStatus": result[0][11],
-            "shelters_shelterID": result[0][13]
-        }
-        
-        return create_success_response(petDetails)
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.put("/pet/", response_model=dict)
-async def update_pet(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        petID = data.get("petID")
-        petName = data.get("petName")
-        species = data.get("species")
-        breed = data.get("breed")
-        age = data.get("age")
-        gender = data.get("gender")
-        weight = data.get("weight")
-        color = data.get("color")
-        dateofbirth = data.get("dateofbirth")
-        description = data.get("description")
-        features = json.dumps(data.get("features"))
-        
-        if None in (petName, species, breed, age, gender, weight, color, dateofbirth):
-            return create_error_response("missing required fields")
-        
-        query = "SELECT * FROM pet WHERE petID = %s"
-        result = await db_connector.execute_query(query, petID)
-        
-        if not result:
-            return create_error_response("pet not found")
-        
-        query = "UPDATE pet SET petName = %s, species = %s, breed = %s, age = %s, gender = %s, weight = %s, " \
-                "color = %s, dateofbirth = %s, description = %s, features = %s"\
-                "WHERE petID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (petName, species, breed, age, gender, weight, color, dateofbirth, description, features, petID))
-        
-        return create_success_response("pet updated")
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.delete("/pet/", response_model=dict)
-async def delete_pet(request: Request):
-    try:
-        await db_connector.connect()
-        data = await request.json()
-        
-        petID = data.get("petID")
-        
-        if petID is None:
-            return create_error_response("missing 'petID' in the request data")
-        
-        query = "SELECT * FROM pet WHERE petID = %s"
-        result = await db_connector.execute_query(query, petID)
-        
-        if not result:
-            return create_error_response("pet not found")
-        
-        query = "DELETE FROM pet WHERE petID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, petID)
-        
-        return create_success_response("pet deleted")
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-##########################################################
-
 @router.post("/pet/create-profile/byUser/", response_model=dict)
 async def create_pet_profile(request: Request):
     try:
@@ -420,6 +267,77 @@ async def read_pet_details_long(request: Request):
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
+
+@router.delete("/pet/delete-profile/", response_model=dict)
+async def delete_pet(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        petID = data.get("petID")
+        
+        if petID is None:
+            return create_error_response("missing 'petID' in the request data")
+        
+        getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+        getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        
+        if getPetDetailsResult:
+            deletePetImagesQuery = "DELETE FROM petImages WHERE pet_petID = %s"
+            async with db_connector.pool.acquire() as conn:
+                async with conn.cursor() as cursor:
+                    await cursor.execute(deletePetImagesQuery, (petID,))
+            
+            deletePetVaccinesQuery = "DELETE FROM petVaccinations WHERE pet_petID = %s"
+            async with db_connector.pool.acquire() as conn:
+                async with conn.cursor() as cursor:
+                    await cursor.execute(deletePetVaccinesQuery, (petID,))
+            
+            if getPetDetailsResult[0][11] == "Owned":
+                deletePetOwnerQuery = "DELETE FROM petOwnership WHERE pet_petID = %s"
+                async with db_connector.pool.acquire() as conn:
+                    async with conn.cursor() as cursor:
+                        await cursor.execute(deletePetOwnerQuery, (petID,))
+            elif getPetDetailsResult[0][11] == "Adopted":
+                getPetOwnerQuery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
+                getPetOwnerResult = await db_connector.execute_query(getPetOwnerQuery, (petID))
+                
+                user_userID = getPetOwnerResult[0][2]
+                
+                getAdoptionRequestQuery = "SELECT * FROM adoptionRequest WHERE pet_petID = %s AND user_userID = %s"
+                getAdoptionRequestResult = await db_connector.execute_query(getAdoptionRequestQuery, petID, user_userID)
+                
+                requestID = getAdoptionRequestResult[0][0]
+                
+                deleteAdoptionDecisionQuery = "DELETE FROM adoptionDecision WHERE adoptionRequest_requestID = %s"
+                async with db_connector.pool.acquire() as conn:
+                    async with conn.cursor() as cursor:
+                        await cursor.execute(deleteAdoptionDecisionQuery, (requestID,))
+                
+                deleteAdoptionRequestQuery = "DELETE FROM adoptionRequest WHERE requestID = %s"
+                async with db_connector.pool.acquire() as conn:
+                    async with conn.cursor() as cursor:
+                        await cursor.execute(deleteAdoptionRequestQuery, (requestID,))
+                
+                deletePetOwnerQuery = "DELETE FROM petOwnership WHERE pet_petID = %s"
+                async with db_connector.pool.acquire() as conn:
+                    async with conn.cursor() as cursor:
+                        await cursor.execute(deletePetOwnerQuery, (petID,))
+            
+            deletePetQuery = "DELETE FROM pet WHERE petID = %s"
+            async with db_connector.pool.acquire() as conn:
+                async with conn.cursor() as cursor:
+                    await cursor.execute(deletePetQuery, (petID,))
+            
+            return create_success_response("pet deleted")
+        else:
+            return create_error_response("pet not found")
+        
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 """
 @router.post("/pet/search/", response_model=dict)
 async def search_pet(request: Request):
