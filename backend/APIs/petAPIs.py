@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Request, UploadFile, File
 from APIs.dbConnector import DBConnector, get_db_connector
-from fastapi.responses import StreamingResponse
 from typing import List
-from io import BytesIO
 import json
 
 router = APIRouter()
@@ -141,6 +139,12 @@ async def update_pet_profile(request: Request):
         if petID is None:
             return create_error_response("missing 'petID' in the request data")
         
+        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
+        
+        if not checkPetResult:
+            return create_error_response("don't have this petID in the database")
+        
         updateFields = {}
         
         if "petName" in data:
@@ -194,7 +198,6 @@ async def update_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
-
 @router.post("/pet/info-short/", response_model=dict)
 async def read_pet_profile_short(request: Request):
     try:
@@ -208,6 +211,9 @@ async def read_pet_profile_short(request: Request):
         
         getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
         getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        
+        if not getPetDetailsResult:
+            return create_error_response("don't have this petID in the database")
         
         if getPetDetailsResult:
             getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
@@ -267,6 +273,9 @@ async def read_pet_profile_long(request: Request):
         
         getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
         getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        
+        if not getPetDetailsResult:
+            return create_error_response("don't have this petID in the database")
         
         if getPetDetailsResult:
             getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
@@ -333,19 +342,16 @@ async def read_pet_profile_long(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.delete("/pet/delete-profile/", response_model=dict)
-async def delete_pet_profile(request: Request):
+@router.delete("/pet/delete-profile/{petID}", response_model=dict)
+async def delete_pet_profile(petID: int):
     try:
         await db_connector.connect()
-        data = await request.json()
-        
-        petID = data.get("petID")
-        
-        if petID is None:
-            return create_error_response("missing 'petID' in the request data")
         
         getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
         getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        
+        if not getPetDetailsResult:
+            return create_error_response("don't have this petID in the database")
         
         if getPetDetailsResult:
             deletePetImagesQuery = "DELETE FROM petImages WHERE pet_petID = %s"

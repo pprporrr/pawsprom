@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, Request, UploadFile, File
 from APIs.dbConnector import get_db_connector
 from fastapi.responses import StreamingResponse
 from typing import List
@@ -14,8 +14,76 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
-@router.post("/image/create/{petID}/", response_model=dict)
-async def upload_image(petID: int, imageFiles: List[UploadFile] = File(...)):
+@router.put("/image/update-vaccinationRecord/{petID}/", response_model=dict)
+async def update_pet_vaccination_record(petID: int, imageFile: UploadFile = File(...)):
+    try:
+        await db_connector.connect()
+        
+        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
+        
+        if not checkPetResult:
+            return create_error_response("pet not found")
+        
+        if imageFile is None:
+            return create_error_response("missing 'imageFiles' fields")
+        
+        imageData = await imageFile.read()
+        
+        updateVaccinationRecordVaquery = "UPDATE pet SET vaccinationRecord = %s WHERE petID = %s"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(updateVaccinationRecordVaquery, (imageData, petID))
+        
+        return create_success_response("vaccination record updated")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.get("/image/get-vaccinationRecord/{petID}/", response_model=dict)
+async def get_pet_vaccination_record(petID: int):
+    try:
+        await db_connector.connect()
+        getImageQuery = "SELECT vaccinationRecord FROM pet WHERE petID = %s"
+        getImageResult = await db_connector.execute_query(getImageQuery, petID)
+        
+        if getImageResult:
+            image = getImageResult[0][0]
+            return StreamingResponse(BytesIO(image), media_type="image/jpeg")
+        else:
+            return create_error_response("pet image not found")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.put("/image/delete-vaccinationRecord/{petID}/", response_model=dict)
+async def delete_pet_vaccination_record(petID: int):
+    try:
+        await db_connector.connect()
+        
+        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
+        
+        if not checkPetResult:
+            return create_error_response("pet not found")
+        
+        updateVaccinationRecordVaquery = "UPDATE pet SET vaccinationRecord = %s WHERE petID = %s"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(updateVaccinationRecordVaquery, (None, petID))
+        
+        return create_success_response("vaccination record updated")
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+########################################################################
+
+@router.post("/image/create-petImage/{petID}/", response_model=dict)
+async def upload_pet_image(petID: int, imageFiles: List[UploadFile] = File(...)):
     try:
         await db_connector.connect()
         
@@ -48,7 +116,7 @@ async def upload_image(petID: int, imageFiles: List[UploadFile] = File(...)):
     finally:
         await db_connector.disconnect()
 
-@router.get("/image/ids/{petID}/", response_model=dict)
+@router.get("/image/get-imageIDs/{petID}/", response_model=dict)
 async def get_pet_image_ids(petID: int):
     try:
         await db_connector.connect()
@@ -72,7 +140,7 @@ async def get_pet_image_ids(petID: int):
     finally:
         await db_connector.disconnect()
 
-@router.get("/image/{imageID}/")
+@router.get("/image/get-image/{imageID}/")
 async def get_pet_image(imageID: int):
     try:
         await db_connector.connect()
@@ -87,5 +155,21 @@ async def get_pet_image(imageID: int):
             return create_error_response("pet image not found")
     except Exception as e:
         raise create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.delete("/image/delete-image/{imageID}/", response_model=dict)
+async def delete_pet_image(imageID: int):
+    try:
+        await db_connector.connect()
+        
+        deleteImageQuery = "DELETE FROM petImages WHERE imageID = %s"
+        async with db_connector.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(deleteImageQuery, imageID)
+        
+        return create_success_response("pet ownership record deleted")
+    except Exception as e:
+        return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
