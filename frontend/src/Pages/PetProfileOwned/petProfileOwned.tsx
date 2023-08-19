@@ -3,6 +3,27 @@ import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+type PetData = {
+  petName: string
+		species: string | null
+		breed: string | null
+		age: number
+		gender: string
+		weight: number
+		color: string | null
+		dateofbirth: string
+		description: string | null
+		imageIDs: number[]
+		features: {
+				[key:string]: boolean
+		}
+		availabiltyStatus: string
+		vaccinationRecord: null
+		// shelterID: number
+		vaccinationName: string[]
+		vaccinationDate: string[]
+		address: string
+}
 
 
 export const PetProfileOwned = () => {
@@ -42,6 +63,7 @@ export const PetProfileOwned = () => {
       address: 'njeenkfjn dsnfoidsdif',
     }
 
+
     // TODO: display image from blob file (below is for testing)
     // const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
     // const blob = new Blob([mockBlob], { type: 'image/jpeg' })
@@ -51,7 +73,7 @@ export const PetProfileOwned = () => {
 
 
     // * the actual data to set after fetch from API
-    const [data, setData] = useState({})
+    const [data, setData] = useState<PetData>(Data)
 
     //* URL for API
     const baseAPI = axios.create({
@@ -78,11 +100,11 @@ export const PetProfileOwned = () => {
 
     return (
         <div className={styles.bgContainer}>
-            {/* <PetProfileFull 
+            <PetProfileFull 
             page={petPage}
             data= {data}
             baseAPI={baseAPI} 
-            ></PetProfileFull> */}
+            ></PetProfileFull>
         </div>
     )
 }
