@@ -1,4 +1,16 @@
 
-p {
-    font-size: 1rem;
+.iconTextWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.symbol {
+    height: 35px;
+    width: 35px;
+}
+
+.textDeco {
+    line-height: 0;
 }
