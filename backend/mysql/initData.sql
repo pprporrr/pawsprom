@@ -61,9 +61,9 @@ CREATE TABLE `adoptionRequest` (
 --
 
 INSERT INTO `adoptionRequest` (`requestID`, `pet_petID`, `user_userID`, `requestStatus`, `requestDate`) VALUES
-(1, 101, 201, 'Approved', '2023-07-10'),
-(2, 102, 202, 'Rejected', '2023-07-18'),
-(3, 103, 203, 'Pending', '2023-07-22');
+(1, 102, 201, 'Approved', '2023-07-10'),
+(2, 104, 202, 'Rejected', '2023-07-18'),
+(3, 103, 202, 'Pending', '2023-07-22');
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE `pet` (
   `color` varchar(45) NOT NULL,
   `dateofbirth` date NOT NULL,
   `description` varchar(512) DEFAULT NULL,
-  `features` json NOT NULL,
+  `features` JSON NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
   `vaccinationRecord` MEDIUMBLOB DEFAULT NULL,
   `shelters_shelterID` int DEFAULT NULL
@@ -92,13 +92,13 @@ CREATE TABLE `pet` (
 -- Dumping data for table `pet`
 --
 
-INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`,`shelters_shelterID`) VALUES
-(101, 'Max', 'Dog', 'Labrador', 3, 'Male', '25', 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 1}', 'Available', NULL,501),
-(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', '4', 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 1}', 'Adopted', NULL, 502),
-(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', '30', 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": 0, "feature2": 0, "feature3": 0}', 'Available', NULL, 503),
-(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', '25', 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": 0, "feature2": 1, "feature3": 0}', 'Available', NULL, 501),
-(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', '8', 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": 1, "feature2": 1, "feature3": 0}', 'Owned', NULL, NULL),
-(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', '30', 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": 1, "feature2": 0, "feature3": 1}', 'Available', NULL, 502);
+INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`, `shelters_shelterID`) VALUES
+(101, 'Max', 'Dog', 'Labrador', 3, 'Male', 25, 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": true, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 501),
+(102, 'Bella', 'Cat', 'Siamese', 2, 'Female', 4, 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": true, "feature2": false, "feature3": false, "feature4": true, "feature5": false, "feature6": true, "feature7": false, "feature8": false, "feature9": false, "feature10": false}', 'Adopted', NULL, 502),
+(103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', 30, 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": false, "feature2": false, "feature3": true, "feature4": false, "feature5": true, "feature6": true, "feature7": false, "feature8": true, "feature9": false, "feature10": false}', 'Available', NULL, 503),
+(104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', 25, 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": true, "feature2": true, "feature3": true, "feature4": false, "feature5": true, "feature6": true, "feature7": true, "feature8": false, "feature9": true, "feature10": false}', 'Available', NULL, 501),
+(105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', 8, 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": false, "feature6": true, "feature7": false, "feature8": false, "feature9": true, "feature10": false}', 'Owned', NULL, NULL),
+(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', 30, 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": false, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 502);
 
 -- --------------------------------------------------------
 
