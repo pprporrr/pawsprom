@@ -21,7 +21,7 @@ export const PetProfileOwned = () => {
       color: 'brown',
       dateofbirth: "2023-06-15",
       description: 'dsnvidhfdf',
-      image: ['sdf'],
+      imageIDs: [1, ],
       features: {
           feature1: true,
           feature2: true,

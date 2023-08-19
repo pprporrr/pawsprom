@@ -19,7 +19,7 @@ interface PetProfileFullProps {
 		color: string | null
 		dateofbirth: string
 		description: string | null
-		image: any[]
+		imageIDs: number[]
 		features: {
 				feature1: boolean,
 				feature2: boolean,
@@ -67,7 +67,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!General Information Section */}
 			<section className={styles.infoContainer1}>
-				<ImageSlider data={slides}></ImageSlider>
+				<ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider>
 				<div className={styles.wrapperFlex}>
 					<IconText text={data.breed} fontSize={1} isVisible={true}></IconText>
 					<IconText text={data.petName} fontSize={1.5} isVisible={true}></IconText>
