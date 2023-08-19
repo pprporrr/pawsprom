@@ -3,21 +3,26 @@ import { BsArrowLeftCircleFill, BsArrowRightCircleFill} from "react-icons/bs"
 import { useEffect, useState } from 'react';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
+ // * testing purpose =================================================
 interface Slide {
     src: string;
     alt: string;
   }
 
+interface ImageSliderProps {
+    data: Slide[];
+}
+ // * testing purpose =================================================
+
 // interface ImageSliderProps {
-//     data: Slide[];
+//     imageIDs: number[]
+//     baseAPI: AxiosInstance
 // }
 
-interface ImageSliderProps {
-    imageIDs: number[]
-    baseAPI: AxiosInstance
-}
+// export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI}) => {
+    export const ImageSlider: React.FC<ImageSliderProps> = ({data}) => {
 
-export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI}) => {
+    // console.log('imageid', imageIDs)
 
     //TODO: test with data from API and change from blob file to display as img
 
@@ -25,50 +30,50 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI}) => 
     const [currentImage, setCurrentImage] = useState('')
     const [imageURLs, setImageURLs] = useState<string[]>([])
 
-    useEffect(()=> {
+    // useEffect(()=> {
 
-        requestImage(imageIDs)
+    //     requestImage(imageIDs)
 
-    }, [imageIDs])
+    // }, [imageIDs])
 
     // * Identify next image
 
     const nextSlide = () => {
-        setSlideIndex(slideIndex === imageIDs.length - 1 ? 0 : slideIndex + 1)
+        setSlideIndex(slideIndex === data.length - 1 ? 0 : slideIndex + 1)
     }
 
     const prevSlide = () => {
-        setSlideIndex(slideIndex === 0 ? imageIDs.length - 1 : slideIndex - 1)
+        setSlideIndex(slideIndex === 0 ? data.length - 1 : slideIndex - 1)
     }
 
     // *---------------- GET IMAGE FROM API ----------------* //
 
-    async function requestImage(imageIDs: number[] ) {
+    // async function requestImage(imageIDs: number[] ) {
         
-        for (let i in imageIDs) {
-            const imageID = imageIDs[i]
+    //     for (let i in imageIDs) {
+    //         const imageID = imageIDs[i]
 
-            const imageURL = `/petAPI/pet/image/${imageID}/`
+    //         const imageURL = `/petAPI/pet/image/${imageID}/`
 
-            try {
-                const response: AxiosResponse<Blob> = await 
-                axios.get(imageURL, {
-                    responseType: 'blob'
-                })
+    //         try {
+    //             const response: AxiosResponse<Blob> = await 
+    //             axios.get(imageURL, {
+    //                 responseType: 'blob'
+    //             })
     
-                const blobURL = URL.createObjectURL(response.data)
+    //             const blobURL = URL.createObjectURL(response.data)
 
-                setImageURLs((imageURLs => [...imageURLs, blobURL]))
+    //             setImageURLs((imageURLs => [...imageURLs, blobURL]))
     
-            } catch (error) {
-                throw error
-            }
+    //         } catch (error) {
+    //             throw error
+    //         }
     
-        }
+    //     }
 
-        console.log(imageURLs)
+    //     console.log(imageURLs)
 
-        }
+        // }
      // *---------------- GET IMAGE FROM API ----------------* //
 
 
@@ -94,15 +99,29 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI}) => 
                 return null
             }
             })} */}
+            {/* // * testing purpose ================================================= */}
+            {data.map((image, index) => {
+
+            return <img 
+            src={image.src} 
+            key={index}
+            className={slideIndex === index ? styles.slide : styles.hiddenSlide}
+            // TODO: POST imageID to get image
+            ></img>
+    
+            })}
+            {/* // * testing purpose ================================================= */}
             <BsArrowRightCircleFill className={styles.arrowRight} onClick={nextSlide}/>
             <span className={styles.dotIndicators}>
-                {/* {data.map((_, index) => {
-                    return <button 
-                    key={index} 
-                    onClick={() => setSlideIndex(index)} 
-                    className={slideIndex === index ? styles.dot : styles.dotInactive}
-                    ></button>
-                })} */}
+            {/* // * testing purpose ================================================= */}
+            {data.map((_, index) => {
+                return <button 
+                key={index} 
+                onClick={() => setSlideIndex(index)} 
+                className={slideIndex === index ? styles.dot : styles.dotInactive}
+                ></button>
+            })}
+            {/* // * testing purpose ================================================= */}
             </span>
         </div>
     )

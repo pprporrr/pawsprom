@@ -21,13 +21,11 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-				feature1: boolean,
-				feature2: boolean,
-				feature3: boolean
+				[key:string]: boolean
 		}
 		availabiltyStatus: string
 		vaccinationRecord: null
-		shelterID: number
+		// shelterID: number
 		vaccinationName: string[]
 		vaccinationDate: string[]
 		address: string
@@ -45,6 +43,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 	//* 'baseAPI' base URL of API (AxiosInstance)
 
 	// change string in 'vaccinationDate' and 'dateofbirth' into Date Object
+	console.log(data.vaccinationDate)
 	const vaccineDateObjects = data.vaccinationDate.map(dateString => new Date(dateString))
 	const dateOfBirth = new Date(data.dateofbirth)
 	
@@ -67,7 +66,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!General Information Section */}
 			<section className={styles.infoContainer1}>
-				<ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider>
+				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
+				<ImageSlider data={slides}></ImageSlider>
 				<div className={styles.wrapperFlex}>
 					<IconText text={data.breed} fontSize={1} isVisible={true}></IconText>
 					<IconText text={data.petName} fontSize={1.5} isVisible={true}></IconText>
