@@ -15,7 +15,16 @@ type PetData = {
 		description: string | null
 		imageIDs: number[]
 		features: {
-				[key:string]: boolean
+      feature1: boolean,
+      feature2: boolean,
+      feature3: boolean,
+      feature4: boolean,
+      feature5: boolean,
+      feature6: boolean,
+      feature7: boolean,
+      feature8: boolean,
+      feature9: boolean,
+      feature10: boolean,
 		}
 		availabiltyStatus: string
 		vaccinationRecord: null
@@ -79,8 +88,7 @@ export const PetProfileOwned = () => {
     const baseAPI = axios.create({
 		baseURL: "http://10.100.7.51"
 		});
-
-    const petID = 101;
+    
     //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
 
     //const blob = new Blob([mockBlob], { type: 'image/jpeg' })

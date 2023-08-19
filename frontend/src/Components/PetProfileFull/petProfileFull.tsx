@@ -21,7 +21,16 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-				[key:string]: boolean
+				feature1: boolean,
+				feature2: boolean,
+				feature3: boolean,
+				feature4: boolean,
+				feature5: boolean,
+				feature6: boolean,
+				feature7: boolean,
+				feature8: boolean,
+				feature9: boolean,
+				feature10: boolean,
 		}
 		availabiltyStatus: string
 		vaccinationRecord: null
