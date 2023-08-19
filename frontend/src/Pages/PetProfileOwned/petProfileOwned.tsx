@@ -58,6 +58,14 @@ export const PetProfileOwned = () => {
 		baseURL: "http://10.100.7.51"
 		});
 
+    const petID = 101;
+    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
+
+    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
+
+    //const blobURL = URL.createObjectURL(blob);
+    
+
     // *---------------- POST to API ----------------* //
     useEffect(() => {
       baseAPI.post('/petAPI/pet/info-long/',{ petID })
@@ -78,4 +86,3 @@ export const PetProfileOwned = () => {
         </div>
     )
 }
-
