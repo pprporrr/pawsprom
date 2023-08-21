@@ -25,8 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-instrumentator = Instrumentator()
-instrumentator.instrument(app).expose(app)
+Instrumentator().instrument(app).expose(app)
 
 app.include_router(user_router, prefix="/userAPI", tags=["userAPI"])
 app.include_router(shelter_router, prefix="/shelterAPI", tags=["shelterAPI"])
@@ -40,3 +39,4 @@ app.include_router(decision_router, prefix="/decisionAPI", tags=["decisionAPI"])
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+    #http://prometheus:9090
