@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: mysql
--- Generation Time: Aug 09, 2023 at 10:11 AM
--- Server version: 8.0.34
--- PHP Version: 8.2.8
+-- Host: localhost:8889
+-- Generation Time: Aug 24, 2023 at 02:51 PM
+-- Server version: 5.7.39
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,43 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `adoptionDecision`
+-- Table structure for table `adoptionApplication`
 --
 
-CREATE TABLE `adoptionDecision` (
-  `decisionID` int NOT NULL,
-  `adoptionRequest_requestID` int NOT NULL,
-  `decisionDate` date NOT NULL,
-  `decisionStatus` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `adoptionDecision`
---
-
-INSERT INTO `adoptionDecision` (`decisionID`, `adoptionRequest_requestID`, `decisionDate`, `decisionStatus`) VALUES
-(1, 1, '2023-07-15', 'Approved'),
-(2, 2, '2023-07-20', 'Rejected');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `adoptionRequest`
---
-
-CREATE TABLE `adoptionRequest` (
-  `requestID` int NOT NULL,
+CREATE TABLE `adoptionApplication` (
+  `applicationID` int NOT NULL,
   `pet_petID` int NOT NULL,
   `user_userID` int NOT NULL,
-  `requestStatus` varchar(45) NOT NULL,
-  `requestDate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `approvalStatus` varchar(45) NOT NULL,
+  `dateofapplication` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `adoptionRequest`
+-- Dumping data for table `adoptionApplication`
 --
 
-INSERT INTO `adoptionRequest` (`requestID`, `pet_petID`, `user_userID`, `requestStatus`, `requestDate`) VALUES
+INSERT INTO `adoptionApplication` (`applicationID`, `pet_petID`, `user_userID`, `approvalStatus`, `dateofapplication`) VALUES
 (1, 102, 201, 'Approved', '2023-07-10'),
 (2, 104, 202, 'Rejected', '2023-07-18'),
 (3, 103, 202, 'Pending', '2023-07-22');
@@ -78,21 +57,21 @@ CREATE TABLE `pet` (
   `breed` varchar(45) NOT NULL,
   `age` int NOT NULL,
   `gender` varchar(45) NOT NULL,
-  `weight` int NOT NULL,
+  `weight` varchar(45) NOT NULL,
   `color` varchar(45) NOT NULL,
   `dateofbirth` date NOT NULL,
-  `description` varchar(512) DEFAULT NULL,
-  `features` JSON NOT NULL,
+  `description` longtext,
+  `features` json NOT NULL,
   `availabilityStatus` varchar(45) NOT NULL,
-  `vaccinationRecord` MEDIUMBLOB DEFAULT NULL,
-  `shelters_shelterID` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `vaccinationRecord` longblob,
+  `shelter_shelterID` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pet`
 --
 
-INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`, `shelters_shelterID`) VALUES
+INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `weight`, `color`, `dateofbirth`, `description`, `features`, `availabilityStatus`, `vaccinationRecord`, `shelter_shelterID`) VALUES
 (101, 'Max', 'Dog', 'Labrador', 3, 'Male', 25, 'Black', '2020-05-12', 'Friendly and playful', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": true, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 501),
 (102, 'Bella', 'Cat', 'Siamese', 2, 'Female', 4, 'White', '2021-01-05', 'Shy but affectionate', '{"feature1": true, "feature2": false, "feature3": false, "feature4": true, "feature5": false, "feature6": true, "feature7": false, "feature8": false, "feature9": false, "feature10": false}', 'Adopted', NULL, 502),
 (103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', 30, 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": false, "feature2": false, "feature3": true, "feature4": false, "feature5": true, "feature6": true, "feature7": false, "feature8": true, "feature9": false, "feature10": false}', 'Available', NULL, 503),
@@ -109,8 +88,8 @@ INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `wei
 CREATE TABLE `petImages` (
   `imageID` int NOT NULL,
   `pet_petID` int NOT NULL,
-  `image` MEDIUMBLOB NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `petImage` longblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -123,7 +102,7 @@ CREATE TABLE `petOwnership` (
   `pet_petID` int NOT NULL,
   `user_userID` int NOT NULL,
   `adoptionDate` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `petOwnership`
@@ -144,7 +123,7 @@ CREATE TABLE `petVaccinations` (
   `pet_petID` int NOT NULL,
   `vaccinationName` varchar(45) NOT NULL,
   `vaccinationDate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `petVaccinations`
@@ -167,17 +146,17 @@ INSERT INTO `petVaccinations` (`vaccinationID`, `pet_petID`, `vaccinationName`, 
 CREATE TABLE `shelter` (
   `shelterID` int NOT NULL,
   `shelterName` varchar(45) NOT NULL,
-  `shelterAddress` varchar(512) NOT NULL,
-  `contactInfo` varchar(512) NOT NULL,
-  `phoneNumber` varchar(16) NOT NULL,
-  `shelterImage` MEDIUMBLOB DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `shelterAddress` longtext NOT NULL,
+  `sheltercontactInfo` varchar(255) NOT NULL,
+  `shelterphoneNumber` varchar(16) NOT NULL,
+  `shelterImage` longblob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `shelter`
 --
 
-INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `contactInfo`, `phoneNumber`, `shelterImage`) VALUES
+INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `sheltercontactInfo`, `shelterphoneNumber`, `shelterImage`) VALUES
 (501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '+123456789', NULL),
 (502, 'Kitty Haven', '456 Park Ave, Town', 'info@kittyhaven.com', '+987654321', NULL),
 (503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '+234567890', NULL);
@@ -191,21 +170,21 @@ INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `contactInf
 CREATE TABLE `user` (
   `userID` int NOT NULL,
   `username` varchar(16) NOT NULL,
-  `password` varchar(512) NOT NULL,
+  `password` varchar(32) NOT NULL,
   `firstName` varchar(32) NOT NULL,
   `lastName` varchar(32) NOT NULL,
-  `phoneNumber` varchar(16) NOT NULL,
-  `address` varchar(512) NOT NULL,
-  `role` varchar(16) NOT NULL,
-  `image` MEDIUMBLOB DEFAULT NULL,
+  `userphoneNumber` varchar(16) NOT NULL,
+  `userAddress` longtext NOT NULL,
+  `userRole` varchar(16) NOT NULL,
+  `userImage` longblob,
   `shelter_shelterID` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `phoneNumber`, `address`, `role`, `image`, `shelter_shelterID`) VALUES
+INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `userphoneNumber`, `userAddress`, `userRole`, `userImage`, `shelter_shelterID`) VALUES
 (201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '+1122334455', '123 Elm St, City', 'User', NULL, NULL),
 (202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '+9988776655', '456 Maple Ave, Town', 'User', NULL, NULL),
 (203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '+7435312302', '123 Main St, City', 'ShelterStaff', NULL, 501),
@@ -216,17 +195,10 @@ INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `
 --
 
 --
--- Indexes for table `adoptionDecision`
+-- Indexes for table `adoptionApplication`
 --
-ALTER TABLE `adoptionDecision`
-  ADD PRIMARY KEY (`decisionID`),
-  ADD KEY `fk_adoptionDecision_adoptionRequest1_idx` (`adoptionRequest_requestID`);
-
---
--- Indexes for table `adoptionRequest`
---
-ALTER TABLE `adoptionRequest`
-  ADD PRIMARY KEY (`requestID`),
+ALTER TABLE `adoptionApplication`
+  ADD PRIMARY KEY (`applicationID`),
   ADD KEY `fk_adoptionRequest_pet1_idx` (`pet_petID`),
   ADD KEY `fk_adoptionRequest_user1_idx` (`user_userID`);
 
@@ -235,7 +207,7 @@ ALTER TABLE `adoptionRequest`
 --
 ALTER TABLE `pet`
   ADD PRIMARY KEY (`petID`),
-  ADD KEY `fk_pet_shelters1_idx` (`shelters_shelterID`);
+  ADD KEY `fk_pet_shelters1_idx` (`shelter_shelterID`);
 
 --
 -- Indexes for table `petImages`
@@ -277,16 +249,10 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `adoptionDecision`
+-- AUTO_INCREMENT for table `adoptionApplication`
 --
-ALTER TABLE `adoptionDecision`
-  MODIFY `decisionID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `adoptionRequest`
---
-ALTER TABLE `adoptionRequest`
-  MODIFY `requestID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `adoptionApplication`
+  MODIFY `applicationID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pet`
@@ -329,48 +295,42 @@ ALTER TABLE `user`
 --
 
 --
--- Constraints for table `adoptionDecision`
+-- Constraints for table `adoptionApplication`
 --
-ALTER TABLE `adoptionDecision`
-  ADD CONSTRAINT `fk_adoptionDecision_adoptionRequest1` FOREIGN KEY (`adoptionRequest_requestID`) REFERENCES `adoptionRequest` (`requestID`);
-
---
--- Constraints for table `adoptionRequest`
---
-ALTER TABLE `adoptionRequest`
-  ADD CONSTRAINT `fk_adoptionRequest_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`),
-  ADD CONSTRAINT `fk_adoptionRequest_user1` FOREIGN KEY (`user_userID`) REFERENCES `user` (`userID`);
+ALTER TABLE `adoptionApplication`
+  ADD CONSTRAINT `fk_adoptionRequest_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_adoptionRequest_user1` FOREIGN KEY (`user_userID`) REFERENCES `user` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `pet`
 --
 ALTER TABLE `pet`
-  ADD CONSTRAINT `fk_pet_shelters1` FOREIGN KEY (`shelters_shelterID`) REFERENCES `shelter` (`shelterID`);
+  ADD CONSTRAINT `fk_pet_shelters1` FOREIGN KEY (`shelter_shelterID`) REFERENCES `shelter` (`shelterID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `petImages`
 --
 ALTER TABLE `petImages`
-  ADD CONSTRAINT `fk_petImages_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`);
+  ADD CONSTRAINT `fk_petImages_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `petOwnership`
 --
 ALTER TABLE `petOwnership`
-  ADD CONSTRAINT `fk_petOwnership_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`),
-  ADD CONSTRAINT `fk_petOwnership_user1` FOREIGN KEY (`user_userID`) REFERENCES `user` (`userID`);
+  ADD CONSTRAINT `fk_petOwnership_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_petOwnership_user1` FOREIGN KEY (`user_userID`) REFERENCES `user` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `petVaccinations`
 --
 ALTER TABLE `petVaccinations`
-  ADD CONSTRAINT `fk_petVaccinations_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`);
+  ADD CONSTRAINT `fk_petVaccinations_pet1` FOREIGN KEY (`pet_petID`) REFERENCES `pet` (`petID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `fk_user_shelter1` FOREIGN KEY (`shelter_shelterID`) REFERENCES `shelter` (`shelterID`);
+  ADD CONSTRAINT `fk_user_shelter1` FOREIGN KEY (`shelter_shelterID`) REFERENCES `shelter` (`shelterID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

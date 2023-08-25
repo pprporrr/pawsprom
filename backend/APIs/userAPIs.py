@@ -28,12 +28,12 @@ async def create_user(request: Request):
         password = data.get("password")
         firstName = data.get("firstName")
         lastName = data.get("lastName")
-        phoneNumber = data.get("phoneNumber")
-        address = data.get("address")
-        role = data.get("role")
+        userphoneNumber = data.get("phoneNumber")
+        userAddress = data.get("address")
+        userRole = data.get("role")
         shelter_shelterID = data.get("shelterID")
         
-        if None in (username, password, firstName, lastName, phoneNumber, address, role):
+        if None in (username, password, firstName, lastName, userphoneNumber, userAddress, userRole):
             return create_error_response("missing required fields")
         
         usernameQuery = "SELECT * FROM user WHERE username = %s"
@@ -44,16 +44,16 @@ async def create_user(request: Request):
         
         hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         
-        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role, shelter_shelterID) " \
+        createUserQuery = "INSERT INTO user (username, password, firstName, lastName, userphoneNumber, userAddress, userRole, shelter_shelterID) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role, shelter_shelterID))
+                await cursor.execute(createUserQuery, (username, hashedPassword, firstName, lastName, userphoneNumber, userAddress, userRole, shelter_shelterID))
         
-        query = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkUserQuery = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
+        checkUserResult = await db_connector.execute_query(checkUserQuery)
         
-        if not result:
+        if not checkUserResult:
             return create_error_response("failed to create user")
         
         return create_success_response("user created")
@@ -73,22 +73,22 @@ async def read_user_details(request: Request):
         if userID is None:
             return create_error_response("missing 'userID' in the request data")
         
-        query = "SELECT * FROM user WHERE userID = %s"
-        result = await db_connector.execute_query(query, userID)
+        getUserQuery = "SELECT * FROM user WHERE userID = %s"
+        getUserResult = await db_connector.execute_query(getUserQuery, userID)
         
-        if not result:
+        if not getUserResult:
             return create_error_response("user not found")
         
         userDetails = {
-            "userID": result[0][0],
-            "username": result[0][1],
-            "firstName": result[0][3],
-            "lastName": result[0][4],
-            "phoneNumber": result[0][5],
-            "address": result[0][6],
-            "role": result[0][7],
-            "image": result[0][8],
-            "shelterID": result[0][9]
+            "userID": getUserResult[0][0],
+            "username": getUserResult[0][1],
+            "firstName": getUserResult[0][3],
+            "lastName": getUserResult[0][4],
+            "phoneNumber": getUserResult[0][5],
+            "address": getUserResult[0][6],
+            "role": getUserResult[0][7],
+            "image": getUserResult[0][8],
+            "shelterID": getUserResult[0][9]
         }
         
         return create_success_response(userDetails)
@@ -102,26 +102,27 @@ async def update_user(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
+        
         userID = data.get("userID")
         firstName = data.get("firstName")
         lastName = data.get("lastName")
-        phoneNumber = data.get("phoneNumber")
-        address = data.get("address")
+        userphoneNumber = data.get("phoneNumber")
+        userAddress = data.get("address")
         
-        if None in (userID, firstName, lastName, phoneNumber, address):
+        if None in (userID, firstName, lastName, userphoneNumber, userAddress):
             return create_error_response("missing required fields")
         
-        query = "SELECT * FROM user WHERE userID = %s"
-        result = await db_connector.execute_query(query, userID)
+        checkUserQuery = "SELECT * FROM user WHERE userID = %s"
+        checkUserResult = await db_connector.execute_query(checkUserQuery, userID)
         
-        if not result:
+        if not checkUserResult:
             return create_error_response("user not found")
         
-        query = "UPDATE user SET firstName = %s, lastName = %s, phoneNumber = %s, address = %s " \
+        updateUserQuery = "UPDATE user SET firstName = %s, lastName = %s, userphoneNumber = %s, userAddress = %s " \
                 "WHERE userID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (firstName, lastName, phoneNumber, address, userID))
+                await cursor.execute(updateUserQuery, (firstName, lastName, userphoneNumber, userAddress, userID))
         
         return create_success_response("user updated")
     except Exception as e:
@@ -139,16 +140,16 @@ async def delete_user(request: Request):
         if userID is None:
             return create_error_response("missing 'userID' in the request data")
         
-        query = "SELECT * FROM user WHERE userID = %s"
-        result = await db_connector.execute_query(query, userID)
+        checkUserQuery = "SELECT * FROM user WHERE userID = %s"
+        checkUserResult = await db_connector.execute_query(checkUserQuery, userID)
         
-        if not result:
+        if not checkUserResult:
             return create_error_response("user not found")
         
-        query = "DELETE FROM user WHERE userID = %s"
+        deleteUserQuery = "DELETE FROM user WHERE userID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, userID)
+                await cursor.execute(deleteUserQuery, userID)
         
         return create_success_response("user deleted")
     except Exception as e:
@@ -168,31 +169,31 @@ async def register_user(request: Request):
         password = data.get("password")
         firstName = data.get("firstName")
         lastName = data.get("lastName")
-        phoneNumber = data.get("phoneNumber")
-        address = data.get("address")
-        role = "User"
+        userphoneNumber = data.get("phoneNumber")
+        userAddress = data.get("address")
+        userRole = "User"
         
-        if None in (username, password, firstName, lastName, phoneNumber, address, role):
+        if None in (username, password, firstName, lastName, userphoneNumber, userAddress, userRole):
             return create_error_response("missing required fields")
         
-        usernameQuery = "SELECT * FROM user WHERE username = %s"
-        usernameExists = await db_connector.execute_query(usernameQuery, username)
+        checkUsernameQuery = "SELECT * FROM user WHERE username = %s"
+        checkUsernameExists = await db_connector.execute_query(checkUsernameQuery, username)
         
-        if usernameExists:
+        if checkUsernameExists:
             return create_error_response("username already exists")
         
         hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         
-        query = "INSERT INTO user (username, password, firstName, lastName, phoneNumber, address, role) " \
+        createUserQuery = "INSERT INTO user (username, password, firstName, lastName, userphoneNumber, userAddress, userRole) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (username, hashedPassword, firstName, lastName, phoneNumber, address, role))
+                await cursor.execute(createUserQuery, (username, hashedPassword, firstName, lastName, userphoneNumber, userAddress, userRole))
         
-        query = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkUserQuery = "SELECT * FROM user WHERE userID = LAST_INSERT_ID()"
+        checkUserResult = await db_connector.execute_query(checkUserQuery)
         
-        if not result:
+        if not checkUserResult:
             return create_error_response("failed to create user")
         
         return create_success_response("user registered")
@@ -230,34 +231,6 @@ async def login_user(request: Request):
         else:
             return create_error_response("invalid credentials")
         
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.post("/user/update_image/{userID}/", response_model=dict)
-async def update_user_image(userID: int, imageFile: UploadFile = File(...)):
-    try:
-        await db_connector.connect()
-        
-        query = "SELECT * FROM user WHERE userID = %s"
-        result = await db_connector.execute_query(query, userID)
-        
-        if not result:
-            return create_error_response("user not found")
-        
-        with open(imageFile.filename, "wb") as image:
-            image.write(imageFile.file.read())
-        
-        if image is None:
-            return create_error_response("missing imageFile fields")
-        
-        query = "UPDATE user SET image = %s WHERE userID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (image, userID))
-        
-        return create_success_response("user image updated")
     except Exception as e:
         return create_error_response(str(e))
     finally:
