@@ -86,7 +86,7 @@ export const PetProfileOwned = () => {
 
     //* URL for API
     const baseAPI = axios.create({
-		baseURL: "http://10.100.7.51"
+		baseURL: "http://10.100.1.161/"
 		});
     
     //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
@@ -98,7 +98,7 @@ export const PetProfileOwned = () => {
 
     // *---------------- POST to API ----------------* //
     useEffect(() => {
-      baseAPI.post('/petAPI/pet/info-long/',{ petID })
+      baseAPI.post('/petAPI/info-long/',{ petID })
       .then((response) => {
         console.log('pass')
         console.log(response.data)
