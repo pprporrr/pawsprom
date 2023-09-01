@@ -36,19 +36,19 @@ async def create_adoption_application(request: Request):
         if not checkUserResult:
             return create_error_response("user not found")
         
-        checkPetQuery = "SELECT * FROM pet WHERE petID = %s"
+        checkPetQuery = "SELECT availabilityStatus FROM pet WHERE petID = %s"
         checkPetResult = await db_connector.execute_query(checkPetQuery, pet_petID)
         
         if not checkPetResult:
             return create_error_response("pet not found")
         
-        if checkPetResult[0][11] != "Available":
+        if checkPetResult[0][0] != "Available":
             return create_error_response("pet not available")
         
-        checkRedunAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s;"
+        checkRedunAdoptionQuery = "SELECT approvalStatus FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s;"
         checkRedunAdoptionResult = await db_connector.execute_query(checkRedunAdoptionQuery, pet_petID, user_userID)
         
-        if checkRedunAdoptionResult and checkRedunAdoptionResult[0][3] != "Rejected":
+        if checkRedunAdoptionResult and checkRedunAdoptionResult[0][0] != "Rejected":
             return create_error_response("adoption application already created")
         
         createAdoptionQuery = "INSERT INTO adoptionApplication (pet_petID, user_userID, dateofapplication, approvalStatus) VALUES (%s, %s, %s, %s)"
@@ -79,23 +79,24 @@ async def get_adoption_application_details(request: Request):
         if shelter_shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
-        getPetByShelterQuery = "SELECT * FROM pet WHERE shelter_shelterID  = %s"
+        getPetByShelterQuery = "SELECT petID, availabilityStatus FROM pet WHERE shelter_shelterID  = %s"
         getPetByShelterResult = await db_connector.execute_query(getPetByShelterQuery, shelter_shelterID)
         
         if not getPetByShelterResult:
-            return create_error_response("shelter not have any pet")
+            return create_error_response("shelter does not have any pet")
         
-        adoptionDetailsList = []
+        adoptionDetailsDict = {}
         
         for petDetails in getPetByShelterResult:
             petID = petDetails[0]
-            petStatus = petDetails[11]
-            #(แก้วิธีส่งข้อมูลไปให้โฟม ให้งานต่อการทำต่อ)
+            petStatus = petDetails[1]
+            
             if petStatus == "Available":
                 checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND approvalStatus = %s"
                 checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, petID, "Pending")
                 
                 if checkAdoptionResult:
+                    pet_adoption_details = []
                     for adoptionApplication in checkAdoptionResult:
                         if adoptionApplication[3] == "Pending":
                             adoptionDetails = {
@@ -105,13 +106,10 @@ async def get_adoption_application_details(request: Request):
                                 "approvalStatus": adoptionApplication[3],
                                 "dateofapplication": adoptionApplication[4].isoformat()
                             }
-                            adoptionDetailsList.append(adoptionDetails)
-                        else:
-                            adoptionDetailsList.append(None)
-                else:
-                    adoptionDetailsList.append(None)
+                            pet_adoption_details.append(adoptionDetails)
+                    adoptionDetailsDict[petID] = pet_adoption_details
         
-        return create_success_response(adoptionDetailsList)
+        return create_success_response({"adoptionDetailsList": adoptionDetailsDict})
     except Exception as e:
         return create_error_response(str(e))
     finally:
@@ -137,6 +135,9 @@ async def update_approvalStatus(request: Request):
         
         if not checkAdoptionResult:
             return create_error_response("adoption application not found")
+        
+        if checkAdoptionResult[0][3] != "Pending":
+            return create_error_response("adoption application already review")
         
         if approvalStatus == "Approved":
             checkAdoptionByPetQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s"

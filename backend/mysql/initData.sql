@@ -31,7 +31,7 @@ CREATE TABLE `adoptionApplication` (
   `applicationID` int NOT NULL,
   `pet_petID` int NOT NULL,
   `user_userID` int NOT NULL,
-  `approvalStatus` varchar(45) NOT NULL,
+  `approvalStatus` ENUM('Approved', 'Rejected', 'Pending') NOT NULL,
   `dateofapplication` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,7 +62,7 @@ CREATE TABLE `pet` (
   `dateofbirth` date NOT NULL,
   `description` longtext,
   `features` json NOT NULL,
-  `availabilityStatus` varchar(45) NOT NULL,
+  `availabilityStatus` ENUM('Available', 'Adopted', 'Owned') NOT NULL,
   `vaccinationRecord` longblob,
   `shelter_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -175,7 +175,7 @@ CREATE TABLE `user` (
   `lastName` varchar(32) NOT NULL,
   `userphoneNumber` varchar(16) NOT NULL,
   `userAddress` longtext NOT NULL,
-  `userRole` varchar(16) NOT NULL,
+  `userRole` ENUM('User', 'ShelterStaff') NOT NULL,
   `userImage` longblob,
   `shelter_shelterID` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

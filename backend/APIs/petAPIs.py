@@ -198,25 +198,27 @@ async def update_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.post("/info-short/", response_model=dict)
-async def get_pet_profile_short(request: Request):
+@router.post("/info-short/", response_model=list)
+async def get_pet_profiles_short(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        petID = data.get("petID")
+        petIDs = data.get("petIDs")
         
-        if petID is None:
-            return create_error_response("missing 'petID' in the request data")
+        if petIDs is None or len(petIDs) == 0:
+            return create_error_response("missing or invalid 'petIDs' in the request data")
         
-        getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
-        getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        pet_info_list = []
         
-        if not getPetDetailsResult:
-            return create_error_response("pet not found")
-        
-        if getPetDetailsResult:
-            getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+        for petID in petIDs:
+            getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+            getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+            
+            if not getPetDetailsResult:
+                pet_info_list.append({"petID": petID, "error": "pet not found"})
+            else:
+                getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
             getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
             
             if getPetDetailsResult[0][11] == "Available":
@@ -251,9 +253,9 @@ async def get_pet_profile_short(request: Request):
                     "address": getOwnerAddressResult[0][6]
                 }
             
-            return create_success_response(petInfo)
-        else:
-            return create_error_response("pet not found")
+            pet_info_list.append(petInfo)
+        
+        return create_success_response(pet_info_list)
         
     except Exception as e:
         return create_error_response(str(e))
