@@ -86,7 +86,8 @@ export const PetProfileOwned = () => {
 
     //* URL for API
     const baseAPI = axios.create({
-		baseURL: "http://10.100.1.161/"
+		//baseURL: "http://10.100.1.161/"
+    baseURL: "http://192.168.1.106/"
 		});
     
     //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";

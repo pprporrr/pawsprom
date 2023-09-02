@@ -1,9 +1,11 @@
 version: '3'
 services:
   fastapi:
-    build: .
+    build: 
+      context: ./backend
+      dockerfile: dockerfile
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -20,7 +22,7 @@ services:
       - MYSQL_USER=project
       - MYSQL_PASSWORD=project
     volumes:
-      - ./mysql/initData.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/mysql/initData.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
   
   phpmyadmin:
@@ -35,7 +37,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "80:80"
     depends_on:
