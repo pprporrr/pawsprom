@@ -344,7 +344,7 @@ async def get_pet_profile_long(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.delete("/delete-profile/{petID}", response_model=dict)
+@router.delete("/delete-profile/{petID}/", response_model=dict)
 async def delete_pet_profile(petID: int):
     try:
         await db_connector.connect()

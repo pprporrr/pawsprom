@@ -107,7 +107,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<DeleteButton baseAPI={baseAPI}></DeleteButton>
+				<DeleteButton baseAPI={baseAPI} petID={103}></DeleteButton>
 			</section>
 		</div>
 	)
