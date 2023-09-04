@@ -120,7 +120,7 @@ CREATE TABLE `shelter` (
 CREATE TABLE `user` (
   `userID` int NOT NULL,
   `username` varchar(16) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` longtext NOT NULL,
   `firstName` varchar(32) NOT NULL,
   `lastName` varchar(32) NOT NULL,
   `userphoneNumber` varchar(16) NOT NULL,

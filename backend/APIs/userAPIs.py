@@ -214,13 +214,14 @@ async def login_user(request: Request):
         if None in (username, password):
             return create_error_response("missing username or password")
         
-        passwordQuery = "SELECT password FROM user WHERE username = %s"
-        storedPassword = await db_connector.execute_query(passwordQuery, username)
+        getPasswordQuery = "SELECT password FROM user WHERE username = %s"
+        getPasswordResult = await db_connector.execute_query(getPasswordQuery, username)
         
-        if not storedPassword:
+        if not getPasswordResult:
             return create_error_response("invalid credentials")
         
-        if bcrypt.checkpw(password.encode("utf-8"), storedPassword[0][0].encode("utf-8")):
+        if bcrypt.checkpw(password.encode("utf-8"), getPasswordResult[0][0].encode("utf-8")):
+            
             payload = {
                 "sub": username,
                 "exp": datetime.utcnow() + timedelta(hours=1)
