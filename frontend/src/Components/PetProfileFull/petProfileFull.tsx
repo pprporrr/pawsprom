@@ -6,9 +6,11 @@ import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { Features } from '../FeaturesDisplay/featuresDisplay'
 import { DeleteButton } from '../DeleteButton/deleteButton'
 import { AxiosInstance } from 'axios'
+import { useEffect, useState } from 'react'
 
 
 interface PetProfileFullProps {
+	petID: number
 	page: string
 	data: { petName: string
 		species: string | null
@@ -21,7 +23,16 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-				[key:string]: boolean
+			feature1: boolean,
+			feature2: boolean,
+			feature3: boolean,
+			feature4: boolean,
+			feature5: boolean,
+			feature6: boolean,
+			feature7: boolean,
+			feature8: boolean,
+			feature9: boolean,
+			feature10: boolean,
 		}
 		availabiltyStatus: string
 		vaccinationRecord: null
@@ -36,16 +47,37 @@ interface PetProfileFullProps {
 
 // TODO: fix svg file , now using img calling svg
 
-export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseAPI}) => {
+export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data, baseAPI}) => {
 
 	// * receive 'page' to identify visibility of components (button)
 	//* 'data' is the data fetch from API
 	//* 'baseAPI' base URL of API (AxiosInstance)
 
 	// change string in 'vaccinationDate' and 'dateofbirth' into Date Object
-	console.log(data.vaccinationDate)
+	// console.log(data.vaccinationDate)
 	const vaccineDateObjects = data.vaccinationDate.map(dateString => new Date(dateString))
 	const dateOfBirth = new Date(data.dateofbirth)
+	const [triggerDelete, setTriggerDelete] = useState(false)
+	const [apiResponse, setAPIResponse] = useState(null)
+	
+	//* delete button sending delete request
+	const handleDeleteClick = () => {
+
+		console.log('send delete request')
+		// test petID = 103
+        baseAPI.delete('/petAPI/delete-profile/106/')
+        .then(response => {
+            console.log('response from api', response.data.success)
+			setAPIResponse(response.data.success)
+        })
+        .catch(error => {
+            console.error(error);
+        })
+	}
+	
+	useEffect(() => {
+	console.log("set response", apiResponse)
+	}, [apiResponse])
 	
 	return (
 		<div className={styles.cardWrapper}>
@@ -98,7 +130,11 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<DeleteButton baseAPI={baseAPI}></DeleteButton>
+				<DeleteButton 
+				onClick={handleDeleteClick}
+				setTriggerDelete={setTriggerDelete}
+				triggerDelete={triggerDelete}
+				apiResponse={apiResponse}/>
 			</section>
 		</div>
 	)
