@@ -40,6 +40,13 @@ export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, setTrigger
     // const handleCloseWindow = () => {
 
     // }
+    
+    useEffect(() => {
+        setIsLoading(false)
+        setTriggerDelete(false)
+        setIsConfirmOpen(false)
+        setResultText("")
+    }, []);
 
     useEffect(() => {
 
@@ -48,22 +55,24 @@ export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, setTrigger
     if (apiResponse !== null) {
         if (apiResponse === true) {
                 setResultText("success")
+                setTimeout(() => {
+                    console.log('pass')
+                    navigate(-1)
+                }, 5000)
             }
             else if (apiResponse === false) {
                 setResultText("failed")
+                setTimeout(() => {
+                    // setIsLoading(false)
+                    // setTriggerDelete(false)
+                    // setIsConfirmOpen(false)
+                    // setResultText("")
+                }, 5000)
             }
         
         // show text for then reset ,close pop up and
         // go to previous page
-        setTimeout(() => {
-            // console.log('check check')
-            setIsLoading(false)
-            setTriggerDelete(false)
-            setIsConfirmOpen(false)
-            // console.log('fin timeout')
-            // window.history.back()
-            navigate(-1)
-        }, 5000)}
+        }
 
     }
     , [apiResponse, isConfirmOpen])

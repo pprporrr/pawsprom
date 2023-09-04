@@ -63,17 +63,24 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	//* delete button sending delete request
 	const handleDeleteClick = () => {
 
+		// test
+		setAPIResponse(true)
 		console.log('send delete request')
 		// test petID = 103
         baseAPI.delete('/petAPI/delete-profile/106/')
         .then(response => {
             console.log('response from api', response.data.success)
-			setAPIResponse(response.data.success)
+			// setAPIResponse(response.data.success)
         })
         .catch(error => {
             console.error(error);
         })
 	}
+
+	useEffect(() => {
+        setTriggerDelete(false)
+		setAPIResponse(null)
+    }, []);
 	
 	useEffect(() => {
 	console.log("set response", apiResponse)
