@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios"
+import { AxiosInstance, AxiosResponse } from "axios";
 
 interface DeleteButtonProps {
     baseAPI: AxiosInstance;
@@ -8,13 +8,20 @@ interface DeleteButtonProps {
 export const DeleteButton: React.FC<DeleteButtonProps> = ({ baseAPI, petID }) => {
     async function handleClick() {
         try {
-        await baseAPI.delete(`/petAPI/delete-profile/${petID}`);
-        alert('Pet profile deleted successfully');
-        window.location.reload();
+            const response: AxiosResponse = await baseAPI.delete(`/petAPI/delete-profile/${petID}`);
+            const responseData = response.data;
+            
+            if (responseData.success === true) {
+                alert('Pet profile deleted successfully');
+                window.location.reload();
+            } else {
+                console.error('Error: ', responseData.error);
+            }
         } catch (error) {
-        console.error('Error deleting pet profile:', error);
+            console.error('Error:', error);
         }
     }
+    
     return (
         <button onClick={handleClick}>Delete Pet Profile</button>
     );

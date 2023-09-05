@@ -5,6 +5,7 @@ import { IconText } from '../IconText/iconText'
 import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { Features } from '../FeaturesDisplay/featuresDisplay'
 import { DeleteButton } from '../DeleteButton/deleteButton'
+import { AdoptionButton } from '../AdoptionButton/adoptionButton'
 import { AxiosInstance } from 'axios'
 
 
@@ -107,7 +108,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<DeleteButton baseAPI={baseAPI} petID={103}></DeleteButton>
+				<div className={styles.buttonContainer}>
+					<DeleteButton baseAPI={baseAPI} petID={103}></DeleteButton>
+					<AdoptionButton baseAPI={baseAPI} petID={103} userID={204}></AdoptionButton>
+				</div>
 			</section>
 		</div>
 	)
