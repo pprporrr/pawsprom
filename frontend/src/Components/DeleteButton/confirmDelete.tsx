@@ -6,26 +6,27 @@ interface ConfirmDeleteProps {
     onCancel: () => void
     onConfirm: () => void
     isLoading: boolean
-    apiResponse: boolean | null
     resultText: string
 
 }
 
 export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({ 
-    isOpen, onCancel, onConfirm, isLoading, apiResponse, resultText}) => {
+    isOpen, onCancel, onConfirm, isLoading, resultText}) => {
 
     if (!isOpen) {
-        return null // Don't render the dialog if it's not open
+        // Don't render the dialog if it's not open
+        return null
     }
-
 
     return (
 
     <div className={styles.modalbackground}>
         <div className={styles.modalcontent}>
+            {/* //! display loading */}
             {isLoading && resultText === "" && (
                 <p>Loading...</p>
             )}
+            {/* //! display confirmation */}
             {!isLoading && resultText === "" && (
             <div>
                 <p>Are you sure you want to delete?</p>
@@ -33,6 +34,7 @@ export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
                 <button onClick={onConfirm}>Delete</button>
             </div>
             )}
+            {/* // ! display success or failed */}
             {resultText != "" &&
             <div>
                 <p>{resultText}</p>

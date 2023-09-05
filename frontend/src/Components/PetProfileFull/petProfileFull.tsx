@@ -54,37 +54,34 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	//* 'baseAPI' base URL of API (AxiosInstance)
 
 	// change string in 'vaccinationDate' and 'dateofbirth' into Date Object
-	// console.log(data.vaccinationDate)
 	const vaccineDateObjects = data.vaccinationDate.map(dateString => new Date(dateString))
 	const dateOfBirth = new Date(data.dateofbirth)
-	const [triggerDelete, setTriggerDelete] = useState(false)
+	// response from api when click delete button
 	const [apiResponse, setAPIResponse] = useState(null)
 	
 	//* delete button sending delete request
 	const handleDeleteClick = () => {
 
 		// test
-		setAPIResponse(true)
+		// setAPIResponse(true)
+
 		console.log('send delete request')
-		// test petID = 103
+		// test petID = 106 , // ! dont forget to change
         baseAPI.delete('/petAPI/delete-profile/106/')
         .then(response => {
             console.log('response from api', response.data.success)
-			// setAPIResponse(response.data.success)
+			setAPIResponse(response.data.success)
         })
         .catch(error => {
             console.error(error);
         })
 	}
 
+
+	//* reset var
 	useEffect(() => {
-        setTriggerDelete(false)
 		setAPIResponse(null)
     }, []);
-	
-	useEffect(() => {
-	console.log("set response", apiResponse)
-	}, [apiResponse])
 	
 	return (
 		<div className={styles.cardWrapper}>
@@ -106,7 +103,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			{/* //!General Information Section */}
 			<section className={styles.infoContainer1}>
 				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				<ImageSlider data={slides}></ImageSlider>
+				<ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider>
 				<div className={styles.wrapperFlex}>
 					<IconText text={data.breed} fontSize={1} isVisible={true}></IconText>
 					<IconText text={data.petName} fontSize={1.5} isVisible={true}></IconText>
@@ -139,8 +136,6 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			<section className={styles.bottomContainer}>
 				<DeleteButton 
 				onClick={handleDeleteClick}
-				setTriggerDelete={setTriggerDelete}
-				triggerDelete={triggerDelete}
 				apiResponse={apiResponse}/>
 			</section>
 		</div>
