@@ -90,11 +90,6 @@ export const PetProfileOwned = () => {
 		baseURL: "http://10.100.4.187"
 		});
 
-    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
-
-    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-
-    //const blobURL = URL.createObjectURL(blob);
     
 
     // *---------------- POST to API ----------------* //

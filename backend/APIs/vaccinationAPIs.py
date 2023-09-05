@@ -26,15 +26,15 @@ async def create_pet_vaccination(request: Request):
         if None in (pet_petID, vaccinationName, vaccinationDate):
             return create_error_response("missing required fields")
         
-        query = "INSERT INTO petVaccinations (pet_petID, vaccinationName, vaccinationDate) VALUES (%s, %s, %s)"
+        createVaccineQuery = "INSERT INTO petVaccinations (pet_petID, vaccinationName, vaccinationDate) VALUES (%s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (pet_petID, vaccinationName, vaccinationDate))
+                await cursor.execute(createVaccineQuery, (pet_petID, vaccinationName, vaccinationDate))
         
-        query = "SELECT * FROM petVaccinations WHERE vaccinationID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkVaccineQuery = "SELECT * FROM petVaccinations WHERE vaccinationID = LAST_INSERT_ID()"
+        checkVaccineResult = await db_connector.execute_query(checkVaccineQuery)
         
-        if not result:
+        if not checkVaccineResult:
             return create_error_response("failed to create pet vaccination record")
         
         return create_success_response("created pet vaccination record")
@@ -44,7 +44,7 @@ async def create_pet_vaccination(request: Request):
         await db_connector.disconnect()
 
 @router.get("/vaccination/", response_model=dict)
-async def read_pet_vaccination_details(request: Request):
+async def get_pet_vaccination_details(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -54,17 +54,17 @@ async def read_pet_vaccination_details(request: Request):
         if vaccinationID is None:
             return create_error_response("missing 'vaccinationID' in the request data")
         
-        query = "SELECT * FROM petVaccinations WHERE vaccinationID = %s"
-        result = await db_connector.execute_query(query, vaccinationID)
+        getVaccineQuery = "SELECT * FROM petVaccinations WHERE vaccinationID = %s"
+        getVaccineResult = await db_connector.execute_query(getVaccineQuery, vaccinationID)
         
-        if not result:
+        if not getVaccineResult:
             return create_error_response("pet vaccination record not found")
         
         vaccinationDetails = {
-            "vaccinationID": result[0][0],
-            "pet_petID": result[0][1],
-            "vaccinationName": result[0][2],
-            "vaccinationDate": result[0][3].isoformat()
+            "vaccinationID": getVaccineResult[0][0],
+            "pet_petID": getVaccineResult[0][1],
+            "vaccinationName": getVaccineResult[0][2],
+            "vaccinationDate": getVaccineResult[0][3].isoformat()
         }
         
         return create_success_response(vaccinationDetails)

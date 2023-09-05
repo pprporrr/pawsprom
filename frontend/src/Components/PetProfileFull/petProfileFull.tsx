@@ -5,6 +5,7 @@ import { IconText } from '../IconText/iconText'
 import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { Features } from '../FeaturesDisplay/featuresDisplay'
 import { DeleteButton } from '../DeleteButton/deleteButton'
+import { AdoptionButton } from '../AdoptionButton/adoptionButton'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -46,7 +47,6 @@ interface PetProfileFullProps {
 }
 
 // TODO: fix svg file , now using img calling svg
-
 export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data, baseAPI}) => {
 
 	// * receive 'page' to identify visibility of components (button)
@@ -137,6 +137,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 				<DeleteButton 
 				onClick={handleDeleteClick}
 				apiResponse={apiResponse}/>
+
 			</section>
 		</div>
 	)

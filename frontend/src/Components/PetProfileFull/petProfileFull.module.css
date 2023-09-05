@@ -62,6 +62,12 @@
     background-color: rgb(142, 35, 192);
 }
 
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}  
+
 /* =========== Grid =========== */
 
 .titleContainer {
