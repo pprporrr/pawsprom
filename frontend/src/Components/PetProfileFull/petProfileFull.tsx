@@ -75,6 +75,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
             console.error(error);
         })
 	}
+
+	// * for adoption button by P'Porpor ======================================
 	
 	const handleAdoptionClick = () => {
 		// test
@@ -99,6 +101,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
             console.error(error);
         })
 	}
+
+	// * for adoption button by P'Porpor ======================================
 	
 	//* reset var
 	useEffect(() => {
