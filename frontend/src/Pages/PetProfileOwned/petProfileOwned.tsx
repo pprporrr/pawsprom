@@ -51,7 +51,7 @@ export const PetProfileOwned = () => {
       weight: 3,
       color: 'brown',
       dateofbirth: "",
-      description: 'Hello my name is Po. I like to eat. I want to go to the toilet na',
+      description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
       imageIDs: [1,2,3],
       features: {
           feature1: true,

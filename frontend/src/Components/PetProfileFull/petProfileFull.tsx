@@ -115,7 +115,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			{/* //!Title Section */}
 			<section className={styles.topContainer}>
 				<div className={styles.titleContainer}>
-					<p className={styles.title}>Pet Profile</p>
+					<h1 className={styles.title}>Pet Profile</h1>
 					<div style={{ width: '2.813rem', height: '2.813rem' }}>
 						{/* <SpeciesSymbol></SpeciesSymbol> change later na vvvvvvvvvvv svg*/}
 						<img src="../../cat.svg" alt="edit-symbol" />
@@ -162,6 +162,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			</section>
 			{/* //!Vaccine Records Section */}
 			<section className={styles.vaccineContainer}>
+				<h2>Vaccine Records</h2>
 				<VaccineRecords 
 				vaccinationName={data.vaccinationName} 
 				vaccinationDate={vaccineDateObjects}></VaccineRecords>

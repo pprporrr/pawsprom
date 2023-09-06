@@ -60,7 +60,8 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
     // reset var
     useEffect(() => {
         setImageURLs([])
-
+        // ! test =======
+        setImageURLs(['https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/1200px-RedCat_8727.jpg'])
     },[])
 
     useEffect(() => {
