@@ -40,6 +40,7 @@ export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
 
     // ! var for testing purpose ========================================
+    const shelterID = 503;
     const petID = 102;
     const Data = { 
       petName: 'Tor',
@@ -84,22 +85,31 @@ export const PetProfileOwned = () => {
 
     // * the actual data to set after fetch from API
     const [data, setData] = useState<PetData>(Data)
+    const [adoptiondata, setAdoptionData] = useState("");
     
     //* URL for API
     const baseAPI = axios.create({
-		baseURL: "http://10.100.4.187"
+		baseURL: "http://192.168.1.7"
 		});
 
     
 
     // *---------------- POST to API ----------------* //
-    // useEffect(() => {
-    //   baseAPI.post('/petAPI/pet/info-long/',{ petID })
-    //   .then((response) => {
-    //     console.log('pass')
-    //     console.log(response.data)
-    //     setData(response.data.data) // two times
-    // })}, [])
+    useEffect(() => {
+      baseAPI.post('/petAPI/info-long/',{ petID })
+      .then((response) => {
+        console.log('pass')
+        console.log(response.data)
+        setData(response.data.data) // two times
+      });
+      
+      baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
+      .then((response) => {
+        console.log('pass')
+        console.log(response.data)
+        setAdoptionData(response.data.data) // two times
+      });
+    }, [])
      // *---------------- POST to API ----------------* //
 
     return (
