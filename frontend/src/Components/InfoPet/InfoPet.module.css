@@ -1,0 +1,69 @@
+.main_container{
+  display: grid;
+  grid-template: 1fr 1fr/1fr 1fr;
+  grid-template-areas:
+  "basic basic"
+  "vaccines features";
+}
+
+.container{
+  grid-area: basic;
+  display: grid;
+  grid-template: 1fr 1fr 1fr 1fr/ 2fr 1fr 1fr;
+  grid-template-areas: 
+  "name dob age"
+  "address gender weight"
+  "address breed breed"
+  "bio color species";
+}
+.container label{
+  display: block;
+}
+
+.vaccines_con{
+  grid-area: vaccines;
+}
+
+.features_con{
+  grid-area: features;
+}
+.seperate_lab_box{
+  /* display: flex; */
+  /* justify-content: ; */
+}
+.flex_seperate{
+  display: flex;
+  justify-content: space-between;
+}
+
+.name_con{
+  grid-area: name;
+}
+.dob_con{
+  grid-area: dob;
+}
+.age_con{
+  grid-area: age;
+}
+.address_con{
+  grid-area: address;
+}
+.gender_con{
+  grid-area: gender;
+}
+.weight_con{
+  grid-area: weight;
+}
+.breed_con{
+  grid-area: breed;
+}
+.bio_con{
+  grid-area: bio;
+}
+.color_con{
+  grid-area: color;
+}
+.species_con{
+  grid-area: species;
+}
+

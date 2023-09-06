@@ -8,9 +8,9 @@ import { BrowserRouter } from "react-router-dom"
 //! OR ELSE IT GONNA RENDER TWICE
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    {/* <React.StrictMode> */}
+  // <React.StrictMode>
+    <BrowserRouter>
       <App />
-    {/* </React.StrictMode> */}
-  </BrowserRouter>,
+    </BrowserRouter>
+  // </React.StrictMode>
 )

@@ -1,0 +1,16 @@
+.main_container{
+  display: grid;
+  grid-template-rows: 100px 1500px 100px;
+  row-gap: 4rem;
+  background-color: #FFFCF1;
+  width: auto;
+  height: 100dvh;
+}
+
+.header{
+  background-color: blue;
+}
+
+.bottom{
+  background-color: green;
+}

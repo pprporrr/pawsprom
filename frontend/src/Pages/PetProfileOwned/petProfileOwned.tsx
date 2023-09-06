@@ -21,7 +21,7 @@ type PetData = {
       feature4: boolean,
       feature5: boolean,
       feature6: boolean,
-      feature7: boolean,
+      feature7: boolean, 
       feature8: boolean,
       feature9: boolean,
       feature10: boolean,

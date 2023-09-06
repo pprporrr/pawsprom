@@ -1,0 +1,27 @@
+.create_pet_container{
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border: 0px none;
+  width: 90%;
+  height: auto;
+  background-color: #FFFCF1;
+  /* background-color: red; */
+  box-shadow: 0px 0px 10px 5px #D1D1D1;
+  border-radius: 1.3rem;
+  padding: 2rem;
+  justify-self: center;
+}
+
+.head{
+  color: #FFFCF1;
+  background-color: #CCAE9E;
+  margin: 0 -2rem 0 -2rem;
+  padding: 1rem 2rem 1rem 2rem;
+}
+
+.photo_area{
+  background-color: red;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 10px;
+  
+}
