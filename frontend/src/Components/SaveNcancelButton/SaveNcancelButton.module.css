@@ -1,0 +1,30 @@
+.btn_container{
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}
+.btn_container>input:hover{
+  cursor:pointer;
+}
+
+.cancel_btn{
+  font-size: 1rem;
+  margin-left: 2rem;
+  height: 3.125rem;
+  width: 7.3rem;
+  border: 2px solid #66BEF0;
+  border-radius: 1.6rem;
+  background-color: #FFFCF1;
+  color: #66BEF0;
+
+}
+.save_btn{
+  font-size: 1rem;
+  margin-left: 2rem;
+  height: 3.125rem;
+  width: 7.3rem;
+  border: 2px solid #66BEF0;
+  border-radius: 1.6rem;
+  background-color: #66BEF0;
+  color: #FFFCF1;
+}

@@ -1,0 +1,55 @@
+.main_container{
+  display: grid;
+  grid-template: 1fr 1fr/1fr 1fr;
+  grid-template-areas:
+  "basic basic"
+  "vaccines features";
+  gap: 1rem;
+}
+.container{
+  grid-area: basic;
+  display: grid;
+  grid-template: 1fr 1fr 1fr 1fr/ 2fr 1fr 1fr;
+  grid-template-areas: 
+  "name dob age"
+  "address gender weight"
+  "address breed breed"
+  "bio color species";
+  gap: 1rem;
+}
+.container div{
+  display: flex;
+  flex-direction: column;
+}
+
+.name_con{
+  grid-area: name;
+}
+.dob_con{
+  grid-area: dob;
+}
+.age_con{
+  grid-area: age;
+}
+.address_con{
+  grid-area: address;
+}
+.gender_con{
+  grid-area: gender;
+}
+.weight_con{
+  grid-area: weight;
+}
+.breed_con{
+  grid-area: breed;
+}
+.bio_con{
+  grid-area: bio;
+}
+.color_con{
+  grid-area: color;
+}
+.species_con{
+  grid-area: species;
+}
+
