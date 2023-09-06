@@ -1,5 +1,7 @@
 .create_pet_container{
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: grid;
+  grid-template-rows: 5rem 1fr;
+  row-gap: 10px;
   border: 0px none;
   width: 90%;
   height: auto;
@@ -10,6 +12,11 @@
   padding: 2rem;
   justify-self: center;
 }
+.create_pet_container form{
+  display: grid;
+  row-gap: 2rem;
+  grid-template-rows: 20% 3fr 1fr;
+}
 
 .head{
   color: #FFFCF1;
@@ -19,9 +26,8 @@
 }
 
 .photo_area{
-  background-color: red;
+  /* background-color: red; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 10px;
-  
+  column-gap: 2.5rem; 
 }

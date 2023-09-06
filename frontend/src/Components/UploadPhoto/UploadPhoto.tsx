@@ -5,11 +5,10 @@ import { useRef} from 'react'
 export const UploadPhoto = () => {
   // const iconRef = useRef<HTMLInputElement>(null!);
 
-
   return (
     <>
-      <label htmlFor="file">file</label>
-      <input className={styles.photo_form} type='file' name='file'/>
+      <label className={styles.photo_form} htmlFor="file">file</label>
+      <input  type='file' id='file'  hidden/>
     </>
     
   )

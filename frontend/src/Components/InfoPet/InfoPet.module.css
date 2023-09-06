@@ -5,7 +5,6 @@
   "basic basic"
   "vaccines features";
 }
-
 .container{
   grid-area: basic;
   display: grid;
@@ -27,10 +26,7 @@
 .features_con{
   grid-area: features;
 }
-.seperate_lab_box{
-  /* display: flex; */
-  /* justify-content: ; */
-}
+
 .flex_seperate{
   display: flex;
   justify-content: space-between;

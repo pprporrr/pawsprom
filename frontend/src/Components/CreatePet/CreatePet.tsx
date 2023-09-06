@@ -1,6 +1,7 @@
 import styles from './CreatePet.module.css'
 import {UploadPhoto} from '../UploadPhoto/UploadPhoto'
 import { InfoPet } from '../InfoPet/InfoPet'
+import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 
 export const CreatePet = () => {
   return (
@@ -12,17 +13,8 @@ export const CreatePet = () => {
           <UploadPhoto/>
           <UploadPhoto/>
         </section>
-        {/* <section> */}
-          <InfoPet/>
-        {/* </section> */}
-        <section>
-          <button>
-            cancel
-          </button>
-          <button>
-            save
-          </button>
-        </section>
+        <InfoPet/>
+        <SaveNcancelButton/>
       </form>
     </section>
   )
