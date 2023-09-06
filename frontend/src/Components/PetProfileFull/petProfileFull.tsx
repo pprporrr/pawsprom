@@ -42,7 +42,6 @@ interface PetProfileFullProps {
 		vaccinationDate: string[]
 		address: string
 	}
-
 	baseAPI: AxiosInstance
 }
 
