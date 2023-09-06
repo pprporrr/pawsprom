@@ -7,9 +7,11 @@ import { Features } from '../FeaturesDisplay/featuresDisplay'
 import { DeleteButton } from '../DeleteButton/deleteButton'
 import { AdoptionButton } from '../AdoptionButton/adoptionButton'
 import { AxiosInstance } from 'axios'
+import { useEffect, useState } from 'react'
 
 
 interface PetProfileFullProps {
+	petID: number
 	page: string
 	data: { petName: string
 		species: string | null
@@ -22,16 +24,16 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-				feature1: boolean,
-				feature2: boolean,
-				feature3: boolean,
-				feature4: boolean,
-				feature5: boolean,
-				feature6: boolean,
-				feature7: boolean,
-				feature8: boolean,
-				feature9: boolean,
-				feature10: boolean,
+			feature1: boolean,
+			feature2: boolean,
+			feature3: boolean,
+			feature4: boolean,
+			feature5: boolean,
+			feature6: boolean,
+			feature7: boolean,
+			feature8: boolean,
+			feature9: boolean,
+			feature10: boolean,
 		}
 		availabiltyStatus: string
 		vaccinationRecord: null
@@ -45,17 +47,41 @@ interface PetProfileFullProps {
 }
 
 // TODO: fix svg file , now using img calling svg
-
-export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseAPI}) => {
+export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data, baseAPI}) => {
 
 	// * receive 'page' to identify visibility of components (button)
 	//* 'data' is the data fetch from API
 	//* 'baseAPI' base URL of API (AxiosInstance)
 
 	// change string in 'vaccinationDate' and 'dateofbirth' into Date Object
-	console.log(data.vaccinationDate)
 	const vaccineDateObjects = data.vaccinationDate.map(dateString => new Date(dateString))
 	const dateOfBirth = new Date(data.dateofbirth)
+	// response from api when click delete button
+	const [apiResponse, setAPIResponse] = useState(null)
+	
+	//* delete button sending delete request
+	const handleDeleteClick = () => {
+
+		// test
+		// setAPIResponse(true)
+
+		console.log('send delete request')
+		// test petID = 106 , // ! dont forget to change
+        baseAPI.delete('/petAPI/delete-profile/106/')
+        .then(response => {
+            console.log('response from api', response.data.success)
+			setAPIResponse(response.data.success)
+        })
+        .catch(error => {
+            console.error(error);
+        })
+	}
+
+
+	//* reset var
+	useEffect(() => {
+		setAPIResponse(null)
+    }, []);
 	
 	return (
 		<div className={styles.cardWrapper}>
@@ -77,7 +103,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			{/* //!General Information Section */}
 			<section className={styles.infoContainer1}>
 				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				<ImageSlider data={slides}></ImageSlider>
+				<ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider>
 				<div className={styles.wrapperFlex}>
 					<IconText text={data.breed} fontSize={1} isVisible={true}></IconText>
 					<IconText text={data.petName} fontSize={1.5} isVisible={true}></IconText>
@@ -108,10 +134,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({page, data, baseA
 			</section>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<div className={styles.buttonContainer}>
-					<DeleteButton baseAPI={baseAPI} petID={103}></DeleteButton>
-					<AdoptionButton baseAPI={baseAPI} petID={103} userID={204}></AdoptionButton>
-				</div>
+				<DeleteButton 
+				onClick={handleDeleteClick}
+				apiResponse={apiResponse}/>
+
 			</section>
 		</div>
 	)

@@ -73,6 +73,7 @@ export const PetProfileOwned = () => {
     }
 
 
+
     // TODO: display image from blob file (below is for testing)
     // const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
     // const blob = new Blob([mockBlob], { type: 'image/jpeg' })
@@ -83,33 +84,28 @@ export const PetProfileOwned = () => {
 
     // * the actual data to set after fetch from API
     const [data, setData] = useState<PetData>(Data)
-
+    
     //* URL for API
     const baseAPI = axios.create({
-		//baseURL: "http://10.100.1.161/"
-    baseURL: "http://192.168.1.106/"
+		baseURL: "http://10.100.4.187"
 		});
-    
-    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
 
-    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-
-    //const blobURL = URL.createObjectURL(blob);
     
 
     // *---------------- POST to API ----------------* //
-    useEffect(() => {
-      baseAPI.post('/petAPI/info-long/',{ petID })
-      .then((response) => {
-        console.log('pass')
-        console.log(response.data)
-        setData(response.data.data) // two times
-    })}, [])
+    // useEffect(() => {
+    //   baseAPI.post('/petAPI/pet/info-long/',{ petID })
+    //   .then((response) => {
+    //     console.log('pass')
+    //     console.log(response.data)
+    //     setData(response.data.data) // two times
+    // })}, [])
      // *---------------- POST to API ----------------* //
 
     return (
         <div className={styles.bgContainer}>
-            <PetProfileFull 
+            <PetProfileFull
+            petID={petID} 
             page={petPage}
             data= {data}
             baseAPI={baseAPI} 
