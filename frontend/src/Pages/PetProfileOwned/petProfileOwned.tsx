@@ -87,7 +87,7 @@ export const PetProfileOwned = () => {
     
     //* URL for API
     const baseAPI = axios.create({
-		baseURL: "http://10.100.4.187"
+		baseURL: "http://10.100.0.162"
 		});
 
     
