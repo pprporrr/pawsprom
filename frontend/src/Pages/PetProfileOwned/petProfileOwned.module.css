@@ -1,9 +1,14 @@
 
 .bgContainer {
     width: 100%;
+    min-width: 1024px;
     height: 100%;
     position: absolute;
-    background-color: aliceblue;
+    background-color: bisque;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    
 }
 
 

@@ -7,7 +7,7 @@ type PetData = {
   petName: string
 		species: string | null
 		breed: string | null
-		age: number
+		age: number | null
 		gender: string
 		weight: number
 		color: string | null
@@ -15,18 +15,18 @@ type PetData = {
 		description: string | null
 		imageIDs: number[]
 		features: {
-      feature1: boolean,
-      feature2: boolean,
-      feature3: boolean,
-      feature4: boolean,
-      feature5: boolean,
-      feature6: boolean,
-      feature7: boolean,
-      feature8: boolean,
-      feature9: boolean,
-      feature10: boolean,
+      feature1: boolean | null,
+      feature2: boolean | null,
+      feature3: boolean | null,
+      feature4: boolean | null,
+      feature5: boolean | null,
+      feature6: boolean | null,
+      feature7: boolean | null,
+      feature8: boolean | null,
+      feature9: boolean | null,
+      feature10: boolean | null,
 		}
-		availabiltyStatus: string
+		availabilityStatus: string
 		vaccinationRecord: null
 		// shelterID: number
 		vaccinationName: string[]
@@ -40,31 +40,32 @@ export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
 
     // ! var for testing purpose ========================================
-    const petID = 102;
+    const petID = 102
     const Data = { 
-      petName: 'Tor',
-      species: 'cat',
-      breed: 'Meow meow',
+      petName: 'Torty',
+      species: 'Raccoon',
+      breed: 'Ameba hahaha',
       age: 2,
-      gender: 'female', 
-      weight: 5,
+      gender: 'Male', 
+      weight: 3,
       color: 'brown',
-      dateofbirth: "2023-06-15",
-      description: 'dsnvidhfdf',
-      imageIDs: [1, ],
+      dateofbirth: "",
+      description: 'Hello my name is Po. I like to eat. I want to go to the toilet na',
+      imageIDs: [1,2,3],
       features: {
           feature1: true,
           feature2: true,
-          feature3: false,
-          feature4: false,
+          feature3: true,
+          feature4: true,
           feature5: true,
           feature6: true,
           feature7: true,
           feature8: true,
           feature9: true,
-          feature10: true,  // prefer true false than 0,1 => number
+          feature10: true,
+          // feature11: false,  // prefer true false than 0,1 => number
       },
-      availabiltyStatus: 'Owned',
+      availabilityStatus: 'Owned',
       vaccinationRecord: null,
       // shelterID: 501,
       vaccinationName: ["vaccine1", "vaccine2", "vaccine3"],
@@ -72,36 +73,20 @@ export const PetProfileOwned = () => {
       address: 'njeenkfjn dsnfoidsdif',
     }
 
-
-
-    // TODO: display image from blob file (below is for testing)
-    // const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
-    // const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-    // const blobURL = URL.createObjectURL(blob);
-
     // ! ==============================================================
 
-
     // * the actual data to set after fetch from API
-    const [data, setData] = useState<PetData>(Data)
+    const [data, setData] = useState()
     
     //* URL for API
     const baseAPI = axios.create({
 		baseURL: "http://10.100.4.187"
 		});
-
-    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
-
-    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-
-    //const blobURL = URL.createObjectURL(blob);
     
-
     // *---------------- POST to API ----------------* //
     // useEffect(() => {
-    //   baseAPI.post('/petAPI/pet/info-long/',{ petID })
+    //   baseAPI.post('/petAPI/info-long/',{ petID })
     //   .then((response) => {
-    //     console.log('pass')
     //     console.log(response.data)
     //     setData(response.data.data) // two times
     // })}, [])
@@ -109,10 +94,18 @@ export const PetProfileOwned = () => {
 
     return (
         <div className={styles.bgContainer}>
-            <PetProfileFull
+            { data != undefined && <PetProfileFull
             petID={petID} 
             page={petPage}
             data= {data}
+            baseAPI={baseAPI} 
+            ></PetProfileFull>
+            }
+            {/* //! for testing */}
+            <PetProfileFull
+            petID={petID} 
+            page={petPage}
+            data= {Data}
             baseAPI={baseAPI} 
             ></PetProfileFull>
         </div>

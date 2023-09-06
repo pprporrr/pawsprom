@@ -1,7 +1,7 @@
-import { AxiosInstance } from "axios"
 import { useEffect, useState } from "react"
 import { ConfirmDelete } from "./confirmDelete"
 import { useNavigate } from "react-router-dom"
+import styles from './deleteButton.module.css'
 
 interface DeleteButtonProps { 
     onClick: () => void
@@ -66,7 +66,7 @@ export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, apiRespons
 
     return (
         <div>
-            <button onClick={handleClick}>deleteButton</button>
+            <button className={styles.deleteButton} onClick={handleClick}>deleteButton</button>
             <ConfirmDelete 
             isOpen={isConfirmOpen}
             onCancel={handleCancel}

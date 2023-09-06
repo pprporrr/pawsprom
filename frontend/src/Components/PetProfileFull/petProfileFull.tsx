@@ -1,6 +1,5 @@
 import styles from './petProfileFull.module.css'
 import { ImageSlider } from '../ImageSlider/imageSlider'
-import { slides } from '../../MockData/carouselData.json'
 import { IconText } from '../IconText/iconText'
 import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { Features } from '../FeaturesDisplay/featuresDisplay'
@@ -23,18 +22,18 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-			feature1: boolean,
-			feature2: boolean,
-			feature3: boolean,
-			feature4: boolean,
-			feature5: boolean,
-			feature6: boolean,
-			feature7: boolean,
-			feature8: boolean,
-			feature9: boolean,
-			feature10: boolean,
+			feature1: boolean | null,
+			feature2: boolean | null,
+			feature3: boolean | null,
+			feature4: boolean | null,
+			feature5: boolean | null,
+			feature6: boolean | null,
+			feature7: boolean | null,
+			feature8: boolean | null,
+			feature9: boolean | null,
+			feature10: boolean | null,
 		}
-		availabiltyStatus: string
+		availabilityStatus: string
 		vaccinationRecord: null
 		// shelterID: number
 		vaccinationName: string[]
@@ -61,10 +60,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	
 	//* delete button sending delete request
 	const handleDeleteClick = () => {
-
 		// test
 		// setAPIResponse(true)
-
 		console.log('send delete request')
 		// test petID = 106 , // ! dont forget to change
         baseAPI.delete('/petAPI/delete-profile/106/')
@@ -103,23 +100,34 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			{/* //!General Information Section */}
 			<section className={styles.infoContainer1}>
 				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				<ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider>
+				<ImageSlider 
+				imageIDs={data.imageIDs} 
+				baseAPI={baseAPI} 
+				availabilityStatus={data.availabilityStatus}
+				></ImageSlider>
 				<div className={styles.wrapperFlex}>
-					<IconText text={data.breed} fontSize={1} isVisible={true}></IconText>
-					<IconText text={data.petName} fontSize={1.5} isVisible={true}></IconText>
-					<IconText text={data.age + ' years old' } fontSize={1} isVisible={true}></IconText>
-					<IconText text={dateOfBirth} fontSize={1} isVisible={true}></IconText>
-					<IconText text={data.gender} fontSize={1} isVisible={true}></IconText>
-					<IconText text={data.weight + ' kg'} fontSize={1} isVisible={true}></IconText>
-					<IconText text={data.color} fontSize={1} isVisible={true}></IconText>
+					<div className={styles.infoText}>
+					<IconText text={data.breed} fontSize={1.2} isVisible={true}></IconText>
+					</div>
+					<div className={styles.NameText}>
+					<IconText text={data.petName} fontSize={1.6} isVisible={true}></IconText>
+					</div>
+					<div className={styles.infoText}>
+						<IconText text={data.age + ' years old' } fontSize={1.2} isVisible={true}></IconText>
+						<IconText text={dateOfBirth} fontSize={1.2} isVisible={true}></IconText>
+						<IconText text={data.gender} fontSize={1.2} isVisible={true}></IconText>
+						<IconText text={data.weight + ' kg'} fontSize={1.2} isVisible={true}></IconText>
+						<IconText text={data.color} fontSize={1.2} isVisible={true}></IconText>
+					</div>
 				</div>
 			</section>
 			<section className={styles.infoContainer2}>
 			<div className={styles.wrapperFlex}>
 				{/* //TODO: adding description of pet */}
-				<IconText text={'funny'} fontSize={1.5} isVisible={true}></IconText>
-				<IconText text={'git'} fontSize={1.5} isVisible={true}></IconText>
-				<IconText text={'hello'} fontSize={1.5} isVisible={true}></IconText>
+				<div className={styles.descriptionBox}>
+					<h3>Bio</h3>
+					<p>{data.description}</p>
+				</div>
 			</div>
 			</section>
 			{/* //!Vaccine Records Section */}

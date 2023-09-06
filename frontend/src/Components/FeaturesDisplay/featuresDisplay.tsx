@@ -3,7 +3,7 @@ import { IconText } from "../IconText/iconText"
 
 interface FeaturesProps {
     features:  {
-        [key:string]: boolean
+        [key:string]: boolean | null
     }
 }
 
@@ -17,8 +17,10 @@ export const Features: React.FC<FeaturesProps> = ({features}) => {
     return (
         <div className={styles.featuresWrapper}>
             {Object.entries(features).map(([feature, value]) => {
+                if (value !== null){
                 return <IconText key={feature} text={feature} 
-                fontSize={0.75} isVisible={value}></IconText>
+                fontSize={1} isVisible={value}></IconText>
+                }
             })}
         </div>
     )
