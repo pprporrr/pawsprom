@@ -1,15 +1,15 @@
+import { AxiosInstance } from "axios"
 import { useEffect, useState } from "react"
-import { ConfirmDelete } from "./confirmDelete"
+import { ConfirmAdoption } from "./confirmAdoption"
 import { useNavigate } from "react-router-dom"
-import styles from './deleteButton.module.css'
 
-interface DeleteButtonProps { 
+interface AdoptionButtonProps { 
     onClick: () => void
     apiResponse: boolean | null
 
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, apiResponse }) => {
+export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiResponse }) => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [resultText, setResultText] = useState("")
@@ -66,8 +66,8 @@ export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, apiRespons
 
     return (
         <div>
-            <button className={styles.deleteButton} onClick={handleClick}>deleteButton</button>
-            <ConfirmDelete 
+            <button onClick={handleClick}>adoptionButton</button>
+            <ConfirmAdoption 
             isOpen={isConfirmOpen}
             onCancel={handleCancel}
             onConfirm={handleConfirm}

@@ -4,6 +4,7 @@ import { IconText } from '../IconText/iconText'
 import { VaccineRecords } from '../VaccineRecords/vaccineRecords'
 import { Features } from '../FeaturesDisplay/featuresDisplay'
 import { DeleteButton } from '../DeleteButton/deleteButton'
+import { AdoptionButton } from '../AdoptionButton/adoptionButton.tsx'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -40,12 +41,10 @@ interface PetProfileFullProps {
 		vaccinationDate: string[]
 		address: string
 	}
-
 	baseAPI: AxiosInstance
 }
 
 // TODO: fix svg file , now using img calling svg
-
 export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data, baseAPI}) => {
 
 	// * receive 'page' to identify visibility of components (button)
@@ -56,28 +55,55 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	const vaccineDateObjects = data.vaccinationDate.map(dateString => new Date(dateString))
 	const dateOfBirth = new Date(data.dateofbirth)
 	// response from api when click delete button
-	const [apiResponse, setAPIResponse] = useState(null)
+	const [apiResponseDEL, setAPIResponseDEL] = useState(null)
+	const [apiResponseADOPT, setAPIResponseADOPT] = useState(null)
 	
 	//* delete button sending delete request
 	const handleDeleteClick = () => {
+
 		// test
 		// setAPIResponse(true)
+
 		console.log('send delete request')
 		// test petID = 106 , // ! dont forget to change
-        baseAPI.delete('/petAPI/delete-profile/106/')
+        baseAPI.delete(`/petAPI/delete-profile/${petID}`)
         .then(response => {
             console.log('response from api', response.data.success)
-			setAPIResponse(response.data.success)
+			setAPIResponseDEL(response.data.success)
         })
         .catch(error => {
             console.error(error);
         })
 	}
-
-
+	
+	const handleAdoptionClick = () => {
+		// test
+		// setAPIResponse(true)
+		const dateofapplication = new Date();
+		const year = dateofapplication.getFullYear();
+		const month = String(dateofapplication.getMonth() + 1).padStart(2, '0');
+		const day = String(dateofapplication.getDate()).padStart(2, '0');
+		const formattedDate = `${year}-${month}-${day}`;
+		
+		console.log('send adoption request')
+		const petID = 106
+		const userID = 202
+		baseAPI.post('/adoptionAPI/create-application/', { petID, userID, dateofapplication: formattedDate })
+        .then(response => {
+			console.log(response.data)
+            console.log('response from api', response.data.success)
+			setAPIResponseADOPT(response.data.success)
+        })
+        .catch(error => {
+			console.error(error);
+            console.error(error);
+        })
+	}
+	
 	//* reset var
 	useEffect(() => {
-		setAPIResponse(null)
+		setAPIResponseDEL(null)
+		setAPIResponseADOPT(null)
     }, []);
 	
 	return (
@@ -144,7 +170,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			<section className={styles.bottomContainer}>
 				<DeleteButton 
 				onClick={handleDeleteClick}
-				apiResponse={apiResponse}/>
+				apiResponse={apiResponseDEL}/>
+				<AdoptionButton 
+				onClick={handleAdoptionClick}
+				apiResponse={apiResponseADOPT}/>
 			</section>
 		</div>
 	)

@@ -91,16 +91,6 @@
 }
 
 
-.descriptionBox {
-    padding: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    background-color: #FFE9DA;
-    color: #9E6D51;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-}
 
 
 .descriptionBox h3 {

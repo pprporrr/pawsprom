@@ -13,7 +13,7 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
-@router.post("/pet/create-profile/byUser/", response_model=dict)
+@router.post("/create-profile/byUser/", response_model=dict)
 async def create_pet_profile_by_User(request: Request):
     try:
         await db_connector.connect()
@@ -39,7 +39,7 @@ async def create_pet_profile_by_User(request: Request):
         checkUserResult = await db_connector.execute_query(checkUserQuery, user_userID)
         
         if not checkUserResult:
-            return create_error_response("don't have this userID in the database")
+            return create_error_response("user not found")
         
         if None in (petName, species, breed, age, gender, weight, color, dateofbirth, availabilityStatus, features):
             return create_error_response("missing required fields")
@@ -77,7 +77,7 @@ async def create_pet_profile_by_User(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.post("/pet/create-profile/byShelter/", response_model=dict)
+@router.post("/create-profile/byShelter/", response_model=dict)
 async def create_pet_profile_by_Shelter(request: Request):
     try:
         await db_connector.connect()
@@ -94,27 +94,27 @@ async def create_pet_profile_by_Shelter(request: Request):
         availabilityStatus = "Available"
         description = data.get("description")
         features = json.dumps(data.get("features"))
-        shelters_shelterID = data.get("shelterID")
+        shelter_shelterID = data.get("shelterID")
         
-        if shelters_shelterID is None:
+        if shelter_shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
         checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
-        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelters_shelterID)
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelter_shelterID)
         
         if not checkShelterResult:
-            return create_error_response("don't have this shelterID in the database")
+            return create_error_response("shelter not found")
         
         if None in (petName, species, breed, age, gender, weight, color, dateofbirth, availabilityStatus, features):
             return create_error_response("missing required fields")
         
         createPetQuery = "INSERT INTO pet (petName, species, breed, age, gender, weight, color, dateofbirth, description, " \
-                "features, availabilityStatus, shelters_shelterID) " \
+                "features, availabilityStatus, shelter_shelterID) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
                 await cursor.execute(createPetQuery, (petName, species, breed, age, gender, weight, color, dateofbirth,
-                                             description, features, availabilityStatus, shelters_shelterID))
+                                             description, features, availabilityStatus, shelter_shelterID))
         
         checkPetQuery = "SELECT * FROM pet WHERE petID = LAST_INSERT_ID()"
         checkPetResult = await db_connector.execute_query(checkPetQuery)
@@ -128,7 +128,7 @@ async def create_pet_profile_by_Shelter(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.put("/pet/update-profile/", response_model=dict)
+@router.put("/update-profile/", response_model=dict)
 async def update_pet_profile(request: Request):
     try:
         await db_connector.connect()
@@ -143,7 +143,7 @@ async def update_pet_profile(request: Request):
         checkPetResult = await db_connector.execute_query(checkPetQuery, petID)
         
         if not checkPetResult:
-            return create_error_response("don't have this petID in the database")
+            return create_error_response("pet not found")
         
         updateFields = {}
         
@@ -198,25 +198,27 @@ async def update_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.post("/pet/info-short/", response_model=dict)
-async def read_pet_profile_short(request: Request):
+@router.post("/info-short/", response_model=list)
+async def get_pet_profiles_short(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        petID = data.get("petID")
+        petIDs = data.get("petIDs")
         
-        if petID is None:
-            return create_error_response("missing 'petID' in the request data")
+        if petIDs is None or len(petIDs) == 0:
+            return create_error_response("missing or invalid 'petIDs' in the request data")
         
-        getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
-        getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+        pet_info_list = []
         
-        if not getPetDetailsResult:
-            return create_error_response("don't have this petID in the database")
-        
-        if getPetDetailsResult:
-            getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+        for petID in petIDs:
+            getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+            getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+            
+            if not getPetDetailsResult:
+                pet_info_list.append({"petID": petID, "error": "pet not found"})
+            else:
+                getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
             getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
             
             if getPetDetailsResult[0][11] == "Available":
@@ -251,17 +253,17 @@ async def read_pet_profile_short(request: Request):
                     "address": getOwnerAddressResult[0][6]
                 }
             
-            return create_success_response(petInfo)
-        else:
-            return create_error_response("pet not found")
+            pet_info_list.append(petInfo)
+        
+        return create_success_response(pet_info_list)
         
     except Exception as e:
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
 
-@router.post("/pet/info-long/", response_model=dict)
-async def read_pet_profile_long(request: Request):
+@router.post("/info-long/", response_model=dict)
+async def get_pet_profile_long(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -275,7 +277,7 @@ async def read_pet_profile_long(request: Request):
         getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
         
         if not getPetDetailsResult:
-            return create_error_response("don't have this petID in the database")
+            return create_error_response("pet not found")
         
         if getPetDetailsResult:
             getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
@@ -342,7 +344,7 @@ async def read_pet_profile_long(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.delete("/pet/delete-profile/{petID}", response_model=dict)
+@router.delete("/delete-profile/{petID}/", response_model=dict)
 async def delete_pet_profile(petID: int):
     try:
         await db_connector.connect()
@@ -351,7 +353,7 @@ async def delete_pet_profile(petID: int):
         getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
         
         if not getPetDetailsResult:
-            return create_error_response("don't have this petID in the database")
+            return create_error_response("pet not found")
         
         if getPetDetailsResult:
             deletePetImagesQuery = "DELETE FROM petImages WHERE pet_petID = %s"
@@ -375,25 +377,20 @@ async def delete_pet_profile(petID: int):
                 
                 user_userID = getPetOwnerResult[0][2]
                 
-                getAdoptionRequestQuery = "SELECT * FROM adoptionRequest WHERE pet_petID = %s AND user_userID = %s"
-                getAdoptionRequestResult = await db_connector.execute_query(getAdoptionRequestQuery, petID, user_userID)
-                
-                requestID = getAdoptionRequestResult[0][0]
-                
-                deleteAdoptionDecisionQuery = "DELETE FROM adoptionDecision WHERE adoptionRequest_requestID = %s"
+                deleteAdoptionApplicationQuery = "DELETE FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s"
                 async with db_connector.pool.acquire() as conn:
                     async with conn.cursor() as cursor:
-                        await cursor.execute(deleteAdoptionDecisionQuery, (requestID,))
-                
-                deleteAdoptionRequestQuery = "DELETE FROM adoptionRequest WHERE requestID = %s"
-                async with db_connector.pool.acquire() as conn:
-                    async with conn.cursor() as cursor:
-                        await cursor.execute(deleteAdoptionRequestQuery, (requestID,))
+                        await cursor.execute(deleteAdoptionApplicationQuery, (petID, user_userID))
                 
                 deletePetOwnerQuery = "DELETE FROM petOwnership WHERE pet_petID = %s"
                 async with db_connector.pool.acquire() as conn:
                     async with conn.cursor() as cursor:
                         await cursor.execute(deletePetOwnerQuery, (petID,))
+            else:
+                deleteAdoptionApplicationQuery = "DELETE FROM adoptionApplication WHERE pet_petID = %s"
+                async with db_connector.pool.acquire() as conn:
+                    async with conn.cursor() as cursor:
+                        await cursor.execute(deleteAdoptionApplicationQuery, (petID,))
             
             deletePetQuery = "DELETE FROM pet WHERE petID = %s"
             async with db_connector.pool.acquire() as conn:
@@ -533,13 +530,13 @@ async def read_pet_details_list_in_shelter(request: Request):
         await db_connector.connect()
         data = await request.json()
         
-        shelters_shelterID = data.get("shelterID")
+        shelter_shelterID = data.get("shelterID")
         
-        if shelters_shelterID is None:
+        if shelter_shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
-        query = "SELECT * FROM pet WHERE shelters_shelterID = %s"
-        results = await db_connector.execute_query(query, shelters_shelterID)
+        query = "SELECT * FROM pet WHERE shelter_shelterID = %s"
+        results = await db_connector.execute_query(query, shelter_shelterID)
         
         pets = []
         

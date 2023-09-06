@@ -21,23 +21,22 @@ async def create_shelter(request: Request):
         
         shelterName = data.get("shelterName")
         shelterAddress = data.get("address")
-        contactInfo = data.get("contactInfo")
-        phoneNumber = data.get("phoneNumber")
-        shelterImage = data.get("shelterImage")
+        sheltercontactInfo = data.get("sheltercontactInfo")
+        shelterphoneNumber = data.get("shelterphoneNumber")
         
-        if None in (shelterName, shelterAddress, contactInfo, phoneNumber):
+        if None in (shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber):
             return create_error_response("missing required fields")
         
-        query = "INSERT INTO shelter (shelterName, shelterAddress, contactInfo, phoneNumber, shelterImage) " \
+        createShelterQuery = "INSERT INTO shelter (shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber) " \
                 "VALUES (%s, %s, %s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (shelterName, shelterAddress, contactInfo, phoneNumber, shelterImage))
+                await cursor.execute(createShelterQuery, (shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber))
         
-        query = "SELECT * FROM shelter WHERE shelterID = LAST_INSERT_ID()"
-        result = await db_connector.execute_query(query)
+        checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = LAST_INSERT_ID()"
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery)
         
-        if not result:
+        if not checkShelterResult:
             return create_error_response("failed to create shelter")
         
         return create_success_response("shelter created")
@@ -47,7 +46,7 @@ async def create_shelter(request: Request):
         await db_connector.disconnect()
 
 @router.get("/shelter/", response_model=dict)
-async def read_shelter_details(request: Request):
+async def get_shelter_details(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
@@ -57,19 +56,19 @@ async def read_shelter_details(request: Request):
         if shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
-        query = "SELECT * FROM shelter WHERE shelterID = %s"
-        result = await db_connector.execute_query(query, shelterID)
+        checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelterID)
         
-        if not result:
+        if not checkShelterResult:
             return create_error_response("shelter not found")
         
         shelterDetails = {
-            "shelterID": result[0][0],
-            "shelterName": result[0][1],
-            "shelterAddress": result[0][2],
-            "contactInfo": result[0][3],
-            "phoneNumber": result[0][4],
-            "shelterImage": result[0][5]
+            "shelterID": checkShelterResult[0][0],
+            "shelterName": checkShelterResult[0][1],
+            "shelterAddress": checkShelterResult[0][2],
+            "sheltercontactInfo": checkShelterResult[0][3],
+            "shelterphoneNumber": checkShelterResult[0][4],
+            "shelterImage": checkShelterResult[0][5]
         }
         
         return create_success_response(shelterDetails)
@@ -87,23 +86,23 @@ async def update_shelter(request: Request):
         shelterID = data.get("shelterID")
         shelterName = data.get("shelterName")
         shelterAddress = data.get("address")
-        contactInfo = data.get("contactInfo")
-        phoneNumber = data.get("phoneNumber")
+        sheltercontactInfo = data.get("sheltercontactInfo")
+        shelterphoneNumber = data.get("shelterphoneNumber")
         
-        if None in (shelterID, shelterName, shelterAddress, contactInfo, phoneNumber):
+        if None in (shelterID, shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber):
             return create_error_response("missing required fields")
         
-        query = "SELECT * FROM shelter WHERE shelterID = %s"
-        result = await db_connector.execute_query(query, shelterID)
+        checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelterID)
         
-        if not result:
+        if not checkShelterResult:
             return create_error_response("shelter not found")
         
-        query = "UPDATE shelter SET shelterName = %s, shelterAddress = %s, contactInfo = %s, phoneNumber = %s " \
+        updateShelterQuery = "UPDATE shelter SET shelterName = %s, shelterAddress = %s, sheltercontactInfo = %s, shelterphoneNumber = %s " \
                 "WHERE shelterID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (shelterName, shelterAddress, contactInfo, phoneNumber, shelterID))
+                await cursor.execute(updateShelterQuery, (shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber, shelterID))
         
         return create_success_response("shelter updated")
     except Exception as e:
@@ -121,16 +120,16 @@ async def delete_shelter(request: Request):
         if shelterID is None:
             return create_error_response("missing 'shelterID' in the request data")
         
-        query = "SELECT * FROM shelter WHERE shelterID = %s"
-        result = await db_connector.execute_query(query, shelterID)
+        checkShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
+        checkShelterResult = await db_connector.execute_query(checkShelterQuery, shelterID)
         
-        if not result:
+        if not checkShelterResult:
             return create_error_response("shelter not found")
         
-        query = "DELETE FROM shelter WHERE shelterID = %s"
+        deleteShelterQuery = "DELETE FROM shelter WHERE shelterID = %s"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, shelterID)
+                await cursor.execute(deleteShelterQuery, shelterID)
         
         return create_success_response("shelter deleted")
     except Exception as e:
@@ -169,41 +168,13 @@ async def read_shelter_details_list(request: Request):
                 "shelterID": result[0],
                 "shelterName": result[1],
                 "shelterAddress": result[2],
-                "contactInfo": result[3],
-                "phoneNumber": result[4],
+                "sheltercontactInfo": result[3],
+                "shelterphoneNumber": result[4],
                 "shelterImage": result[5]
             }
             shelters.append(shelterDetails)
         
         return create_success_response(shelters)
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-@router.post("/shelter/update_image/{shelterID}/", response_model=dict)
-async def update_shelter_image(shelterID: int, imageFile: UploadFile = File(...)):
-    try:
-        await db_connector.connect()
-        
-        query = "SELECT * FROM shelter WHERE shelterID = %s"
-        result = await db_connector.execute_query(query, shelterID)
-        
-        if not result:
-            return create_error_response("shelter not found")
-        
-        with open(imageFile.filename, "wb") as shelterImage:
-            shelterImage.write(imageFile.file.read())
-        
-        if shelterImage is None:
-            return create_error_response("missing imageFile fields")
-        
-        query = "UPDATE shelter SET shelterImage = %s WHERE shelterID = %s"
-        async with db_connector.pool.acquire() as conn:
-            async with conn.cursor() as cursor:
-                await cursor.execute(query, (shelterImage, shelterID))
-        
-        return create_success_response("shelter image updated")
     except Exception as e:
         return create_error_response(str(e))
     finally:
