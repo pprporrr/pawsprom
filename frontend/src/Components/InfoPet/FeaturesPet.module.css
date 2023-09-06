@@ -1,0 +1,21 @@
+.features_con{
+  grid-area: features;
+}
+.features_con p{
+  color: #ffaa78;
+}
+
+.flex_seperate{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 1rem;
+}
+.flex_seperate>label{
+  color: #66BEF0;
+}
+.flex_seperate>label:hover{
+  cursor: pointer;
+}
+.flex_seperate>input:hover{
+  cursor: pointer;
+}

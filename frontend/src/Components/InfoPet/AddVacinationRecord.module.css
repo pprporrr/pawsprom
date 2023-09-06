@@ -1,0 +1,14 @@
+.vaccines_con{
+  grid-area: vaccines;
+}
+.vaccines_con p{
+  color: #ffaa78;
+}
+.vaccine_con{
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+.vaccine_con label{
+  color: #9071B3;
+}

@@ -3,7 +3,7 @@
   justify-content: end;
   align-items: end;
 }
-.btn_container button:hover{
+.btn_container>input:hover{
   cursor:pointer;
 }
 

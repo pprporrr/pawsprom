@@ -4,6 +4,7 @@
   grid-template-areas:
   "basic basic"
   "vaccines features";
+  gap: 1rem;
 }
 .container{
   grid-area: basic;
@@ -14,22 +15,11 @@
   "address gender weight"
   "address breed breed"
   "bio color species";
+  gap: 1rem;
 }
-.container label{
-  display: block;
-}
-
-.vaccines_con{
-  grid-area: vaccines;
-}
-
-.features_con{
-  grid-area: features;
-}
-
-.flex_seperate{
+.container div{
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .name_con{

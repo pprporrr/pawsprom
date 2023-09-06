@@ -8,7 +8,7 @@ export const UploadPhoto = () => {
   return (
     <>
       <label className={styles.photo_form} htmlFor="file">file</label>
-      <input  type='file' id='file'  hidden/>
+      <input  type='file' id='file' required hidden/>
     </>
     
   )

@@ -1,5 +1,5 @@
 import styles from './CreatePet.module.css'
-import {UploadPhoto} from '../UploadPhoto/UploadPhoto'
+import { UploadPhoto } from './UploadPhoto'
 import { InfoPet } from '../InfoPet/InfoPet'
 import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 
