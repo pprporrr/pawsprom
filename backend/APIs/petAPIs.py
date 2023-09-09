@@ -219,7 +219,7 @@ async def get_pet_profiles_short(request: Request):
                 pet_info_list.append({"petID": petID, "error": "pet not found"})
             else:
                 getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
-            getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
+                getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
             
             if getPetDetailsResult[0][11] == "Available":
                 getPetAddressQuery = "SELECT * FROM shelter WHERE shelterID = %s"
@@ -233,7 +233,7 @@ async def get_pet_profiles_short(request: Request):
                     "vaccinationRecord": getPetDetailsResult[0][12],
                     "imageIDs": [imageID for sublist in getPetImagesResult for imageID in sublist],
                     "features": json.loads(getPetDetailsResult[0][10]),
-                    "address": getPetAddressResult[0][2]
+                    "address": getPetAddressResult[0][2],
                 }
             elif getPetDetailsResult[0][11] == "Adopted" or getPetDetailsResult[0][11] == "Owned":
                 getPetOwnerQuery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
@@ -290,6 +290,17 @@ async def get_pet_profile_long(request: Request):
                 getPetAddressQuery = "SELECT * FROM shelter WHERE shelterID = %s"
                 getPetAddressResult = await db_connector.execute_query(getPetAddressQuery, getPetDetailsResult[0][13])
                 
+                getAdoptionQuery = "SELECT user_userID FROM adoptionApplication WHERE pet_petID = %s AND approvalStatus = %s"
+                getAdoptionResult = await db_connector.execute_query(getAdoptionQuery, petID, "Pending")
+                
+                userIDList = [applicationID for sublist in getAdoptionResult for applicationID in sublist]
+                applicationDict = {}
+                
+                for userID in userIDList:
+                    getAddressQuery = "SELECT * FROM user WHERE userID = %s"
+                    getAddressResult = await db_connector.execute_query(getAddressQuery, userID)
+                    applicationDict[userID] = {"firstName": getAddressResult[0][3], "lastName": getAddressResult[0][4], "phoneNo": getAddressResult[0][5], "address": getAddressResult[0][6]}
+                
                 petInfo = {
                 "petName": getPetDetailsResult[0][1],
                 "species": getPetDetailsResult[0][2],
@@ -307,7 +318,8 @@ async def get_pet_profile_long(request: Request):
                 "shelterID": getPetDetailsResult[0][13],
                 "vaccinationName": [row[2] for row in getPetVaccinesResult],
                 "vaccinationDate": [row[3] for row in getPetVaccinesResult],
-                "address": getPetAddressResult[0][2]
+                "address": getPetAddressResult[0][2],
+                "adoptionApplications": applicationDict
                 }
             elif getPetDetailsResult[0][11] == "Adopted" or getPetDetailsResult[0][11] == "Owned":
                 getPetOwnerQuery = "SELECT * FROM petOwnership WHERE pet_petID = %s"
@@ -332,7 +344,8 @@ async def get_pet_profile_long(request: Request):
                 "vaccinationRecord": getPetDetailsResult[0][12],
                 "vaccinationName": [row[2] for row in getPetVaccinesResult],
                 "vaccinationDate": [row[3] for row in getPetVaccinesResult],
-                "address": getOwnerAddressResult[0][6]
+                "address": getOwnerAddressResult[0][6],
+                "adoptionApplications": None
                 }
             
             return create_success_response(petInfo)

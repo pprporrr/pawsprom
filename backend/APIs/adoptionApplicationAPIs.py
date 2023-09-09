@@ -36,6 +36,9 @@ async def create_adoption_application(request: Request):
         if not checkUserResult:
             return create_error_response("user not found")
         
+        if checkUserResult[0][7] != "User":
+            return create_error_response("role is not user")
+        
         checkPetQuery = "SELECT availabilityStatus FROM pet WHERE petID = %s"
         checkPetResult = await db_connector.execute_query(checkPetQuery, pet_petID)
         
