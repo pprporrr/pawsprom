@@ -40,8 +40,7 @@ export const PetProfileOwned = () => {
     const petPage = 'PetProfileOwned';
 
     // ! var for testing purpose ========================================
-    const shelterID = 503;
-    const petID = 102
+    const petID = 103
     const Data = { 
       petName: 'Torty',
       species: 'Raccoon',
@@ -100,13 +99,6 @@ export const PetProfileOwned = () => {
         console.log('pass')
         console.log(response.data)
         setData(response.data.data) // two times
-      });
-      
-      baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
-      .then((response) => {
-        console.log('pass')
-        console.log(response.data)
-        setAdoptionData(response.data.data) // two times
       });
     }, [])
      // *---------------- POST to API ----------------* //
