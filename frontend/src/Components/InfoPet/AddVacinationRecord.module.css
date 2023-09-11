@@ -1,14 +1,28 @@
 .vaccines_con{
   grid-area: vaccines;
 }
-.vaccines_con p{
+.vaccines_con p:first-child{
   color: #ffaa78;
 }
-.vaccine_con{
-  display: flex;
-  flex-direction: column;
+.vaccines_con p:nth-child(2){
+  padding-left: 1rem;
+  color: #9071B3;
+}
+
+label{
   padding-left: 1rem;
 }
-.vaccine_con label{
-  color: #9071B3;
+label:hover{
+  cursor: pointer;
+  padding-left: 1rem;
+}
+
+.add_btn{
+  display: flex;
+  border: 2px solid #ffaa78;
+  background-color: rgba(255, 167, 133, 0.25);
+  color: #ffaa78;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 0.3rem 1rem;
 }
