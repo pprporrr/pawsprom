@@ -42,6 +42,7 @@ export const PetProfileOwned = () => {
     // ! var for testing purpose ========================================
     const shelterID = 503;
     const petID = 102
+    const username = 'Hello its me'
     const Data = { 
       petName: 'Torty',
       species: 'Raccoon',
@@ -50,9 +51,9 @@ export const PetProfileOwned = () => {
       gender: 'Male', 
       weight: 3,
       color: 'brown',
-      dateofbirth: "",
+      dateofbirth: "2011",
       description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
-      imageIDs: [1,2,3],
+      imageIDs: [1,2],
       features: {
           feature1: true,
           feature2: true,
@@ -69,9 +70,17 @@ export const PetProfileOwned = () => {
       availabilityStatus: 'Owned',
       vaccinationRecord: null,
       // shelterID: 501,
-      vaccinationName: ["vaccine1", "vaccine2", "vaccine3"],
-      vaccinationDate: ["2023-06-15", "2021-04-01", "2023-06-15"],
-      address: 'njeenkfjn dsnfoidsdif',
+      vaccinationName: ["Feline Parvo Virus (FPV)",
+      "Feline Callicivirus (FCV)",
+      "Feline Herpesvirus (FHV-1) sgafagregvrevrfrgvfa",
+      "Rabies Virus",
+      "Chlamydophila felis"],
+      vaccinationDate: ["2023-06-15",
+      "2021-04-01", 
+      "2023-06-15", 
+      "2019-02-20",
+      "2021-05-30"],
+      address: '209 Mantika Soi 1 Bangbon 3 Rd. Bangbon Bangkok',
     }
 
     // ! ==============================================================
@@ -83,15 +92,8 @@ export const PetProfileOwned = () => {
     
     //* URL for API
     const baseAPI = axios.create({
-		baseURL: "http://192.168.1.7"
+		baseURL: "http://10.100.7.88"
 		});
-
-    //const mockBlob = "<io_.BufferedWriter name='fjnsofs.JPG'>";
-
-    //const blob = new Blob([mockBlob], { type: 'image/jpeg' })
-
-    //const blobURL = URL.createObjectURL(blob);
-    
 
     // *---------------- POST to API ----------------* //
     useEffect(() => {
@@ -102,24 +104,25 @@ export const PetProfileOwned = () => {
         setData(response.data.data) // two times
       });
       
-      baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
-      .then((response) => {
-        console.log('pass')
-        console.log(response.data)
-        setAdoptionData(response.data.data) // two times
-      });
+      // baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
+      // .then((response) => {
+      //   console.log('pass')
+      //   console.log(response.data)
+      //   setAdoptionData(response.data.data) // two times
+      // });
+
     }, [])
      // *---------------- POST to API ----------------* //
 
     return (
         <div className={styles.bgContainer}>
-            { data != undefined && <PetProfileFull
+            {/* { data != undefined && <PetProfileFull
             petID={petID} 
             page={petPage}
             data= {data}
             baseAPI={baseAPI} 
             ></PetProfileFull>
-            }
+            } */}
             {/* //! for testing */}
             <PetProfileFull
             petID={petID} 

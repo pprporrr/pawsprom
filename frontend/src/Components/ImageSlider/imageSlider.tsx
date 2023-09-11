@@ -12,7 +12,6 @@ interface ImageSliderProps {
 export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, availabilityStatus}) => {
     // export const ImageSlider: React.FC<ImageSliderProps> = ({data}) => {
 
-
     //TODO: test with data from API and change from blob file to display as img
 
     const [slideIndex, setSlideIndex] = useState(0)
@@ -81,8 +80,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
 
     return (
         <div className={styles.slider}>
-            {statusText !== undefined && (<div className={styles.status}>
-                <p style={{ fontSize: '18px' }}>{statusText}</p>
+            {statusText !== undefined && (
+            <div className={styles.status}>
+                {statusText}
             </div>)}
             { imageIDs.length > 1 && (
             <BsArrowLeftCircleFill className={styles.arrowLeft} onClick={prevSlide}/>)}
@@ -93,7 +93,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
                 src={image} 
                 key={index}
                 className={slideIndex === index ? styles.slide : styles.hiddenSlide}
-                // TODO: POST imageID to get image
                 ></img>
             } else {
                 return null
@@ -102,7 +101,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
             { imageIDs.length > 1 && (
             <BsArrowRightCircleFill className={styles.arrowRight} onClick={nextSlide}/>)}
             { imageIDs.length > 1 && (
-                <span className={styles.dotIndicators}>
+                <div className={styles.dotIndicators}>
                 {imageIDs.map((_, index) => {
                 return <button 
                 key={index}
@@ -110,7 +109,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
                 className={slideIndex === index ? styles.dot : styles.dotInactive}
                 ></button>
             })}
-                </span>
+                </div>
             )}
         </div>
     )

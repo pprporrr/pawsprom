@@ -12,25 +12,17 @@ export const VaccineRecords: React.FC<VaccineRecordsProps> = ({vaccinationName, 
 
 
     return (
-        <div className={styles.vaccineWrapper}>
-            {/* //! vaccine Name */}
             <div className={styles.vaccineMap}>
                 {vaccinationName.map((vaccine, index) => {
-                    return <p  key={index} >{vaccine}</p>
-                })}
-            </div>
-            {/* //! vaccine Date */}
-            <div className={styles.dateMap}>
-                {vaccinationDate.map((date, index) => {
-                    const formattedDate = date.toLocaleDateString('en-GB', 
+
+                    const formattedDate = vaccinationDate[index].toLocaleDateString('en-GB', 
                     { day: '2-digit', month: 'short', year: 'numeric' })
                     .split(' ').join('-')
-    
-                    return <p  key={index}>{formattedDate}</p>
+                    return  <div key={index} className={styles.vaccine}>
+                    <p>{vaccine}</p>
+                    <p>{formattedDate}</p>
+                    </div>
                 })}
             </div>
-        </div>
     )
 }
-
-// "<io_.BufferedWriter name='fjnsofs.JPG'>"

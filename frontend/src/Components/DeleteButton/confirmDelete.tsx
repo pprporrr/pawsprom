@@ -21,17 +21,18 @@ export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
     return (
 
     <div className={styles.modalbackground}>
+        <div className={styles.boxDeco}>
         <div className={styles.modalcontent}>
             {/* //! display loading */}
             {isLoading && resultText === "" && (
-                <p>Loading...</p>
+                <p className={styles.loadingText}>Loading...</p>
             )}
             {/* //! display confirmation */}
             {!isLoading && resultText === "" && (
             <div>
-                <p>Are you sure you want to delete?</p>
-                <button onClick={onCancel}>Cancel</button>
-                <button onClick={onConfirm}>Delete</button>
+                <h3>Are you sure you want to delete?</h3>
+                <button className = {styles.buttonCancel} onClick={onCancel}>Cancel</button>
+                <button className={styles.buttonDelete} onClick={onConfirm}>Delete</button>
             </div>
             )}
             {/* // ! display success or failed */}
@@ -40,6 +41,7 @@ export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
                 <p>{resultText}</p>
             </div>
             }
+        </div>
         </div>
     </div>
     )

@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios"
 import { useEffect, useState } from "react"
 import { ConfirmAdoption } from "./confirmAdoption"
 import { useNavigate } from "react-router-dom"
+import styles from "../DeleteButton/deleteButton.module.css"
 
 interface AdoptionButtonProps { 
     onClick: () => void
@@ -66,7 +67,7 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
 
     return (
         <div>
-            <button onClick={handleClick}>adoptionButton</button>
+            <button className={styles.adoptDeco} onClick={handleClick}>adoptionButton</button>
             <ConfirmAdoption 
             isOpen={isConfirmOpen}
             onCancel={handleCancel}

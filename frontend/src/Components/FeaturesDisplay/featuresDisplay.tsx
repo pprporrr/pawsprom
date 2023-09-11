@@ -31,9 +31,11 @@ export const Features: React.FC<FeaturesProps> = ({features}) => {
     return (
         <div className={styles.featuresWrapper}>
             {Object.entries(features).map(([feature, value], index) => {
-                if (value !== null){
-                return <IconText key={feature} text={featuresList[index]} 
-                fontSize={1} isVisible={value}></IconText>
+                if (value == true){
+                return <IconText key={feature}
+                text={featuresList[index]}
+                fontSize={1}
+                svgName={feature.toString() + '-symbol.svg'} ></IconText>
                 }
             })}
         </div>

@@ -1,13 +1,14 @@
 
-.vaccineWrapper {
-    display: grid;
-}
-
 .vaccineMap {
-    grid-column: 1;
+    margin-left: 2rem;
 }
 
-.dateMap {
-    grid-column: 2;
-    margin-left: auto;
+.vaccine {
+    display: grid;
+    grid-template-columns: 70% 30%;
 }
+
+/* .vaccine :last-child {
+    color: #000;
+    text-align: right;
+} */
