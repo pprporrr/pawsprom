@@ -1,15 +1,1 @@
-.main_container{
-  display: grid;
-  grid-template-rows: 100px 1fr 100px;
-  row-gap: 4rem;
-  width: auto;
-  height: 100dvh;
-}
 
-.header{
-  background-color: rgb(65, 65, 65);
-}
-
-.bottom{
-  background-color: rgb(66, 66, 66);
-}

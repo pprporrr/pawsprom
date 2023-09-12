@@ -103,26 +103,22 @@ export const PetProfileOwned = () => {
     }, [])
      // *---------------- POST to API ----------------* //
 
-    return (
-      <div className={styles.main_container}>
-        <section className={styles.header}>header</section>
-          <div className={styles.bgContainer}>
-            { data != undefined && <PetProfileFull
-            petID={petID} 
-            page={petPage}
-            data= {data}
-            baseAPI={baseAPI} 
-            ></PetProfileFull>
-            }
-            {/* //! for testing */}
-            <PetProfileFull
-            petID={petID} 
-            page={petPage}
-            data= {Data}
-            baseAPI={baseAPI} 
-            ></PetProfileFull>
-          </div>
-        <section className={styles.bottom}>bottom</section>
-      </div>
+  return (
+    <div className={styles.bgContainer}>
+      { data != undefined && <PetProfileFull
+      petID={petID} 
+      page={petPage}
+      data= {data}
+      baseAPI={baseAPI} 
+      ></PetProfileFull>
+      }
+      {/* //! for testing */}
+      <PetProfileFull
+      petID={petID} 
+      page={petPage}
+      data= {Data}
+      baseAPI={baseAPI} 
+      ></PetProfileFull>
+    </div>
     )
 }

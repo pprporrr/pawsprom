@@ -1,0 +1,53 @@
+.container{
+  display: grid;
+  background-color: #FFFCF1;
+  box-shadow: 0px 0px 10px 5px #D1D1D1;
+  border-radius: 1.3rem;
+  width: 40%;
+  justify-self: center;
+}
+
+.container > h1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #66BEF0;
+  padding: 2.5rem 0;
+}
+
+.container > form{
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+}
+
+.container > form > section{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.container > form > section > div{
+  display: flex;
+  flex-direction: column;
+}
+.container > form > section > div > input{
+  margin-bottom: 1rem;
+}
+
+.container > form > button{
+  font-size: 1rem;
+  height: 3.125rem;
+  width: 7.3rem;
+  border: 2px solid #66BEF0;
+  border-radius: 1.6rem;
+  background-color: #66BEF0;
+  color: #FFFCF1;
+}
+
+.container p{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffaa78;
+  padding: 1rem 0;
+}

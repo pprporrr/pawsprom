@@ -9,14 +9,6 @@
   color: #9071B3;
 }
 
-label{
-  padding-left: 1rem;
-}
-label:hover{
-  cursor: pointer;
-  padding-left: 1rem;
-}
-
 .add_btn{
   display: flex;
   border: 2px solid #ffaa78;
