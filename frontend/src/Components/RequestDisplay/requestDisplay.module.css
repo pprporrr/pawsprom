@@ -1,0 +1,20 @@
+
+.singleRequest {
+    display: grid;
+    grid-template-columns: 80% auto;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    background: rgb(195, 215, 38);
+    border-radius: 1rem;
+}
+
+.leftInfo {
+    left: auto;
+}
+
+.rightInfo {
+    text-align: right;
+}

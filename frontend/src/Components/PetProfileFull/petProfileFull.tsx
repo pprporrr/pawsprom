@@ -7,6 +7,7 @@ import { DeleteButton } from '../DeleteButton/deleteButton'
 import { AdoptionButton } from '../AdoptionButton/adoptionButton.tsx'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
+import { RequestDisplay } from '../RequestDisplay/requestDisplay.tsx'
 
 
 interface PetProfileFullProps {
@@ -187,6 +188,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 				onClick={handleAdoptionClick}
 				apiResponse={apiResponseADOPT}/>}
 			</section>
+			<RequestDisplay></RequestDisplay>
 			</div>
 		</div>
 	)

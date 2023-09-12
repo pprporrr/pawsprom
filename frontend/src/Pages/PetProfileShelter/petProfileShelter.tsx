@@ -2,6 +2,7 @@ import styles from '../PetProfileOwned/petProfileOwned.module.css'
 import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { RequestDisplay } from '../../Components/RequestDisplay/requestDisplay';
 
 type PetData = {
 petName: string
@@ -35,9 +36,9 @@ petName: string
 }
 
 
-export const PetProfileOthers = () => {
+export const PetProfileShelter = () => {
 
-const petPage = 'PetProfileOthers';
+const petPage = 'PetProfileOwned';
 
 // ! var for testing purpose ========================================
 const shelterID = 503;
@@ -53,7 +54,7 @@ const Data = {
     color: 'brown',
     dateofbirth: "2011",
     description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
-    imageIDs: [1,2,3],
+    imageIDs: [1,2],
     features: {
         feature1: true,
         feature2: true,
@@ -81,59 +82,59 @@ const Data = {
     "2019-02-20",
     "2021-05-30"],
     address: '209 Mantika Soi 1 Bangbon 3 Rd. Bangbon Bangkok',
-    }
+}
 
-    // ! ==============================================================
+// ! ==============================================================
 
-    // * the actual data to set after fetch from API
-    const [data, setData] = useState()
-    // * for adoption button by P'Porpor ======================================
-    const [adoptiondata, setAdoptionData] = useState("");
-    
-    //* URL for API
-    const baseAPI = axios.create({
-		baseURL: "http://10.100.4.187"
-		});
+// * the actual data to set after fetch from API
+const [data, setData] = useState()
+// * for adoption button by P'Porpor ======================================
+const [adoptiondata, setAdoptionData] = useState("");
 
-    // *---------------- POST to API ----------------* //
-    useEffect(() => {
-    baseAPI.post('/petAPI/info-long/',{ petID })
-    .then((response) => {
-        console.log('pass')
-        console.log(response.data)
-        setData(response.data.data) // two times
+//* URL for API
+const baseAPI = axios.create({
+    baseURL: "http://10.100.7.88"
     });
 
-      // baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
-      // .then((response) => {
-      //   console.log('pass')
-      //   console.log(response.data)
-      //   setAdoptionData(response.data.data) // two times
-      // });
+// *---------------- POST to API ----------------* //
+useEffect(() => {
+    baseAPI.post('/petAPI/info-long/',{ petID })
+    .then((response) => {
+    console.log('pass')
+    console.log(response.data)
+    setData(response.data.data) // two times
+    });
+    
+    // baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
+    // .then((response) => {
+    //   console.log('pass')
+    //   console.log(response.data)
+    //   setAdoptionData(response.data.data) // two times
+    // });
 
-    }, [])
-     // *---------------- POST to API ----------------* //
+}, [])
+    // *---------------- POST to API ----------------* //
 
-    return (
+return (
     <div className={styles.main_container}>
-        <section className={styles.header}>header</section>
-            <div className={styles.bgContainer}>
-                {/* { data != undefined && <PetProfileFull
-                petID={petID} 
-                page={petPage}
-                data= {data}
-                baseAPI={baseAPI} 
-                ></PetProfileFull>
-                } */}
-                {/* //! for testing */}
-                <PetProfileFull
-                petID={petID} 
-                page={petPage}
-                data= {Data}
-                baseAPI={baseAPI} 
-                ></PetProfileFull>
-            </div>
-        <section className={styles.bottom}>bottom</section>
+    <section className={styles.header}>header</section>
+        <div className={styles.bgContainer}>
+        {/* { data != undefined && <PetProfileFull
+        petID={petID} 
+        page={petPage}
+        data= {data}
+        baseAPI={baseAPI} 
+        ></PetProfileFull>
+        } */}
+        {/* //! for testing */}
+        <PetProfileFull
+        petID={petID} 
+        page={petPage}
+        data= {Data}
+        baseAPI={baseAPI} 
+        ></PetProfileFull>
+        </div>
+    <section className={styles.bottom}>bottom</section>
     </div>
-    )
+)
 }
