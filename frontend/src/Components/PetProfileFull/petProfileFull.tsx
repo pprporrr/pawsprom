@@ -7,6 +7,7 @@ import { DeleteButton } from '../DeleteButton/deleteButton'
 import { AdoptionButton } from '../AdoptionButton/adoptionButton.tsx'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
+import { RequestDisplay } from '../RequestDisplay/requestDisplay.tsx'
 
 
 interface PetProfileFullProps {
@@ -58,7 +59,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	const [apiResponseDEL, setAPIResponseDEL] = useState(null)
 	const [apiResponseADOPT, setAPIResponseADOPT] = useState(null)
 	
-	//* delete button sending delete request
+
+	//* sending request to API from button (start) ================================= 
+
+	//* delete button
 	const handleDeleteClick = () => {
 
 		// test
@@ -76,7 +80,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
         })
 	}
 
-	// * for adoption button by P'Porpor ======================================
+	//* adopt button
 	
 	const handleAdoptionClick = () => {
 		// test
@@ -98,11 +102,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
         })
         .catch(error => {
 			console.error(error);
-            console.error(error);
         })
 	}
 
-	// * for adoption button by P'Porpor ======================================
+	//* sending request to API from button (end) =================================
 	
 	//* reset var
 	useEffect(() => {
@@ -127,39 +130,41 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 					</div>
 				</div>
 			</section>
+			
 			{/* //!General Information Section */}
-			<section className={styles.infoContainer1}>
+			<section className={styles.firstRowWrapper}>
 				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				<ImageSlider 
-				imageIDs={data.imageIDs} 
-				baseAPI={baseAPI} 
-				availabilityStatus={data.availabilityStatus}
-				></ImageSlider>
-				<div className={styles.wrapperFlex}>
-					<div className={styles.infoText}>
-					<IconText text={data.breed} fontSize={1.2} isVisible={true}></IconText>
+				{/* <div className={styles.infoContainer1}> */}
+					<div className={styles.imageAndInfo}>
+						<ImageSlider
+						imageIDs={data.imageIDs} 
+						baseAPI={baseAPI} 
+						availabilityStatus={data.availabilityStatus}
+						></ImageSlider>
+							<div className={styles.infoText}>
+								<h3>{data.breed}</h3>
+								<div className={styles.NameText}>
+									<h2>{data.petName}</h2>
+								</div>
+								<IconText text={data.age + ' years old' } fontSize={1.2} svgName='age-symbol.svg'></IconText>
+								<IconText text={dateOfBirth} fontSize={1.2} svgName='birthday-symbol.svg'></IconText>
+								<IconText text={data.gender} fontSize={1.2} svgName='gender-symbol.svg'></IconText>
+								<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='weight-symbol.svg'></IconText>
+								<IconText text={data.color} fontSize={1.2} svgName='color-symbol.svg'></IconText>
+							</div>
 					</div>
-					<div className={styles.NameText}>
-					<IconText text={data.petName} fontSize={1.6} isVisible={true}></IconText>
-					</div>
-					<div className={styles.infoText}>
-						<IconText text={data.age + ' years old' } fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={dateOfBirth} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.gender} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.weight + ' kg'} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.color} fontSize={1.2} isVisible={true}></IconText>
-					</div>
-				</div>
-			</section>
-			<section className={styles.infoContainer2}>
-			<div className={styles.wrapperFlex}>
-				{/* //TODO: adding description of pet */}
+					{ page != 'PetProfileOwned' && <div className={styles.moreInfo}>
+						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='owner-symbol.svg'></IconText>
+						<IconText text={dateOfBirth} fontSize={1.2} svgName='phone-symbol.svg'></IconText>
+						<IconText text={data.address} fontSize={1.2} svgName='location-symbol.svg'></IconText>
+					</div>}
 				<div className={styles.descriptionBox}>
 					<h3>Bio</h3>
 					<p>{data.description}</p>
 				</div>
-			</div>
 			</section>
+			
+			<div className={styles.secondRowWrapper}>
 			{/* //!Vaccine Records Section */}
 			<section className={styles.vaccineContainer}>
 				<h2>Vaccine Records</h2>
@@ -169,17 +174,22 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			</section>
 			{/* //!Features Section */}
 			<section className={styles.featuresContainer}>
+				<h2>Features</h2>
 				<Features features={data.features}></Features>
 			</section>
+			</div>
+			<div>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<DeleteButton 
+				{page === 'PetProfileOwned' && <DeleteButton 
 				onClick={handleDeleteClick}
-				apiResponse={apiResponseDEL}/>
-				<AdoptionButton 
+				apiResponse={apiResponseDEL}/>}
+				{page === 'PetProfileOthers' && <AdoptionButton 
 				onClick={handleAdoptionClick}
-				apiResponse={apiResponseADOPT}/>
+				apiResponse={apiResponseADOPT}/>}
 			</section>
+			<RequestDisplay></RequestDisplay>
+			</div>
 		</div>
 	)
 }
