@@ -157,9 +157,9 @@ CREATE TABLE `shelter` (
 --
 
 INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `sheltercontactInfo`, `shelterphoneNumber`, `shelterImage`) VALUES
-(501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '+123456789', NULL),
-(502, 'Kitty Haven', '456 Park Ave, Town', 'info@kittyhaven.com', '+987654321', NULL),
-(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '+234567890', NULL);
+(501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '0823456789', NULL),
+(502, 'Kitty Haven', '456 Park Ave, Town', 'info@kittyhaven.com', '0987654321', NULL),
+(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '0934567890', NULL);
 
 -- --------------------------------------------------------
 
@@ -185,10 +185,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `userphoneNumber`, `userAddress`, `userRole`, `userImage`, `shelter_shelterID`) VALUES
-(201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '+1122334455', '123 Elm St, City', 'User', NULL, NULL),
-(202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '+9988776655', '456 Maple Ave, Town', 'User', NULL, NULL),
-(203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '+7435312302', '123 Main St, City', 'ShelterStaff', NULL, 501),
-(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '+7654321890', '789 Oakwood Dr, Village', 'ShelterStaff', NULL, 503);
+(201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '0812233445', '123 Elm St, City', 'User', NULL, NULL),
+(202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '0998877665', '456 Maple Ave, Town', 'User', NULL, NULL),
+(203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '0943531230', '123 Main St, City', 'ShelterStaff', NULL, 501),
+(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '0865432189', '789 Oakwood Dr, Village', 'ShelterStaff', NULL, 503);
 
 --
 -- Indexes for dumped tables

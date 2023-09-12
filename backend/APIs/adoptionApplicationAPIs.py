@@ -124,17 +124,18 @@ async def update_approvalStatus(request: Request):
         await db_connector.connect()
         data = await request.json()
         
-        applicationID = data.get("applicationID")
+        petID = data.get("petID")
+        userID = data.get("userID")
         approvalStatus = data.get("approvalStatus")
         
-        if None in (applicationID, approvalStatus):
+        if None in (petID, userID, approvalStatus):
             return create_error_response("missing required fields")
         
         if approvalStatus != "Approved" and approvalStatus != "Rejected":
             return create_error_response("wrong approvalStatus")
         
-        checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE applicationID = %s"
-        checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, applicationID)
+        checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s"
+        checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, petID, userID)
         
         if not checkAdoptionResult:
             return create_error_response("adoption application not found")
@@ -152,10 +153,10 @@ async def update_approvalStatus(request: Request):
                     async with conn.cursor() as cursor:
                         await cursor.execute(updateAdoptionQuery, ("Rejected", adoptionApplication[0]))
             
-            updateAdoptionQuery = "UPDATE adoptionApplication SET approvalStatus = %s WHERE applicationID = %s"
+            updateAdoptionQuery = "UPDATE adoptionApplication SET approvalStatus = %s WHERE pet_petID = %s AND user_userID = %s"
             async with db_connector.pool.acquire() as conn:
                 async with conn.cursor() as cursor:
-                    await cursor.execute(updateAdoptionQuery, (approvalStatus, applicationID))
+                    await cursor.execute(updateAdoptionQuery, (approvalStatus, petID, userID))
             
             pet_petID = checkAdoptionResult[0][1]
             user_userID = checkAdoptionResult[0][2]
@@ -177,10 +178,10 @@ async def update_approvalStatus(request: Request):
                 async with conn.cursor() as cursor:
                     await cursor.execute(updatePetQuery, ("Adopted", pet_petID))
         else:
-            updateAdoptionQuery = "UPDATE adoptionApplication SET approvalStatus = %s WHERE applicationID = %s"
+            updateAdoptionQuery = "UPDATE adoptionApplication SET approvalStatus = %s WHERE pet_petID = %s AND user_userID = %s"
             async with db_connector.pool.acquire() as conn:
                 async with conn.cursor() as cursor:
-                    await cursor.execute(updateAdoptionQuery, (approvalStatus, applicationID))
+                    await cursor.execute(updateAdoptionQuery, (approvalStatus, petID, userID))
         
         return create_success_response("adoption application updated")
     except Exception as e:
