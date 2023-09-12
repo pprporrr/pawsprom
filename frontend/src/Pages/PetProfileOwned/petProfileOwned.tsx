@@ -32,8 +32,15 @@ type PetData = {
 		vaccinationName: string[]
 		vaccinationDate: string[]
 		address: string
+    adoptionApplications: {
+      [key:string] : {
+          firstName: string,
+          lastName: string,
+          phoneNo: string,
+          address: string,
+      }
+    }
 }
-
 
 export const PetProfileOwned = () => {
 
@@ -41,7 +48,7 @@ export const PetProfileOwned = () => {
 
     // ! var for testing purpose ========================================
     const shelterID = 503;
-    const petID = 102
+    const petID = 103
     const username = 'Hello its me'
     const Data = { 
       petName: 'Torty',
@@ -80,8 +87,17 @@ export const PetProfileOwned = () => {
       "2023-06-15", 
       "2019-02-20",
       "2021-05-30"],
-      address: '209 Mantika Soi 1 Bangbon 3 Rd. Bangbon Bangkok',
+      phone: "+234567890",
+      address: "789 Oak Rd, Village",
+      adoptionApplications: {
+            "202": {
+                "firstName": "Nong",
+                "lastName": "Foam",
+                "phoneNo": "+9988776655",
+                "address": "456 Maple Ave, Town"
+            }
     }
+  }
 
     // ! ==============================================================
 
@@ -113,6 +129,7 @@ export const PetProfileOwned = () => {
 
     }, [])
      // *---------------- POST to API ----------------* //
+    
 
   return (
     <div className={styles.bgContainer}>

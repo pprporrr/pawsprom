@@ -41,8 +41,18 @@ interface PetProfileFullProps {
 		vaccinationName: string[]
 		vaccinationDate: string[]
 		address: string
+		adoptionApplications: {
+			[key:string] : {
+				firstName: string,
+				lastName: string,
+				phoneNo: string,
+				address: string,
+			}
+		}
 	}
+
 	baseAPI: AxiosInstance
+	
 }
 
 // TODO: fix svg file , now using img calling svg
@@ -64,9 +74,6 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 
 	//* delete button
 	const handleDeleteClick = () => {
-
-		// test
-		// setAPIResponse(true)
 
 		console.log('send delete request')
 		// test petID = 106 , // ! dont forget to change
@@ -108,11 +115,11 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	//* sending request to API from button (end) =================================
 	
 	//* reset var
-	useEffect(() => {
-		setAPIResponseDEL(null)
-		setAPIResponseADOPT(null)
-    }, []);
-	
+	// useEffect(() => {
+	// 	setAPIResponseDEL(null)
+	// 	setAPIResponseADOPT(null)
+    // }, []);
+
 	return (
 		<div className={styles.cardWrapper}>
 			{/* //!Title Section */}
@@ -188,7 +195,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 				onClick={handleAdoptionClick}
 				apiResponse={apiResponseADOPT}/>}
 			</section>
-			<RequestDisplay></RequestDisplay>
+			<RequestDisplay adoptionApplications={data.adoptionApplications}></RequestDisplay>
 			</div>
 		</div>
 	)

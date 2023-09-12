@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 type PetData = {
-petName: string
-    species: string | null
-    breed: string | null
-    age: number | null
-    gender: string
-    weight: number
-    color: string | null
-    dateofbirth: string
-    description: string | null
-    imageIDs: number[]
-    features: {
+    petName: string
+        species: string | null
+        breed: string | null
+        age: number | null
+        gender: string
+        weight: number
+        color: string | null
+        dateofbirth: string
+        description: string | null
+        imageIDs: number[]
+        features: {
     feature1: boolean | null,
     feature2: boolean | null,
     feature3: boolean | null,
@@ -25,13 +25,21 @@ petName: string
     feature8: boolean | null,
     feature9: boolean | null,
     feature10: boolean | null,
+        }
+        availabilityStatus: string
+        vaccinationRecord: null
+        // shelterID: number
+        vaccinationName: string[]
+        vaccinationDate: string[]
+        address: string
+    adoptionApplications: {
+    [key:string] : {
+        firstName: string,
+        lastName: string,
+        phoneNo: string,
+        address: string,
     }
-    availabilityStatus: string
-    vaccinationRecord: null
-    // shelterID: number
-    vaccinationName: string[]
-    vaccinationDate: string[]
-    address: string
+    }
 }
 
 
@@ -41,8 +49,8 @@ const petPage = 'PetProfileOthers';
 
 // ! var for testing purpose ========================================
 const shelterID = 503;
-const petID = 102
 const username = 'Hello its me'
+const petID = 103
 const Data = { 
     petName: 'Torty',
     species: 'Raccoon',
@@ -53,7 +61,7 @@ const Data = {
     color: 'brown',
     dateofbirth: "2011",
     description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
-    imageIDs: [1,2,3],
+    imageIDs: [1,2],
     features: {
         feature1: true,
         feature2: true,
@@ -80,9 +88,17 @@ const Data = {
     "2023-06-15", 
     "2019-02-20",
     "2021-05-30"],
-    address: '209 Mantika Soi 1 Bangbon 3 Rd. Bangbon Bangkok',
-    }
-
+    phone: "+234567890",
+    address: "789 Oak Rd, Village",
+    adoptionApplications: {
+        "202": {
+            "firstName": "Nong",
+            "lastName": "Foam",
+            "phoneNo": "+9988776655",
+            "address": "456 Maple Ave, Town"
+            }
+        }
+}
     // ! ==============================================================
 
     // * the actual data to set after fetch from API

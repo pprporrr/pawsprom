@@ -6,16 +6,16 @@ import { RequestDisplay } from '../../Components/RequestDisplay/requestDisplay';
 
 type PetData = {
 petName: string
-    species: string | null
-    breed: string | null
-    age: number | null
-    gender: string
-    weight: number
-    color: string | null
-    dateofbirth: string
-    description: string | null
-    imageIDs: number[]
-    features: {
+        species: string | null
+        breed: string | null
+        age: number | null
+        gender: string
+        weight: number
+        color: string | null
+        dateofbirth: string
+        description: string | null
+        imageIDs: number[]
+        features: {
     feature1: boolean | null,
     feature2: boolean | null,
     feature3: boolean | null,
@@ -26,13 +26,21 @@ petName: string
     feature8: boolean | null,
     feature9: boolean | null,
     feature10: boolean | null,
+        }
+        availabilityStatus: string
+        vaccinationRecord: null
+        // shelterID: number
+        vaccinationName: string[]
+        vaccinationDate: string[]
+        address: string
+    adoptionApplications: {
+    [key:string] : {
+        firstName: string,
+        lastName: string,
+        phoneNo: string,
+        address: string,
     }
-    availabilityStatus: string
-    vaccinationRecord: null
-    // shelterID: number
-    vaccinationName: string[]
-    vaccinationDate: string[]
-    address: string
+    }
 }
 
 
@@ -42,47 +50,63 @@ const petPage = 'PetProfileOwned';
 
 // ! var for testing purpose ========================================
 const shelterID = 503;
-const petID = 102
 const username = 'Hello its me'
+const petID = 103
 const Data = { 
-    petName: 'Torty',
-    species: 'Raccoon',
-    breed: 'Ameba hahaha',
-    age: 2,
-    gender: 'Male', 
-    weight: 3,
-    color: 'brown',
-    dateofbirth: "2011",
-    description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
-    imageIDs: [1,2],
-    features: {
-        feature1: true,
-        feature2: true,
-        feature3: true,
-        feature4: true,
-        feature5: true,
-        feature6: true,
-        feature7: true,
-        feature8: true,
-        feature9: true,
-        feature10: true,
-        // feature11: false,  // prefer true false than 0,1 => number
+petName: 'Torty',
+species: 'Raccoon',
+breed: 'Ameba hahaha',
+age: 2,
+gender: 'Male', 
+weight: 3,
+color: 'brown',
+dateofbirth: "2011",
+description: 'This delightful kitty is a true embodiment of everything you want in a feline companion. Whiskers is incredibly friendly and social, always seeking out attention and affection.',
+imageIDs: [1,2],
+features: {
+    feature1: true,
+    feature2: true,
+    feature3: true,
+    feature4: true,
+    feature5: true,
+    feature6: true,
+    feature7: true,
+    feature8: true,
+    feature9: true,
+    feature10: true,
+    // feature11: false,  // prefer true false than 0,1 => number
+},
+availabilityStatus: 'Owned',
+vaccinationRecord: null,
+// shelterID: 501,
+vaccinationName: ["Feline Parvo Virus (FPV)",
+"Feline Callicivirus (FCV)",
+"Feline Herpesvirus (FHV-1) sgafagregvrevrfrgvfa",
+"Rabies Virus",
+"Chlamydophila felis"],
+vaccinationDate: ["2023-06-15",
+"2021-04-01", 
+"2023-06-15", 
+"2019-02-20",
+"2021-05-30"],
+phone: "+234567890",
+address: "789 Oak Rd, Village",
+adoptionApplications: {
+    "202": {
+        firstName: "Nong",
+        lastName: "Foam",
+        phoneNo: "+9988776655",
+        address: "456 Maple Ave, Town"
     },
-    availabilityStatus: 'Owned',
-    vaccinationRecord: null,
-    // shelterID: 501,
-    vaccinationName: ["Feline Parvo Virus (FPV)",
-    "Feline Callicivirus (FCV)",
-    "Feline Herpesvirus (FHV-1) sgafagregvrevrfrgvfa",
-    "Rabies Virus",
-    "Chlamydophila felis"],
-    vaccinationDate: ["2023-06-15",
-    "2021-04-01", 
-    "2023-06-15", 
-    "2019-02-20",
-    "2021-05-30"],
-    address: '209 Mantika Soi 1 Bangbon 3 Rd. Bangbon Bangkok',
+    "201": {
+        firstName: "Nong",
+        lastName: "Noon",
+        phoneNo: "+1122334455",
+        address: "123 Elm St, City"
+    }
 }
+}
+
 
 // ! ==============================================================
 
