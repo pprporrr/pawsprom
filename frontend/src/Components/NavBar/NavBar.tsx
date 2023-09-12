@@ -10,7 +10,7 @@ export const NavBar = () => {
       <section className={styles.right_side}>
         <a href='/'>Home</a>
         <a href='/create'>create</a>
-        <a href='/p'>username</a>
+        <a href='/PetProfileOwned'>username</a>
       </section>
     </div>
   )
