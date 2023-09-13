@@ -290,6 +290,8 @@ async def get_pet_profile_long(request: Request):
             getPetVaccinesQuery = "SELECT * FROM petVaccinations WHERE pet_petID = %s"
             getPetVaccinesResult = await db_connector.execute_query(getPetVaccinesQuery, petID)
             
+            applicationDict = {}
+            
             if getPetDetailsResult[0][11] == "Available":
                 getShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
                 getShelterResult = await db_connector.execute_query(getShelterQuery, getPetDetailsResult[0][13])
@@ -298,7 +300,6 @@ async def get_pet_profile_long(request: Request):
                 getAdoptionResult = await db_connector.execute_query(getAdoptionQuery, petID, "Pending")
                 
                 userIDList = [applicationID for sublist in getAdoptionResult for applicationID in sublist]
-                applicationDict = {}
                 
                 for userID in userIDList:
                     getAddressQuery = "SELECT * FROM user WHERE userID = %s"
@@ -353,7 +354,7 @@ async def get_pet_profile_long(request: Request):
                 "name": f"{getOwnerResult[0][3]} {getOwnerResult[0][4]}",
                 "phone": getOwnerResult[0][5],
                 "address": getOwnerResult[0][6],
-                "adoptionApplications": None
+                "adoptionApplications": applicationDict
                 }
             
             return create_success_response(petInfo)
