@@ -134,14 +134,11 @@ async def update_approvalStatus(request: Request):
         if approvalStatus != "Approved" and approvalStatus != "Rejected":
             return create_error_response("wrong approvalStatus")
         
-        checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s"
-        checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, petID, userID)
+        checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND user_userID = %s AND approvalStatus = %s"
+        checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, petID, userID, "Pending")
         
         if not checkAdoptionResult:
             return create_error_response("adoption application not found")
-        
-        if checkAdoptionResult[0][3] != "Pending":
-            return create_error_response("adoption application already review")
         
         if approvalStatus == "Approved":
             checkAdoptionByPetQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s"
