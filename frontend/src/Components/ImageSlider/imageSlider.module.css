@@ -37,14 +37,15 @@
 .arrowRight,
 .arrowLeft {
     position: absolute;
-    width: 2rem;
-    height: 2rem;
-    color: white;
-    filter: drop-shadow(0px, 0px, 5px #555);
+    width: fit-content;
+    height: fit-content;
+    border: none;
+    background: transparent;
+    top: 45%;
 }
 
 .arrowRight {
-    right: 1rem;
+    right: 0.5rem;
 }
 
 .arrowLeft {

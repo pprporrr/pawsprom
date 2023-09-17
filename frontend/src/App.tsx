@@ -7,6 +7,7 @@ import { PetProfileShelter } from "./Pages/PetProfileShelter/petProfileShelter.t
 import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx';
 import { LoginPage } from "./Pages/Login/LoginPage.tsx";
 import { Home } from './Pages/Home/home.tsx';
+import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
 
 function App() {
   return (
@@ -14,11 +15,12 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/PetProfileOwned" element={<PetProfileOwned />} />
-        <Route path="/PetProfileOthers" element={<PetProfileOthers />} />
-      <Route path="/PetProfileShelter" element={<PetProfileShelter />} />
-      <Route path="/create" element={<CreatePetProfile />} />
+        <Route path="/petprofileowned" element={<PetProfileOwned />} />
+        <Route path="/petprofileothers" element={<PetProfileOthers />} />
+        <Route path="/petprofileshelter" element={<PetProfileShelter />} />
+        <Route path="/create" element={<CreatePetProfile />} />
         <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/search" element={<SearchPage />} />
       </Routes>
       <div className={styles.footer }>
         Copyright © [Year of Creation] Cloud Go Go Pet Adoption. All rights reserved.

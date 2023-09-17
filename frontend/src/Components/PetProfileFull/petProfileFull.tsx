@@ -47,6 +47,7 @@ interface PetProfileFullProps {
 				lastName: string,
 				phoneNo: string,
 				address: string,
+				dateofapplication: string,
 			}
 		}
 	}
@@ -99,8 +100,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 		const formattedDate = `${year}-${month}-${day}`;
 		
 		console.log('send adoption request')
-		const petID = 106
-		const userID = 202
+		// ! test
+		const userID = 201
 		baseAPI.post('/adoptionAPI/create-application/', { petID, userID, dateofapplication: formattedDate })
         .then(response => {
 			console.log(response.data)
@@ -118,7 +119,12 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	// useEffect(() => {
 	// 	setAPIResponseDEL(null)
 	// 	setAPIResponseADOPT(null)
-    // }, []);
+    // }, []
+
+	useEffect(() => {
+
+    }, [data]);
+
 
 	return (
 		<div className={styles.cardWrapper}>
@@ -160,7 +166,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 								<IconText text={data.color} fontSize={1.2} svgName='color-symbol.svg'></IconText>
 							</div>
 					</div>
-					{ page != 'PetProfileOwned' && <div className={styles.moreInfo}>
+					{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
 						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='owner-symbol.svg'></IconText>
 						<IconText text={dateOfBirth} fontSize={1.2} svgName='phone-symbol.svg'></IconText>
 						<IconText text={data.address} fontSize={1.2} svgName='location-symbol.svg'></IconText>
@@ -195,7 +201,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 				onClick={handleAdoptionClick}
 				apiResponse={apiResponseADOPT}/>}
 			</section>
-			<RequestDisplay adoptionApplications={data.adoptionApplications}></RequestDisplay>
+			{page === 'PetProfileShelter' && <RequestDisplay baseAPI={baseAPI} petID={petID} adoptionApplications={data.adoptionApplications}></RequestDisplay>}
 			</div>
 		</div>
 	)
