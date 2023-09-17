@@ -1,4 +1,14 @@
-div{
-  height: 100%;
-  width:100%
+.main_container{
+  display: grid;
+  grid-template-rows: 100px 1fr 100px;
+  row-gap: 4rem;
+  width: auto;
+  height: 100dvh;
+}
+.footer{
+  display: flex;
+  background-color: #162D39;
+  color: #FFFCF1;
+  justify-content: center;
+  align-items: center;
 }

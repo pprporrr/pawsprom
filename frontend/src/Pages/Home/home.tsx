@@ -5,7 +5,7 @@ export const Home = () => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate("/p")
+        navigate("/PetProfileOwned")
     }
 
     return (

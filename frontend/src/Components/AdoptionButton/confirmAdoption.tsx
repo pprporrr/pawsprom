@@ -24,14 +24,14 @@ export const ConfirmAdoption: React.FC<ConfirmAdoptionProps> = ({
         <div className={styles.modalcontent}>
             {/* //! display loading */}
             {isLoading && resultText === "" && (
-                <p>Loading...</p>
+                <p className={styles.loadingText}>Loading...</p>
             )}
             {/* //! display confirmation */}
             {!isLoading && resultText === "" && (
             <div>
                 <p>Are you sure you want to apply adoption application?</p>
-                <button onClick={onCancel}>Cancel</button>
-                <button onClick={onConfirm}>Adopt</button>
+                <button className={styles.buttonCancel}onClick={onCancel}>Cancel</button>
+                <button className={styles.buttonAdopt}onClick={onConfirm}>Adopt</button>
             </div>
             )}
             {/* // ! display success or failed */}

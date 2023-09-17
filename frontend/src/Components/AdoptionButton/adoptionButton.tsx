@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios"
 import { useEffect, useState } from "react"
 import { ConfirmAdoption } from "./confirmAdoption"
 import { useNavigate } from "react-router-dom"
+import styles from "../DeleteButton/deleteButton.module.css"
 
 interface AdoptionButtonProps { 
     onClick: () => void
@@ -49,13 +50,17 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
         if (apiResponse === true) {
                 setResultText("success")
                 setTimeout(() => {
+                    setIsConfirmOpen(false)
                     // go back to previous page
                     navigate(-1)
                 }, 5000)
             }
             else if (apiResponse === false) {
                 setResultText("failed")
-                setTimeout(() => {} , 5000)
+                setTimeout(() => {
+                    setIsConfirmOpen(false)
+                    location.reload()
+                } , 2000)
             }
         
         }
@@ -66,7 +71,7 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
 
     return (
         <div>
-            <button onClick={handleClick}>adoptionButton</button>
+            <button className={styles.adoptDeco} onClick={handleClick}>adoptionButton</button>
             <ConfirmAdoption 
             isOpen={isConfirmOpen}
             onCancel={handleCancel}

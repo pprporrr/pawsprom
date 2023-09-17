@@ -7,6 +7,7 @@ import { DeleteButton } from '../DeleteButton/deleteButton'
 import { AdoptionButton } from '../AdoptionButton/adoptionButton.tsx'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
+import { RequestDisplay } from '../RequestDisplay/requestDisplay.tsx'
 
 
 interface PetProfileFullProps {
@@ -40,8 +41,19 @@ interface PetProfileFullProps {
 		vaccinationName: string[]
 		vaccinationDate: string[]
 		address: string
+		adoptionApplications: {
+			[key:string] : {
+				firstName: string,
+				lastName: string,
+				phoneNo: string,
+				address: string,
+				dateofapplication: string,
+			}
+		}
 	}
+
 	baseAPI: AxiosInstance
+	
 }
 
 // TODO: fix svg file , now using img calling svg
@@ -58,11 +70,11 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	const [apiResponseDEL, setAPIResponseDEL] = useState(null)
 	const [apiResponseADOPT, setAPIResponseADOPT] = useState(null)
 	
-	//* delete button sending delete request
-	const handleDeleteClick = () => {
 
-		// test
-		// setAPIResponse(true)
+	//* sending request to API from button (start) ================================= 
+
+	//* delete button
+	const handleDeleteClick = () => {
 
 		console.log('send delete request')
 		// test petID = 106 , // ! dont forget to change
@@ -75,6 +87,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
             console.error(error);
         })
 	}
+
+	//* adopt button
 	
 	const handleAdoptionClick = () => {
 		// test
@@ -86,8 +100,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 		const formattedDate = `${year}-${month}-${day}`;
 		
 		console.log('send adoption request')
-		const petID = 106
-		const userID = 202
+		// ! test
+		const userID = 201
 		baseAPI.post('/adoptionAPI/create-application/', { petID, userID, dateofapplication: formattedDate })
         .then(response => {
 			console.log(response.data)
@@ -96,22 +110,28 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
         })
         .catch(error => {
 			console.error(error);
-            console.error(error);
         })
 	}
+
+	//* sending request to API from button (end) =================================
 	
 	//* reset var
+	// useEffect(() => {
+	// 	setAPIResponseDEL(null)
+	// 	setAPIResponseADOPT(null)
+    // }, []
+
 	useEffect(() => {
-		setAPIResponseDEL(null)
-		setAPIResponseADOPT(null)
-    }, []);
-	
+
+    }, [data]);
+
+
 	return (
 		<div className={styles.cardWrapper}>
 			{/* //!Title Section */}
 			<section className={styles.topContainer}>
 				<div className={styles.titleContainer}>
-					<p className={styles.title}>Pet Profile</p>
+					<h1 className={styles.title}>Pet Profile</h1>
 					<div style={{ width: '2.813rem', height: '2.813rem' }}>
 						{/* <SpeciesSymbol></SpeciesSymbol> change later na vvvvvvvvvvv svg*/}
 						<img src="../../cat.svg" alt="edit-symbol" />
@@ -123,58 +143,66 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 					</div>
 				</div>
 			</section>
+			
 			{/* //!General Information Section */}
-			<section className={styles.infoContainer1}>
+			<section className={styles.firstRowWrapper}>
 				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				<ImageSlider 
-				imageIDs={data.imageIDs} 
-				baseAPI={baseAPI} 
-				availabilityStatus={data.availabilityStatus}
-				></ImageSlider>
-				<div className={styles.wrapperFlex}>
-					<div className={styles.infoText}>
-					<IconText text={data.breed} fontSize={1.2} isVisible={true}></IconText>
+				{/* <div className={styles.infoContainer1}> */}
+					<div className={styles.imageAndInfo}>
+						<ImageSlider
+						imageIDs={data.imageIDs} 
+						baseAPI={baseAPI} 
+						availabilityStatus={data.availabilityStatus}
+						></ImageSlider>
+							<div className={styles.infoText}>
+								<h3>{data.breed}</h3>
+								<div className={styles.NameText}>
+									<h2>{data.petName}</h2>
+								</div>
+								<IconText text={data.age + ' years old' } fontSize={1.2} svgName='age-symbol.svg'></IconText>
+								<IconText text={dateOfBirth} fontSize={1.2} svgName='birthday-symbol.svg'></IconText>
+								<IconText text={data.gender} fontSize={1.2} svgName='gender-symbol.svg'></IconText>
+								<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='weight-symbol.svg'></IconText>
+								<IconText text={data.color} fontSize={1.2} svgName='color-symbol.svg'></IconText>
+							</div>
 					</div>
-					<div className={styles.NameText}>
-					<IconText text={data.petName} fontSize={1.6} isVisible={true}></IconText>
-					</div>
-					<div className={styles.infoText}>
-						<IconText text={data.age + ' years old' } fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={dateOfBirth} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.gender} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.weight + ' kg'} fontSize={1.2} isVisible={true}></IconText>
-						<IconText text={data.color} fontSize={1.2} isVisible={true}></IconText>
-					</div>
-				</div>
-			</section>
-			<section className={styles.infoContainer2}>
-			<div className={styles.wrapperFlex}>
-				{/* //TODO: adding description of pet */}
+					{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
+						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='owner-symbol.svg'></IconText>
+						<IconText text={dateOfBirth} fontSize={1.2} svgName='phone-symbol.svg'></IconText>
+						<IconText text={data.address} fontSize={1.2} svgName='location-symbol.svg'></IconText>
+					</div>}
 				<div className={styles.descriptionBox}>
 					<h3>Bio</h3>
 					<p>{data.description}</p>
 				</div>
-			</div>
 			</section>
+			
+			<div className={styles.secondRowWrapper}>
 			{/* //!Vaccine Records Section */}
 			<section className={styles.vaccineContainer}>
+				<h2>Vaccine Records</h2>
 				<VaccineRecords 
 				vaccinationName={data.vaccinationName} 
 				vaccinationDate={vaccineDateObjects}></VaccineRecords>
 			</section>
 			{/* //!Features Section */}
 			<section className={styles.featuresContainer}>
+				<h2>Features</h2>
 				<Features features={data.features}></Features>
 			</section>
+			</div>
+			<div>
 			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
-				<DeleteButton 
+				{page === 'PetProfileOwned' && <DeleteButton 
 				onClick={handleDeleteClick}
-				apiResponse={apiResponseDEL}/>
-				<AdoptionButton 
+				apiResponse={apiResponseDEL}/>}
+				{page === 'PetProfileOthers' && <AdoptionButton 
 				onClick={handleAdoptionClick}
-				apiResponse={apiResponseADOPT}/>
+				apiResponse={apiResponseADOPT}/>}
 			</section>
+			{page === 'PetProfileShelter' && <RequestDisplay baseAPI={baseAPI} petID={petID} adoptionApplications={data.adoptionApplications}></RequestDisplay>}
+			</div>
 		</div>
 	)
 }

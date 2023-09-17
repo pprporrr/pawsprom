@@ -3,60 +3,67 @@
 
 .cardWrapper {
     width: 86%;
-    /* height: rem; */
-    position: absolute;
-    background-color: #FFFCF1;
+    height: auto;
+    background-color: #fff8e0;
+    box-shadow: 0px 0px 10px 5px #D1D1D1;
     top: 20%;
-    display: grid;
-    grid-template-columns: repeat(15, 1fr);
-    gap: 1.875rem;
-    /* grid-auto-rows: minmax(20px, auto); */
-    grid-auto-rows: min-content;
-    /* border: 2px solid red; */
     border-radius: 1.875rem;
     overflow: hidden;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     padding-top: 2.5rem;
     padding-bottom: 1rem;
-}
-
-.topContainer {
-    grid-column: 1/-1;
-    grid-row: 1;
-}
-
-.infoContainer1 {
-    min-width: 24rem;
-    grid-column: 1/9;
-    grid-row: 2;
     display: flex;
-    flex-direction: row;
-    
+    flex-direction: column;
+
+    background-image: url(paws-bg.svg);
+    background-repeat: no-repeat;
+    background-position: 100%;
 }
 
-.infoContainer2 {
-    grid-column: 9/-1;
-    grid-row: 2;
-    
+
+.firstRowWrapper {
+    width: 100%;
+    height: auto;
+    display: grid;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-style: solid;
+    border-radius: 1rem;
+    border-color: #ffd2b8;
+    padding: 1rem;
+    column-gap: 0.5rem; /*10 px*/
+    grid-template-columns: 60% auto;
+    grid-template-rows: auto auto;
 }
 
 .vaccineContainer {
-    grid-column: 1/9;
-    grid-row: 3;
-   
+    width: 100%;
+    color: #66BEF0;
+    margin: 1rem;
+    margin-right: 0rem;
+    margin-left: 0rem;
 }
 
 .featuresContainer {
-    grid-column: 9/-1;
-    grid-row: 3;
-    
+    width: 100%;
+    margin: 1rem;
+    margin-right: 0rem;
+    margin-left: 0rem;
+}
+
+.featuresContainer h2 {
+    margin-bottom: 0.5rem;
+}
+.secondRowWrapper {
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: 60% auto;
 }
 
 .bottomContainer {
-    grid-column: 15/-1;
-    
-    grid-row: 4;
+    float: right;
 }
 
 /* =========== container/Wrapper =========== */
@@ -70,45 +77,116 @@
     padding-left: 3.375rem;
     padding-right: 3.375rem;
     gap: 10px;
-    margin-left: -1rem;
-    margin-right: -1rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
     /* margin-top: 2.5rem; */
     align-items: center;
 }
 
 .title {
-    color: aliceblue;
+    color: #FFFCF1;
 }
 
-.title:last-of-type {
+.titleContainer p, img {
     margin-left: auto;
 }
 
-.wrapperFlex {
+.imageAndInfo {
     display: flex;
-    flex-direction: column;
-    gap: 0;
+    flex-direction: row;
+    grid-column-start: 1;
+    grid-row: 1/ span 2;
+}
+
+.moreInfo {
+    grid-column-start: 2;
+    grid-row: 1;
+    color: #66BEF0;
 }
 
 
+.descriptionBox {
+    background-color: #FFE9DA;
+    border-radius: 1rem;
+    padding: 1rem;
+    padding-top: 1.5rem;
+    height: fit-content;
+    grid-column-start: 2;
 
+}
 
 .descriptionBox h3 {
     font-weight: 500;
     margin-bottom: 0.5rem;
     line-height: 0rem;
+    color: #704B36;
+
 }
 
 .descriptionBox p {
     font-weight: 500;
     margin-left: 0rem;
     line-height: 1.5rem;
+    color: #9E6D51;
 }
 
 .infoText {
     color: #66BEF0;
+    margin-left: 1rem;
 }
 
 .NameText {
     color: #53A3D0;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    color: #53A3D0;
+}
+
+
+@media only screen and (max-width: 1120px) {
+    
+    .firstRowWrapper {
+        row-gap: 2rem;
+        grid-template-columns: 70% auto;
+        grid-template-rows: auto auto;
+    }
+
+    
+    .imageAndInfo {
+        display: flex;
+        flex-direction: row;
+        grid-column-start: 1;
+        grid-row: 1;
+    }
+
+    .moreInfo {
+        grid-column-start: 2;
+        grid-row: 1;
+        color: #66BEF0;
+    }  
+
+    .descriptionBox {
+        margin-top: -1rem;
+        grid-column: 1/ span 2;
+        grid-row: 2;
+    }
+
+
+    .secondRowWrapper {
+        row-gap: 1rem;
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto;
+    }
+
+    .vaccineContainer {
+        grid-row: 1;
+        margin: 0rem;
+    }
+
+    .featuresContainer {
+        grid-row: 2;
+        margin: 0rem;
+    }
 }

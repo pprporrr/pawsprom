@@ -1,8 +1,23 @@
 
-.deleteButton {
+.buttonDeco {
     background-color: #FFB184;
-    border-radius: 2rem;
+    border-radius: 5rem;
     padding: 0.5rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     border: 0rem;
     color: #FFFCF1;
+}
+
+.adoptDeco {
+    background-color: #FFB184;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: 0rem;
+    color: #FFFCF1;
+    border-radius: 2rem;
+    padding: 0.5rem;
 }

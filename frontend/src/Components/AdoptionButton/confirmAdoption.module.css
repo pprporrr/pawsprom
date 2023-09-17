@@ -10,9 +10,52 @@
     align-items: center;
 }
 
+.boxDeco {
+    background-color: #FFFCF1;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+
 .modalcontent {
-    background-color: white;
-    padding: 20px;
-    border-radius: 4px;
+    background-color: #FFFCF1;
+    width: fit-content;
+    border-style: solid;
+    border-width: 0.2rem;
+    border-color: #FFB184;
+    padding: 1rem;
+    border-radius: 1rem;
     text-align: center;
+    color:  #F57E85;
+}
+
+.modalcontent button {
+    font-size: 1rem;
+    padding: 0.2rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    border-radius: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    border-style: solid;
+    border-color: #66BEF0;
+
+}
+
+.buttonAdopt {
+
+    background-color: #66BEF0;
+    color: #FFFCF1;
+    
+}
+
+.buttonCancel {
+    
+    background-color: #FFFCF1;
+    color: #66BEF0;
+
+}
+
+.loadingText {
+    color: #66BEF0;
 }
