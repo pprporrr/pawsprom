@@ -296,15 +296,13 @@ async def get_pet_profile_long(request: Request):
                 getShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
                 getShelterResult = await db_connector.execute_query(getShelterQuery, getPetDetailsResult[0][13])
                 
-                getAdoptionQuery = "SELECT user_userID FROM adoptionApplication WHERE pet_petID = %s AND approvalStatus = %s"
+                getAdoptionQuery = "SELECT user_userID, dateofapplication FROM adoptionApplication WHERE pet_petID = %s AND approvalStatus = %s"
                 getAdoptionResult = await db_connector.execute_query(getAdoptionQuery, petID, "Pending")
                 
-                userIDList = [applicationID for sublist in getAdoptionResult for applicationID in sublist]
-                
-                for userID in userIDList:
+                for userID, dateofapplication in getAdoptionResult:
                     getAddressQuery = "SELECT * FROM user WHERE userID = %s"
                     getAddressResult = await db_connector.execute_query(getAddressQuery, userID)
-                    applicationDict[userID] = {"firstName": getAddressResult[0][3], "lastName": getAddressResult[0][4], "phoneNo": getAddressResult[0][5], "address": getAddressResult[0][6]}
+                    applicationDict[userID] = {"firstName": getAddressResult[0][3], "lastName": getAddressResult[0][4], "phoneNo": getAddressResult[0][5], "address": getAddressResult[0][6], "dateofapplication": dateofapplication}
                 
                 petInfo = {
                 "petName": getPetDetailsResult[0][1],
