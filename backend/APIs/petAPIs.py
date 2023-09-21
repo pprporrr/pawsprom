@@ -13,29 +13,6 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
-@router.post("/drop-down/", response_model=dict)
-async def get_drop_down(request: Request):
-    try:
-        await db_connector.connect()
-        
-        getSpeciesQuery = "SELECT DISTINCT species FROM pet"
-        getSpeciesResult = await db_connector.execute_query(getSpeciesQuery)
-        
-        breedDict = {}
-        
-        for Species in getSpeciesResult:
-            getBreedQuery = "SELECT DISTINCT breed FROM pet WHERE species = %s"
-            getBreedResult = await db_connector.execute_query(getBreedQuery, Species)
-            breedList = [Breed[0] for Breed in getBreedResult]
-            breedDict[Species] = breedList
-        
-        return create_success_response(breedDict)
-    except Exception as e:
-        return create_error_response(str(e))
-    finally:
-        await db_connector.disconnect()
-
-
 @router.post("/create-profile/byUser/", response_model=dict)
 async def create_pet_profile_by_User(request: Request):
     try:
@@ -449,49 +426,122 @@ async def delete_pet_profile(petID: int):
     finally:
         await db_connector.disconnect()
 
+@router.post("/drop-down/", response_model=dict)
+async def get_drop_down():
+    try:
+        await db_connector.connect()
+        
+        getSpeciesQuery = "SELECT DISTINCT species FROM pet"
+        getSpeciesResult = await db_connector.execute_query(getSpeciesQuery)
+        
+        dropDownDict = {}
+        
+        for Species in getSpeciesResult:
+            getBreedQuery = "SELECT DISTINCT breed FROM pet WHERE species = %s"
+            getBreedResult = await db_connector.execute_query(getBreedQuery, Species)
+            
+            breedList = [Breed[0] for Breed in getBreedResult]
+            sortedbreedList = sorted(breedList)
+            
+            dropDownDict[Species] = sortedbreedList
+        
+        getColorQuery = "SELECT DISTINCT color FROM pet"
+        getColorResult = await db_connector.execute_query(getColorQuery)
+        
+        colorList = [Color[0] for Color in getColorResult]
+        sortedcolorList = sorted(colorList)
+        
+        dropDownDict["Color"] = sortedcolorList
+        
+        return create_success_response(dropDownDict)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.post("/drop-down/colors/", response_model=dict)
+async def get_drop_down_colors(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        speciesList = data.get("species")
+        breedList = data.get("breed")
+        
+        allColors = []
+        
+        if speciesList:
+            for species in speciesList:
+                getColorbySpeciesQuery = "SELECT DISTINCT color FROM pet WHERE species = %s"
+                getColorbySpeciesResult = await db_connector.execute_query(getColorbySpeciesQuery, species)
+                
+                colorList = [color[0] for color in getColorbySpeciesResult]
+                allColors.extend(colorList)
+        
+        if breedList:
+            for breed in breedList:
+                getColorbyBreedQuery = "SELECT DISTINCT color FROM pet WHERE breed = %s"
+                getColorbyBreedResult = await db_connector.execute_query(getColorbyBreedQuery, breed)
+                
+                colorList = [color[0] for color in getColorbyBreedResult]
+                allColors.extend(colorList)
+        
+        uniqueColors = list(set(allColors))
+        sortedColors = sorted(uniqueColors)
+        
+        return create_success_response(sortedColors)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 @router.post("/search-pet/", response_model=dict)
 async def search_pet(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        species = data.get("species")
-        breed = data.get("breed")
-        ageRange = data.get("ageRange")
-        gender = data.get("gender")
-        weightRange = data.get("weightRange")
-        color = data.get("color")
+        species = data.get("species", [])
+        breeds = data.get("breed", [])
+        age_range = data.get("age_range")
+        gender = data.get("gender", [])
+        weight_range = data.get("weight_range")
+        colors = data.get("color", [])
         features = json.dumps(data.get("features"))
         
-        searchPetQuery = "SELECT * FROM pet WHERE 1"
+        search_pet_query = "SELECT * FROM pet WHERE 1"
         
-        if species:
-            searchPetQuery += f" AND species = '{species}'"
-        if breed:
-            searchPetQuery += f" AND breed = '{breed}'"
-        if ageRange:
-            searchPetQuery += f" AND age >= {ageRange[0]} AND age <= {ageRange[1]}"
-        if gender:
-            searchPetQuery += f" AND gender = '{gender}'"
-        if weightRange:
-            searchPetQuery += f" AND weight >= {weightRange[0]} AND weight <= {weightRange[1]}"
-        if color:
-            searchPetQuery += f" AND color = '{color}'"
+        if species != []:
+            species_filter = " OR ".join([f"species = '{s}'" for s in species])
+            search_pet_query += f" AND ({species_filter})"
+        if breeds != []:
+            breeds_filter = " OR ".join([f"breed = '{b}'" for b in breeds])
+            search_pet_query += f" AND ({breeds_filter})"
+        if age_range:
+            search_pet_query += f" AND age >= {age_range[0]} AND age <= {age_range[1]}"
+        if gender != []:
+            gender_filter = " OR ".join([f"gender = '{g}'" for g in gender])
+            search_pet_query += f" AND ({gender_filter})"
+        if weight_range:
+            search_pet_query += f" AND weight >= {weight_range[0]} AND weight <= {weight_range[1]}"
+        if colors != []:
+            colors_filter = " OR ".join([f"color = '{c}'" for c in colors])
+            search_pet_query += f" AND ({colors_filter})"
+        if not features:
+            search_pet_query += f" AND features LIKE '{features}'"
         
-        print(features)
+        search_pet_results = await db_connector.execute_query(search_pet_query)
         
-        searchPetResults = await db_connector.execute_query(searchPetQuery)
-        
-        if not searchPetResults:
+        if not search_pet_results:
             return create_error_response("no matching pets found")
         
-        petIDs = []
+        pet_ids = []
         
-        for pet in searchPetResults:
+        for pet in search_pet_results:
             if pet[11] == "Available":
-                petIDs.append(pet[0])
+                pet_ids.append(pet[0])
         
-        return create_success_response(petIDs)
+        return create_success_response(pet_ids)
     except Exception as e:
         return create_error_response(str(e))
     finally:
