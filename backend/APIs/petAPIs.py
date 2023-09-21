@@ -13,6 +13,29 @@ def create_success_response(data):
 def create_error_response(error_msg):
     return {"success": False, "error": error_msg}
 
+@router.post("/drop-down/", response_model=dict)
+async def get_drop_down(request: Request):
+    try:
+        await db_connector.connect()
+        
+        getSpeciesQuery = "SELECT DISTINCT species FROM pet"
+        getSpeciesResult = await db_connector.execute_query(getSpeciesQuery)
+        
+        breedDict = {}
+        
+        for Species in getSpeciesResult:
+            getBreedQuery = "SELECT DISTINCT breed FROM pet WHERE species = %s"
+            getBreedResult = await db_connector.execute_query(getBreedQuery, Species)
+            breedList = [Breed[0] for Breed in getBreedResult]
+            breedDict[Species] = breedList
+        
+        return create_success_response(breedDict)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+
 @router.post("/create-profile/byUser/", response_model=dict)
 async def create_pet_profile_by_User(request: Request):
     try:
@@ -198,7 +221,7 @@ async def update_pet_profile(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.post("/info-short/", response_model=list)
+@router.post("/info-short/", response_model=dict)
 async def get_pet_profiles_short(request: Request):
     try:
         await db_connector.connect()
@@ -212,14 +235,14 @@ async def get_pet_profiles_short(request: Request):
         pet_info_list = []
         
         for petID in petIDs:
-            getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
-            getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
-            
-            if not getPetDetailsResult:
-                pet_info_list.append({"petID": petID, "error": "pet not found"})
-            else:
+            try:
+                getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+                getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+                
                 getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
                 getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
+            except:
+                pet_info_list.append({"petID": petID, "error": "pet not found"})
             
             if getPetDetailsResult[0][11] == "Available":
                 getShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
@@ -426,71 +449,55 @@ async def delete_pet_profile(petID: int):
     finally:
         await db_connector.disconnect()
 
-"""
-@router.post("/pet/search/", response_model=dict)
+@router.post("/search-pet/", response_model=dict)
 async def search_pet(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        petName = data.get("petName")
+        species = data.get("species")
         breed = data.get("breed")
         ageRange = data.get("ageRange")
-        weightRange = data.get("weightRange")
         gender = data.get("gender")
+        weightRange = data.get("weightRange")
         color = data.get("color")
+        features = json.dumps(data.get("features"))
         
-        query = "SELECT * FROM pet WHERE 1"
+        searchPetQuery = "SELECT * FROM pet WHERE 1"
         
-        if petName:
-            query += f" AND petName LIKE '%{petName}%'"
+        if species:
+            searchPetQuery += f" AND species = '{species}'"
         if breed:
-            query += f" AND breed = '{breed}'"
+            searchPetQuery += f" AND breed = '{breed}'"
         if ageRange:
-            query += f" AND age >= {ageRange[0]} AND age <= {ageRange[1]}"
-        if weightRange:
-            query += f" AND weight >= {weightRange[0]} AND weight <= {weightRange[1]}"
+            searchPetQuery += f" AND age >= {ageRange[0]} AND age <= {ageRange[1]}"
         if gender:
-            query += f" AND gender = '{gender}'"
+            searchPetQuery += f" AND gender = '{gender}'"
+        if weightRange:
+            searchPetQuery += f" AND weight >= {weightRange[0]} AND weight <= {weightRange[1]}"
         if color:
-            query += f" AND color = '{color}'"
+            searchPetQuery += f" AND color = '{color}'"
         
-        results = await db_connector.execute_query(query)
+        print(features)
         
-        if not results:
+        searchPetResults = await db_connector.execute_query(searchPetQuery)
+        
+        if not searchPetResults:
             return create_error_response("no matching pets found")
         
-        petImagesquery = "SELECT * FROM petImages WHERE pet_petID = %s"
+        petIDs = []
         
-        pets = []
-        for result in results:
-            petImagesresult = await db_connector.execute_query(petImagesquery, result[0])
-            petDetails = {
-                "petID": result[0],
-                "petName": result[1],
-                "species": result[2],
-                "breed": result[3],
-                "age": result[4],
-                "gender": result[5],
-                "weight": result[6],
-                "color": result[7],
-                "dateofbirth": result[8].isoformat(),
-                "description": result[9],
-                "images": StreamingResponse(content=images, media_type="image/jpeg"),
-                "features": json.loads(result[10]),
-                "availabilityStatus": result[11],
-                "vaccinationRecord": result[12],
-                "shelterID": result[13],
-            }
-            if result[11] == "Available":
-                pets.append(petDetails)
+        for pet in searchPetResults:
+            if pet[11] == "Available":
+                petIDs.append(pet[0])
         
-        return create_success_response(pets)
+        return create_success_response(petIDs)
     except Exception as e:
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
 
+"""
 @router.post("/pet/search_by_features/", response_model=dict)
 async def search_pet_by_features(request: Request):
     try:

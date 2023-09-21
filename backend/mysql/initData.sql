@@ -77,7 +77,13 @@ INSERT INTO `pet` (`petID`, `petName`, `species`, `breed`, `age`, `gender`, `wei
 (103, 'Rocky', 'Dog', 'German Shep', 4, 'Male', 30, 'Brown', '2019-10-20', 'Energetic and loyal', '{"feature1": false, "feature2": false, "feature3": true, "feature4": false, "feature5": true, "feature6": true, "feature7": false, "feature8": true, "feature9": false, "feature10": false}', 'Available', NULL, 503),
 (104, 'Buddy', 'Dog', 'Labrador', 3, 'Male', 25, 'Golden', '2020-03-15', 'Friendly and playful', '{"feature1": true, "feature2": true, "feature3": true, "feature4": false, "feature5": true, "feature6": true, "feature7": true, "feature8": false, "feature9": true, "feature10": false}', 'Available', NULL, 501),
 (105, 'Whiskers', 'Cat', 'Siamese', 2, 'Female', 8, 'White', '2021-01-10', 'Shy but affectionate', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": false, "feature6": true, "feature7": false, "feature8": false, "feature9": true, "feature10": false}', 'Owned', NULL, NULL),
-(106, 'NooMax', 'Dog', 'German Shep', 4, 'Male', 30, 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": false, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 502);
+(106, 'NooMax', 'Dog', 'German Shep', 2, 'Female', 25, 'Black', '2019-12-05', 'Active and loves outdoor play', '{"feature1": false, "feature2": true, "feature3": true, "feature4": false, "feature5": false, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 502),
+(107, 'Luna', 'Cat', 'Maine Coon', 1, 'Female', 12, 'Gray', '2022-04-18', 'Playful and fluffy', '{"feature1": true, "feature2": true, "feature3": false, "feature4": false, "feature5": true, "feature6": false, "feature7": false, "feature8": true, "feature9": false, "feature10": true}', 'Available', NULL, 501),
+(108, 'Charlie', 'Dog', 'Golden Retriever', 2, 'Male', 60, 'Golden', '2021-09-03', 'Friendly and outgoing', '{"feature1": true, "feature2": true, "feature3": true, "feature4": true, "feature5": true, "feature6": true, "feature7": true, "feature8": true, "feature9": true, "feature10": true}', 'Available', NULL, 503),
+(109, 'Mittens', 'Cat', 'Persian', 5, 'Male', 10, 'Cream', '2018-06-25', 'Gentle and independent', '{"feature1": false, "feature2": false, "feature3": false, "feature4": true, "feature5": false, "feature6": true, "feature7": false, "feature8": false, "feature9": true, "feature10": false}', 'Available', NULL, 502),
+(110, 'Oreo', 'Dog', 'Dalmatian', 2, 'Male', 45, 'Black and White', '2021-02-08', 'Energetic and playful', '{"feature1": true, "feature2": true, "feature3": false, "feature4": false, "feature5": true, "feature6": true, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 501),
+(111, 'Shadow', 'Cat', 'Russian Blue', 3, 'Male', 8, 'Gray', '2020-07-15', 'Reserved but affectionate', '{"feature1": false, "feature2": true, "feature3": false, "feature4": true, "feature5": true, "feature6": false, "feature7": false, "feature8": false, "feature9": true, "feature10": true}', 'Available', NULL, 504),
+(112, 'Lucky', 'Dog', 'Beagle', 5, 'Female', 20, 'Tri-color', '2018-04-12', 'Friendly and obedient', '{"feature1": true, "feature2": false, "feature3": true, "feature4": true, "feature5": true, "feature6": false, "feature7": false, "feature8": true, "feature9": true, "feature10": false}', 'Available', NULL, 505);
 
 -- --------------------------------------------------------
 
@@ -159,7 +165,10 @@ CREATE TABLE `shelter` (
 INSERT INTO `shelter` (`shelterID`, `shelterName`, `shelterAddress`, `sheltercontactInfo`, `shelterphoneNumber`, `shelterImage`) VALUES
 (501, 'Happy Paws', '123 Main St, City', 'info@happypaws.com', '0823456789', NULL),
 (502, 'Kitty Haven', '456 Park Ave, Town', 'info@kittyhaven.com', '0987654321', NULL),
-(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '0934567890', NULL);
+(503, 'Doggie Sanctuary', '789 Oak Rd, Village', 'info@doggiesanct.com', '0934567890', NULL),
+(504, 'Paws and Whiskers', '101 Forest Lane, Suburb', 'info@pawsnwhiskers.com', '0765432109', NULL),
+(505, 'Feline Friends', '222 River Road, Countryside', 'info@felinefriends.com', '0876543210', NULL),
+(506, 'Canine Retreat', '333 Meadow Street, Outskirts', 'info@canineretreat.com', '0654321098', NULL);
 
 -- --------------------------------------------------------
 
@@ -188,7 +197,15 @@ INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `
 (201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '0812233445', '123 Elm St, City', 'User', NULL, NULL),
 (202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '0998877665', '456 Maple Ave, Town', 'User', NULL, NULL),
 (203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '0943531230', '123 Main St, City', 'ShelterStaff', NULL, 501),
-(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '0865432189', '789 Oakwood Dr, Village', 'ShelterStaff', NULL, 503);
+(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '0865432189', '789 Oak Rd, Village', 'ShelterStaff', NULL, 503),
+(205, 'JAMES', '$2b$12$1G4HCF.bR6jH8nv5UJY0kuG/83qFeSWE3e.YI.qNt0e8f.BEUV52q', 'James', 'Smith', '0771122334', '789 Birch Ln, Town', 'User', NULL, NULL),
+(206, 'EMMA', '$2b$12$YgW9JTsj.nRi9KkDGf/KvegKj8pBf6pP5iG.jvQMO/MTsVpHyYy/i', 'Emma', 'Johnson', '0887766554', '101 Pine St, City', 'User', NULL, NULL),
+(207, 'staff_3', '$2b$12$AaVjw8Jd.RuK8SVZv9jvxO5H0B8DJqPPtDZ9kH61eL0dE74gkLjlm', 'Staff', '502', '0779988776', '456 Park Ave, Town', 'ShelterStaff', NULL, 502),
+(208, 'staff_4', '$2b$12$pg4rF0apu8Dle2Ib2kHt9ur7.EFuVCpO3iO67AeTy0xYLT/eir.qi', 'Staff', '505', '0898877665', '222 River Road, Countryside', 'ShelterStaff', NULL, 505),
+(209, 'SARAH', '$2b$12$N6MTf7P9.7dvnWEG3LkMweqoCw.F5nyJ5Kx.fv/gEilx4PwvlOlDG', 'Sarah', 'Davis', '0888777665', '234 Oak St, Village', 'User', NULL, NULL),
+(210, 'staff_5', '$2b$12$zrQoVht9T8Gx2H82B0Iv6Owz0KJ8g.Yy9P5c0flO9hR4r93FtCQZW', 'Staff', '504', '0776655443', '101 Forest Lane, Suburb', 'ShelterStaff', NULL, 504),
+(211, 'staff_6', '$2b$12$7Yrj1uQLeYIevx.q3LzgweIb8ZfjpttqEvq6QEHs4pMB0SvOlzAe6', 'Staff', '506', '0777888999', '333 Meadow Street, Outskirts', 'ShelterStaff', NULL, 506);
+
 
 --
 -- Indexes for dumped tables
@@ -258,7 +275,7 @@ ALTER TABLE `adoptionApplication`
 -- AUTO_INCREMENT for table `pet`
 --
 ALTER TABLE `pet`
-  MODIFY `petID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `petID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `petImages`
@@ -282,13 +299,13 @@ ALTER TABLE `petVaccinations`
 -- AUTO_INCREMENT for table `shelter`
 --
 ALTER TABLE `shelter`
-  MODIFY `shelterID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=504;
+  MODIFY `shelterID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=507;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- Constraints for dumped tables
