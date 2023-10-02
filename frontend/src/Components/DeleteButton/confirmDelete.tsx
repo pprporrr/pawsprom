@@ -31,7 +31,7 @@ export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
             {!isLoading && resultText === "" && (
             <div>
                 <h3>Are you sure you want to delete?</h3>
-                <button className = {styles.buttonCancel} onClick={onCancel}>Cancel</button>
+                <button className= {styles.buttonCancel} onClick={onCancel}>Cancel</button>
                 <button className={styles.buttonDelete} onClick={onConfirm}>Delete</button>
             </div>
             )}

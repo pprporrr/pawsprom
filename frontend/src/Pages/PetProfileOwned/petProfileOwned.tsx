@@ -3,44 +3,6 @@ import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-type PetData = {
-  petName: string
-		species: string | null
-		breed: string | null
-		age: number | null
-		gender: string
-		weight: number
-		color: string | null
-		dateofbirth: string
-		description: string | null
-		imageIDs: number[]
-		features: {
-      feature1: boolean | null,
-      feature2: boolean | null,
-      feature3: boolean | null,
-      feature4: boolean | null,
-      feature5: boolean | null,
-      feature6: boolean | null,
-      feature7: boolean | null,
-      feature8: boolean | null,
-      feature9: boolean | null,
-      feature10: boolean | null,
-		}
-		availabilityStatus: string
-		vaccinationRecord: null
-		// shelterID: number
-		vaccinationName: string[]
-		vaccinationDate: string[]
-		address: string
-    adoptionApplications: {
-      [key:string] : {
-          firstName: string,
-          lastName: string,
-          phoneNo: string,
-          address: string,
-      }
-    }
-}
 
 export const PetProfileOwned = () => {
 
@@ -90,14 +52,19 @@ export const PetProfileOwned = () => {
       phone: "+234567890",
       address: "789 Oak Rd, Village",
       adoptionApplications: {
-            "202": {
-                "firstName": "Nong",
-                "lastName": "Foam",
-                "phoneNo": "+9988776655",
-                "address": "456 Maple Ave, Town"
-            }
-    }
-  }
+          "202": {
+              firstName: "Nong",
+              lastName: "Foam",
+              phoneNo: "+9988776655",
+              address: "456 Maple Ave, Town"
+          },
+          "201": {
+              firstName: "Nong",
+              lastName: "Noon",
+              phoneNo: "+1122334455",
+              address: "123 Elm St, City"
+          }}
+      }
 
     // ! ==============================================================
 
@@ -119,13 +86,6 @@ export const PetProfileOwned = () => {
         console.log(response.data)
         setData(response.data.data) // two times
       });
-      
-      // baseAPI.post('/adoptionAPI/get-application/',{ shelterID })
-      // .then((response) => {
-      //   console.log('pass')
-      //   console.log(response.data)
-      //   setAdoptionData(response.data.data) // two times
-      // });
 
     }, [])
      // *---------------- POST to API ----------------* //

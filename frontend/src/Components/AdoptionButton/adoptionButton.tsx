@@ -50,13 +50,17 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
         if (apiResponse === true) {
                 setResultText("success")
                 setTimeout(() => {
+                    setIsConfirmOpen(false)
                     // go back to previous page
                     navigate(-1)
                 }, 5000)
             }
             else if (apiResponse === false) {
                 setResultText("failed")
-                setTimeout(() => {} , 5000)
+                setTimeout(() => {
+                    setIsConfirmOpen(false)
+                    location.reload()
+                } , 2000)
             }
         
         }

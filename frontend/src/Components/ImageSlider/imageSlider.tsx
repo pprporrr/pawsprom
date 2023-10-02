@@ -1,5 +1,4 @@
 import styles from './imageSlider.module.css'
-import { BsArrowLeftCircleFill, BsArrowRightCircleFill} from "react-icons/bs"
 import { useEffect, useState } from 'react';
 import { AxiosInstance, AxiosResponse } from 'axios';
 
@@ -85,7 +84,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
                 {statusText}
             </div>)}
             { imageIDs.length > 1 && (
-            <BsArrowLeftCircleFill className={styles.arrowLeft} onClick={prevSlide}/>)}
+            <button className={styles.arrowLeft} onClick={prevSlide}>
+                <img src="left-arrow.svg"></img>
+            </button>)}
             {imageURLs.map((image, index) => {
 
             if (image) {
@@ -99,7 +100,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
             }
             })}
             { imageIDs.length > 1 && (
-            <BsArrowRightCircleFill className={styles.arrowRight} onClick={nextSlide}/>)}
+            <button className={styles.arrowRight} onClick={nextSlide}>
+                <img src="right-arrow.svg"></img>
+            </button>)}
             { imageIDs.length > 1 && (
                 <div className={styles.dotIndicators}>
                 {imageIDs.map((_, index) => {
