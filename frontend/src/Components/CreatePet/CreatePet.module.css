@@ -1,4 +1,4 @@
-.create_pet_container{
+.create-pet-container{
   display: grid;
   grid-template-rows: 5rem 1fr;
   row-gap: 10px;

@@ -1,4 +1,5 @@
 import styles from './NavBar.module.css'
+import { Link } from 'react-router-dom'
 
 export const NavBar = () => {
   return (
@@ -8,9 +9,11 @@ export const NavBar = () => {
         <p>PawsPr้om</p>
       </section>
       <section className={styles.right_side}>
-        <a href='/'>Home</a>
-        <a href='/create'>create</a>
-        <a href='/PetProfileOwned'>username</a>
+        <Link to="/">Home</Link>
+        <Link to="/create">create</Link>
+        <p>
+          <Link to="/login">Login</Link> / <Link to="/signup">Register</Link>
+        </p>
       </section>
     </div>
   )

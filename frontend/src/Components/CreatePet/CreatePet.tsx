@@ -5,9 +5,9 @@ import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 
 export const CreatePet = () => {
   return (
-    <section className={styles.create_pet_container}>
+    <section className={styles.createpet_container}>
       <h1 className={styles.head}>Create Pet Profile</h1>
-      <form  >
+      <form>
         <section className={styles.photo_area}>
           <UploadPhoto/>
           <UploadPhoto/>

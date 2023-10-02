@@ -38,7 +38,15 @@ p {
   font-size: 1rem;
 }
   
-div > input{
+input[type = text]{
+  padding-left: 1rem;
+  border: 2.5px solid #ffaa78;
+  border-radius: 1.25rem;
+  color: #5e5e5e;
+  outline: none;
+}
+
+input[type = password]{
   padding-left: 1rem;
   border: 2.5px solid #ffaa78;
   border-radius: 1.25rem;
