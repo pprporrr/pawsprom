@@ -194,17 +194,17 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userID`, `username`, `password`, `firstName`, `lastName`, `userphoneNumber`, `userAddress`, `userRole`, `userImage`, `shelter_shelterID`) VALUES
-(201, 'NONGNOON', '$2b$12$os3yFWCLdKljq/4ThhROVODo/xQJNv/PYOicDTQRahwg5IoGyjLHG', 'Nong', 'Noon', '0812233445', '123 Elm St, City', 'User', NULL, NULL),
-(202, 'NONGFOAM', '$2b$12$pJpHOUQbwvga.Cd/mWI4VOeIp9cbTTKJjDWyrXnfTNpVK2haCldRO', 'Nong', 'Foam', '0998877665', '456 Maple Ave, Town', 'User', NULL, NULL),
-(203, 'staff_1', '$2b$12$fZQ.D7Y3HBUxXwn/Tz5oNuhipwyITCMyn2qI.EQKWTdf2cmqPoy82', 'Shelter', '501', '0943531230', '123 Main St, City', 'ShelterStaff', NULL, 501),
-(204, 'staff_2', '$2b$12$7OeavEt7df8ZhbISBd3L7uReGWyHie7SQo59r0RZ1f2bxST3aCSeK', 'Shelter', '503', '0865432189', '789 Oak Rd, Village', 'ShelterStaff', NULL, 503),
-(205, 'JAMES', '$2b$12$1G4HCF.bR6jH8nv5UJY0kuG/83qFeSWE3e.YI.qNt0e8f.BEUV52q', 'James', 'Smith', '0771122334', '789 Birch Ln, Town', 'User', NULL, NULL),
-(206, 'EMMA', '$2b$12$YgW9JTsj.nRi9KkDGf/KvegKj8pBf6pP5iG.jvQMO/MTsVpHyYy/i', 'Emma', 'Johnson', '0887766554', '101 Pine St, City', 'User', NULL, NULL),
-(207, 'staff_3', '$2b$12$AaVjw8Jd.RuK8SVZv9jvxO5H0B8DJqPPtDZ9kH61eL0dE74gkLjlm', 'Staff', '502', '0779988776', '456 Park Ave, Town', 'ShelterStaff', NULL, 502),
-(208, 'staff_4', '$2b$12$pg4rF0apu8Dle2Ib2kHt9ur7.EFuVCpO3iO67AeTy0xYLT/eir.qi', 'Staff', '505', '0898877665', '222 River Road, Countryside', 'ShelterStaff', NULL, 505),
-(209, 'SARAH', '$2b$12$N6MTf7P9.7dvnWEG3LkMweqoCw.F5nyJ5Kx.fv/gEilx4PwvlOlDG', 'Sarah', 'Davis', '0888777665', '234 Oak St, Village', 'User', NULL, NULL),
-(210, 'staff_5', '$2b$12$zrQoVht9T8Gx2H82B0Iv6Owz0KJ8g.Yy9P5c0flO9hR4r93FtCQZW', 'Staff', '504', '0776655443', '101 Forest Lane, Suburb', 'ShelterStaff', NULL, 504),
-(211, 'staff_6', '$2b$12$7Yrj1uQLeYIevx.q3LzgweIb8ZfjpttqEvq6QEHs4pMB0SvOlzAe6', 'Staff', '506', '0777888999', '333 Meadow Street, Outskirts', 'ShelterStaff', NULL, 506);
+(201, 'NONGNOON', '$2b$12$Y57j34m1TIINwgxdzy4wf.GcwzERhod5bBr0lyZfW0P3kxTqbXiXO', 'Nong', 'Noon', '0812233445', '123 Elm St, City', 'User', NULL, NULL),
+(202, 'NONGFOAM', '$2b$12$r6mzcP9/cLbVQde6l3Y..elV2ZYtqaYX8vIm378CYMIjVlJQUC9Aa', 'Nong', 'Foam', '0998877665', '456 Maple Ave, Town', 'User', NULL, NULL),
+(203, 'staff_1', '$2b$12$TqkJkOQPhYVFOSVY8D7NJ.9unyz/tlAhWLXmMTB4b1Zh81nvhyzKm', 'Shelter', '501', '0943531230', '123 Main St, City', 'ShelterStaff', NULL, 501),
+(204, 'staff_2', '$2b$12$Z3Fx2d28GH6b6GnLkoG8Qe0OtHIMV.5Iajm1wAbeha8QJJXpdf1BO', 'Shelter', '503', '0865432189', '789 Oak Rd, Village', 'ShelterStaff', NULL, 503),
+(205, 'JAMES', '$2b$12$OggIQzn/Lk24lb.yiodnxePiuvTHpPBHKAWUuu1hLTklFUwWlm2vi', 'James', 'Smith', '0771122334', '789 Birch Ln, Town', 'User', NULL, NULL),
+(206, 'EMMA', '$2b$12$rbk4xyhW4A8Ev5941nRCoegUab9QTs9GRxpnF0aoiO3DGvoEjI5qK', 'Emma', 'Johnson', '0887766554', '101 Pine St, City', 'User', NULL, NULL),
+(207, 'staff_3', '$2b$12$J9KPgwqYDY1i8DnsUoJGju/2.f0tRqPw4E.kwWLUeL.eS8kXzcSGq', 'Staff', '502', '0779988776', '456 Park Ave, Town', 'ShelterStaff', NULL, 502),
+(208, 'staff_4', '$2b$12$yXAjJaD.pv6JWAh74JmXi..a7k9IfFU6bFS/NFHAgHqcLozjh1i5e', 'Staff', '505', '0898877665', '222 River Road, Countryside', 'ShelterStaff', NULL, 505),
+(209, 'SARAH', '$2b$12$y0fRseP4UzfsNoA8nxPwbeA3oXqW.XMovxsUOQnzMkXwe7d/vpz4a', 'Sarah', 'Davis', '0888777665', '234 Oak St, Village', 'User', NULL, NULL),
+(210, 'staff_5', '$2b$12$AtUMhe5KO3jvwUhp6OgQr.TV20/oYBBFrI7jHnXwwa7lZsJWF6M.G', 'Staff', '504', '0776655443', '101 Forest Lane, Suburb', 'ShelterStaff', NULL, 504),
+(211, 'staff_6', '$2b$12$yl3WadGqMFxq8Cyd92pIqOQRdsGRR/BnzjHd4dcIOeBl/qrnyJG2G', 'Staff', '506', '0777888999', '333 Meadow Street, Outskirts', 'ShelterStaff', NULL, 506);
 
 
 --
