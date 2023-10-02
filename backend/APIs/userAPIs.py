@@ -211,17 +211,24 @@ async def login_user(request: Request):
         username = data.get("username")
         password = data.get("password")
         
+        print(username)
+        print(password)
+        
         if None in (username, password):
             return create_error_response("missing username or password")
         
         getPasswordQuery = "SELECT password, userRole FROM user WHERE username = %s"
         getPasswordResult = await db_connector.execute_query(getPasswordQuery, username)
         
+        print(getPasswordResult)
+        
         if not getPasswordResult:
             return create_error_response("invalid credentials")
         
+        print(bcrypt.checkpw(password.encode("utf-8")))
+        
         if bcrypt.checkpw(password.encode("utf-8"), getPasswordResult[0][0].encode("utf-8")):
-            
+            print(getPasswordResult[0][1])
             return create_success_response({"username": username, "role": getPasswordResult[0][1]})
         else:
             return create_error_response("invalid credentials")
