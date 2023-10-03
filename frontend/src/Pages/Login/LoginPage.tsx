@@ -1,35 +1,34 @@
 import styles from './LoginPage.module.css'
 import axios from 'axios'
-import { useNavigate,Form } from 'react-router-dom'
+import { useNavigate, Form } from 'react-router-dom'
 import { FormEvent, useEffect, useState } from 'react'
 
 export const LoginPage = () => {
   const navigate = useNavigate()
-  
+  const baseAPI = axios.create({
+    baseURL: "http://10.26.10.55"
+  });
+
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const { username, password } = event.target as typeof event.target & {
       username: { value: string }
       password: { value: string }
-      //! test
-      userRole: { value: string }
     }
-    // axios.post()
-    // const hash = await bcrypt.hash(password.value,saltOrRounds)
-    localStorage.setItem('ID', JSON.stringify({
-      username: username.value,
-      // password: bcrypt.hash(password.value, 10),
-      password: password.value,
-      userRole: "user"
+    baseAPI.post('/userAPI/login/',
+      { username: username.value, password: password.value })
+      .then((response) => {
+        console.log(response.data)
+      })
+    localStorage.setItem('ID',JSON.stringify({
+      username: username.value
     }))
-    navigate(`/login/PetProfileOwned/${username.value}`)
-    localStorage.clear()
+    navigate(`/petprofileowned/${username.value}`)
   }
 
   return (
     <div className={styles.container}>
       <h1>PawsPr้om</h1>
-      {/* <button onClick={() => { localStorage.clear() }}>clear</button> */}
       <Form onSubmit={evt => { sendForm(evt) }}>
         <section>
           <div>

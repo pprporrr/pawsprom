@@ -2,8 +2,6 @@ import styles from './App.module.css'
 import { Outlet} from "react-router-dom";
 import { NavBar } from './Components/NavBar/NavBar.tsx';
 
-import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
-
 function App() {
   return (
     <div className={styles.main_container}>
@@ -17,9 +15,9 @@ function App() {
         <Route path="/create" element={<CreatePetProfile />} />
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/search" element={<SearchPage />} />
-      </Routes>
+      </Routes> */}
       <div className={styles.footer }>
-        Copyright © [Year of Creation] Cloud Go Go Pet Adoption. All rights reserved.
+        Copyright © 2023 Cloud Go Go Pet Adoption. All rights reserved.
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx'
 import { LoginPage } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage } from './Pages/SignUpPage/SignUpPage.tsx';
 import { Home } from './Pages/Home/home.tsx';
+import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
+// import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
@@ -20,6 +22,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App/>,
     errorElement: <ErrorPage/>,
+    // loader: navLoader,
     children: [
       { index: true, element: <Home/>},
       {
@@ -31,15 +34,19 @@ const router = createBrowserRouter([
         element: <SignUpPage/>
       },
       {
-        path: "login/PetProfileOwned/:id",
+        path: "search",
+        element: <SearchPage/>
+      },
+      {
+        path: "petprofileowned/:username",
         element: <PetProfileOwned/>
       },
       {
-        path: "PetProfileOthers",
+        path: "petprofileothers",
         element: <PetProfileOthers/>
       },
       {
-        path: "PetProfileShelter",
+        path: "petprofileshelter",
         element: <PetProfileShelter/>
       },
       {
