@@ -10,48 +10,58 @@ import { LoginPage } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage } from './Pages/SignUpPage/SignUpPage.tsx';
 import { Home } from './Pages/Home/home.tsx';
 import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
-// import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
+import { UserProfile } from './Pages/UserProfile/userProfile.tsx';
+import { ShelterProfile } from './Pages/ShelterProfile/shelterProfile.tsx';
+import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
-// ! DONT FORGET TO COMMENT <React.StrictMode> 
+//! DONT FORGET TO COMMENT <React.StrictMode> 
 //! OR ELSE IT GONNA RENDER TWICE
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
-    errorElement: <ErrorPage/>,
-    // loader: navLoader,
+    element: <App />,
+    errorElement: <ErrorPage />,
+    loader: navLoader,
     children: [
-      { index: true, element: <Home/>},
+      { index: true, element: <Home /> },
       {
         path: "login",
-        element: <LoginPage/>,
+        element: <LoginPage />,
       },
       {
         path: "signup",
-        element: <SignUpPage/>
+        element: <SignUpPage />
       },
       {
         path: "search",
-        element: <SearchPage/>
+        element: <SearchPage />
+      },
+      {
+        path: "userprofile",
+        element: <UserProfile />
+      },
+      {
+        path: "shelterprofile",
+        element: <ShelterProfile />
       },
       {
         path: "petprofileowned/:username",
-        element: <PetProfileOwned/>
+        element: <PetProfileOwned />
       },
       {
         path: "petprofileothers",
-        element: <PetProfileOthers/>
+        element: <PetProfileOthers />
       },
       {
         path: "petprofileshelter",
-        element: <PetProfileShelter/>
+        element: <PetProfileShelter />
       },
       {
         path: "create",
-        element: <CreatePetProfile/>
+        element: <CreatePetProfile />
       },
     ]
   }

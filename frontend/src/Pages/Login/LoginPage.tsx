@@ -1,31 +1,38 @@
 import styles from './LoginPage.module.css'
 import axios from 'axios'
 import { useNavigate, Form } from 'react-router-dom'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent } from 'react'
 
 export const LoginPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const baseAPI = axios.create({
     baseURL: "http://10.26.10.55"
   });
-
   async function sendForm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
     const { username, password } = event.target as typeof event.target & {
       username: { value: string }
       password: { value: string }
-    }
+    };
     baseAPI.post('/userAPI/login/',
       { username: username.value, password: password.value })
       .then((response) => {
         console.log(response.data)
-      })
-    localStorage.setItem('ID',JSON.stringify({
-      username: username.value
-    }))
-    navigate(`/petprofileowned/${username.value}`)
-  }
-
+        const clientUsername = response.data.data.username
+        const clientRole = response.data.data.role
+        // localStorage.setItem('ID', JSON.stringify({
+        //   username: clientUsername,
+        //   role: clientRole
+        // }))
+        if (clientRole === "User") {
+          navigate(`/userprofile`)
+        }
+        else if (clientRole === "ShelterStaff") {
+          navigate(`/shelterprofile`)
+        }
+      });
+    // navigate(`/petprofileowned/${username.value}`)
+  };
   return (
     <div className={styles.container}>
       <h1>PawsPr้om</h1>
