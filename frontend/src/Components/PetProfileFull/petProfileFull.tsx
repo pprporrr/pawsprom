@@ -24,16 +24,16 @@ interface PetProfileFullProps {
 		description: string | null
 		imageIDs: number[]
 		features: {
-			feature1: boolean | null,
-			feature2: boolean | null,
-			feature3: boolean | null,
-			feature4: boolean | null,
-			feature5: boolean | null,
-			feature6: boolean | null,
-			feature7: boolean | null,
-			feature8: boolean | null,
-			feature9: boolean | null,
-			feature10: boolean | null,
+			feature1: boolean ,
+			feature2: boolean,
+			feature3: boolean,
+			feature4: boolean,
+			feature5: boolean,
+			feature6: boolean,
+			feature7: boolean,
+			feature8: boolean,
+			feature9: boolean,
+			feature10: boolean,
 		}
 		availabilityStatus: string
 		vaccinationRecord: null
@@ -101,6 +101,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 		
 		console.log('send adoption request')
 		// ! test
+		const petID = 103
 		const userID = 201
 		baseAPI.post('/adoptionAPI/create-application/', { petID, userID, dateofapplication: formattedDate })
         .then(response => {

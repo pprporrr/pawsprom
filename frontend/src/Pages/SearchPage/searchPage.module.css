@@ -2,3 +2,25 @@
     display: flex;
     justify-content: center;
 }
+
+.bodyWrapper {
+    display: grid;
+    width: 80%;
+}
+
+
+.cardsWrapper {
+    width: 80%;
+    height: fit-content;
+    /* border: solid;
+    border-color: red; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.mockCard {
+    width: 14rem;
+    height: 20rem;
+    background-color: aquamarine;
+}

@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios"
+
 import { useEffect, useState } from "react"
 import { ConfirmAdoption } from "./confirmAdoption"
 import { useNavigate } from "react-router-dom"
@@ -46,7 +46,7 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
 
     // * show text according to response from api
     if (apiResponse !== null) {
-        
+
         if (apiResponse === true) {
                 setResultText("success")
                 setTimeout(() => {
@@ -62,16 +62,14 @@ export const AdoptionButton: React.FC<AdoptionButtonProps>  = ({ onClick, apiRes
                     location.reload()
                 } , 2000)
             }
-        
         }
-
     }
     , [apiResponse, isConfirmOpen])
 
-
     return (
         <div>
-            <button className={styles.adoptDeco} onClick={handleClick}>adoptionButton</button>
+            <button className={styles.adoptDeco} 
+            onClick={handleClick}>adoptionButton</button>
             <ConfirmAdoption 
             isOpen={isConfirmOpen}
             onCancel={handleCancel}

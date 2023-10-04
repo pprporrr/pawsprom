@@ -3,7 +3,7 @@ import { IconText } from '../IconText/iconText'
 import { useEffect, useState } from 'react'
 import { AxiosInstance } from 'axios'
 
-interface RequestDisplayProps {
+type RequestDisplayProps = {
     baseAPI: AxiosInstance,
     petID: number,
     adoptionApplications: {
@@ -17,7 +17,8 @@ interface RequestDisplayProps {
     },
 }
 
-export const RequestDisplay: React.FC<RequestDisplayProps> = ({baseAPI, petID, adoptionApplications}) => {
+export const RequestDisplay: React.FC<RequestDisplayProps> = (
+    {baseAPI, petID, adoptionApplications}) => {
 
     console.log(Object.values(adoptionApplications))
 
@@ -26,7 +27,7 @@ export const RequestDisplay: React.FC<RequestDisplayProps> = ({baseAPI, petID, a
         const userID = Number((event.currentTarget.id).split("-")[1]);
         const date = adoptionApplications[userID].dateofapplication
 
-        console.log(date)
+        console.log('date', date)
 
         baseAPI.put('/adoptionAPI/update-application/', { 
             petID, 

@@ -3,6 +3,7 @@ import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { RequestDisplay } from '../../Components/RequestDisplay/requestDisplay';
+import { baseAPI } from '../../main';
 
 export const PetProfileShelter = () => {
 
@@ -76,10 +77,6 @@ const [data, setData] = useState()
 // * for adoption button by P'Porpor ======================================
 const [adoptiondata, setAdoptionData] = useState("");
 
-//* URL for API
-const baseAPI = axios.create({
-    baseURL: "http://10.100.7.88"
-    });
 
 // *---------------- POST to API ----------------* //
     useEffect(() => {
@@ -95,19 +92,19 @@ const baseAPI = axios.create({
 
 return (
     <div className={styles.bgContainer}>
-    {/* { data != undefined && <PetProfileFull
+    { data != undefined && <PetProfileFull
     petID={petID} 
     page={petPage}
     data= {data}
     baseAPI={baseAPI} 
-    ></PetProfileFull>} */}
+    ></PetProfileFull>}
     {/* //! for testing */}
-    <PetProfileFull
+    {/* <PetProfileFull
     petID={petID} 
     page={petPage}
     data= {Data}
     baseAPI={baseAPI} 
-    ></PetProfileFull>
+    ></PetProfileFull> */}
     </div>
 )
 }

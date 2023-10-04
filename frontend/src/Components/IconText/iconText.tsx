@@ -18,7 +18,8 @@ export const IconText: React.FC<IconTextProps> = ({text, fontSize, svgName}) => 
         <div className={styles.iconTextWrapper}>
             <span className={styles.symbol}>
             {/* //! check if 'Date' Object then display in different format else normal text*/}
-            <object data={svgName} className={styles.svgDeco}></object>
+            {/* <object data={svgName} className={styles.svgDeco}></object> */}
+            <img className={styles.svgDeco} src={svgName}></img>
             </span>
             { text instanceof Date ? <span style={{ fontSize: `${fontSize}rem`}}>{text.toLocaleDateString('en-GB', 
                 { day: '2-digit', month: 'short', year: 'numeric' })
