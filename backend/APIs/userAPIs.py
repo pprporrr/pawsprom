@@ -231,3 +231,61 @@ async def login_user(request: Request):
         return create_error_response(str(e))
     finally:
         await db_connector.disconnect()
+
+@router.post("/dashboard/info/", response_model=dict)
+async def get_user_dashboard_info(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        username = data.get("username")
+        userRole = data.get("userRole")
+        
+        if None in (username, userRole):
+            return create_error_response("missing 'username or userRole' in the request data")
+        
+        if userRole == "User":
+            getUserQuery = "SELECT * FROM user WHERE username = %s AND userRole = %s"
+            getUserResult = await db_connector.execute_query(getUserQuery, username, userRole)
+            
+            if not getUserResult:
+                return create_error_response("user not found")
+            
+            userDetails = {
+                "userID": getUserResult[0][0],
+                "username": getUserResult[0][1],
+                "firstName": getUserResult[0][3],
+                "lastName": getUserResult[0][4],
+                "phoneNumber": getUserResult[0][5],
+                "address": getUserResult[0][6],
+                "role": getUserResult[0][7],
+                "image": getUserResult[0][8]
+            }
+            return create_success_response(userDetails)
+        elif userRole == "ShelterStaff":
+            getUserQuery = "SELECT * FROM user WHERE username = %s AND userRole = %s"
+            getUserResult = await db_connector.execute_query(getUserQuery, username, userRole)
+            
+            if not getUserResult:
+                return create_error_response("user not found")
+            
+            shelterID = getUserResult[0][9]
+            
+            getShelterQuery = "SELECT * FROM shelter WHERE shelterID = %s"
+            getShelterResult = await db_connector.execute_query(getShelterQuery, shelterID)
+            
+            if not getShelterResult:
+                return create_error_response("shelter not found")
+            
+            shelterDetails = {
+                "shelterID": getShelterResult[0][0],
+                "shelterName": getShelterResult[0][1],
+                "shelterAddress": getShelterResult[0][2],
+                "sheltercontactInfo": getShelterResult[0][3],
+                "shelterphoneNumber": getShelterResult[0][4]
+            }
+            return create_success_response(shelterDetails)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()

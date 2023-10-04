@@ -592,6 +592,114 @@ async def search_pet(request: Request):
     finally:
         await db_connector.disconnect()
 
+@router.post("/dashboard/info/", response_model=dict)
+async def get_user_dashboard_info(request: Request):
+    try:
+        await db_connector.connect()
+        data = await request.json()
+        
+        username = data.get("username")
+        userRole = data.get("userRole")
+        
+        if None in (username, userRole):
+            return create_error_response("missing 'username or userRole' in the request data")
+        
+        if userRole == "User":
+            getUserQuery = "SELECT userID FROM user WHERE username = %s AND userRole = %s"
+            getUserResult = await db_connector.execute_query(getUserQuery, username, userRole)
+            
+            if not getUserResult:
+                return create_error_response("user not found")
+            
+            getOwnerShipQuery = "SELECT pet_petID FROM petOwnership WHERE user_userID = %s"
+            getOwnerShipResult = await db_connector.execute_query(getOwnerShipQuery, getUserResult[0])
+            
+            if not getOwnerShipResult:
+                return create_error_response("user don't have pet")
+            
+            pet_info_list = []
+            
+            for petID in getOwnerShipResult:
+                try:
+                    getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+                    getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+                    
+                    getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+                    getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
+                except:
+                    pet_info_list.append({"petID": petID, "error": "pet not found"})
+                
+                petInfo = {
+                    "petName": getPetDetailsResult[0][1],
+                    "species": getPetDetailsResult[0][2],
+                    "breed": getPetDetailsResult[0][3],
+                    "availabilityStatus": getPetDetailsResult[0][11],
+                    "vaccinationRecord": getPetDetailsResult[0][12],
+                    "imageIDs": [imageID for sublist in getPetImagesResult for imageID in sublist],
+                    "features": json.loads(getPetDetailsResult[0][10])
+                }
+                
+                pet_info_list.append(petInfo)
+            
+            return create_success_response(pet_info_list)
+        elif userRole == "ShelterStaff":
+            getShelterIDQuery = "SELECT shelter_shelterID FROM user WHERE username = %s AND userRole = %s"
+            getShelterIDResult = await db_connector.execute_query(getShelterIDQuery, username, userRole)
+            
+            if not getShelterIDResult:
+                return create_error_response("user not found")
+            
+            getPetQuery = "SELECT petID FROM pet WHERE shelter_shelterID = %s"
+            getPetResult = await db_connector.execute_query(getPetQuery, getShelterIDResult[0])
+            
+            pet_info_list = []
+            pet_info_list_requested = []
+            
+            for petID in getPetResult:
+                try:
+                    getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+                    getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+                    
+                    getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+                    getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
+                except:
+                    pet_info_list.append({"petID": petID, "error": "pet not found"})
+                
+                if getPetDetailsResult[0][11] == "Available":
+                    checkAdoptionQuery = "SELECT * FROM adoptionApplication WHERE pet_petID = %s AND approvalStatus = %s"
+                    checkAdoptionResult = await db_connector.execute_query(checkAdoptionQuery, petID, "Pending")
+                    
+                    if checkAdoptionResult:
+                        petInfo = {
+                            "petName": getPetDetailsResult[0][1],
+                            "species": getPetDetailsResult[0][2],
+                            "breed": getPetDetailsResult[0][3],
+                            "availabilityStatus": getPetDetailsResult[0][11],
+                            "vaccinationRecord": getPetDetailsResult[0][12],
+                            "imageIDs": [imageID for sublist in getPetImagesResult for imageID in sublist],
+                            "features": json.loads(getPetDetailsResult[0][10])
+                        }
+                        
+                        pet_info_list_requested.append(petInfo)
+                    else:
+                        petInfo = {
+                            "petName": getPetDetailsResult[0][1],
+                            "species": getPetDetailsResult[0][2],
+                            "breed": getPetDetailsResult[0][3],
+                            "availabilityStatus": getPetDetailsResult[0][11],
+                            "vaccinationRecord": getPetDetailsResult[0][12],
+                            "imageIDs": [imageID for sublist in getPetImagesResult for imageID in sublist],
+                            "features": json.loads(getPetDetailsResult[0][10])
+                        }
+                        
+                        pet_info_list.append(petInfo)
+            
+            return create_success_response({"Available": pet_info_list, "Requested": pet_info_list_requested})
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 """
 @router.post("/pet/search_by_features/", response_model=dict)
 async def search_pet_by_features(request: Request):
