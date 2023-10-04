@@ -1,0 +1,121 @@
+
+.switchDeco {
+    border: solid;
+    border-color: #FFB78E;
+    width: 16rem;
+    height: 3.5rem;
+    border-radius: 10rem;
+    margin-bottom: 1rem;
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 15rem;
+    height: 2.5rem;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.sliderRound {
+    position: absolute;
+    cursor: pointer;
+    padding-top: 0.4rem;
+    padding-left: 0.4rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 10rem;
+}
+
+.sliderRound:before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 60%;
+    background-color: #FFB78E;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 10rem;
+}
+
+input:checked + .sliderRound:before {
+-webkit-transform: translateX(8rem);
+-ms-transform: translateX(8rem);
+transform: translateX(6rem);
+}
+
+.labels {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    transition: all 0.4s ease-in-out;
+}
+
+.labels::after {
+    content: attr(data-right);
+    color: #FFB78E;
+    position: absolute;
+    right: 7%;
+    bottom: 25%;
+    font-size: 1rem;
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+.labels::before {
+    content: attr(data-left);
+    color: #FFFCF1;
+    position: absolute;
+    left: 20%;
+    bottom: 25%;
+    font-size: 1rem;
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+input:checked~.labels::after {
+    color: #FFFCF1;
+}
+
+input:checked~.labels::before {
+    color: #FFB78E;
+}
+
+.paw::after {
+    position: absolute;
+    left: 50%;
+    top: 37%;
+    content: url("paw-switch.svg");
+    opacity: 1;
+    transition: all 0.15s ease-in-out;
+}
+
+.paw::before {
+    position: absolute;
+    left: 50%;
+    top: 32%;
+    content: url("shelter-switch.svg");
+    opacity: 0;
+    transition: all 0.15s ease-in-out;
+}
+
+input:checked~.paw::before {
+    opacity: 1;
+}
+    
+input:checked~.paw::after {
+    opacity: 0;
+}
+    

@@ -2,7 +2,7 @@ import styles from './imageSlider.module.css'
 import { useEffect, useState } from 'react';
 import { AxiosInstance, AxiosResponse } from 'axios';
 
-interface ImageSliderProps {
+type ImageSliderProps = {
     imageIDs: number[]
     baseAPI: AxiosInstance
     availabilityStatus: string

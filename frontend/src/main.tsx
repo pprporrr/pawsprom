@@ -15,9 +15,15 @@ import { ShelterProfile } from './Pages/ShelterProfile/shelterProfile.tsx';
 import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import axios from 'axios'
 
 //! DONT FORGET TO COMMENT <React.StrictMode> 
 //! OR ELSE IT GONNA RENDER TWICE
+
+//* URL for API
+export const baseAPI = axios.create({
+  baseURL: "http://10.26.7.142"
+  });
 
 const router = createBrowserRouter([
   {

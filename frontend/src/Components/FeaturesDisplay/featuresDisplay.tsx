@@ -1,9 +1,9 @@
 import styles from "./featuresDisplay.module.css"
 import { IconText } from "../IconText/iconText"
 
-interface FeaturesProps {
+type FeaturesProps = {
     features:  {
-        [key:string]: boolean | null
+        [key:string]: boolean
     }
 }
 
