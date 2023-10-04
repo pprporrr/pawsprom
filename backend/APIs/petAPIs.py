@@ -459,7 +459,7 @@ async def get_drop_down():
     finally:
         await db_connector.disconnect()
 
-@router.post("/drop-down/colors/", response_model=dict)
+@router.post("/drop-down/filter/", response_model=dict)
 async def get_drop_down_colors(request: Request):
     try:
         await db_connector.connect()
@@ -469,23 +469,44 @@ async def get_drop_down_colors(request: Request):
         speciesList = data.get("species")
         breedList = data.get("breed")
         
-        allColors = []
+        speciesSet = set()
+        breedSet = set()
+        speciesColors = set()
+        breedColors = set()
         
         if colorList:
-            allSpecies = []
-            allBreed = []
             for color in colorList:
                 getSpeciesbyColorQuery = "SELECT DISTINCT species FROM pet WHERE color = %s"
                 getSpeciesbyColorResult = await db_connector.execute_query(getSpeciesbyColorQuery, color)
                 
-                speciesList = [species[0] for species in getSpeciesbyColorResult]
-                allSpecies.extend(speciesList)
+                speciesListbyColor = [species[0] for species in getSpeciesbyColorResult]
+                speciesSet.update(speciesListbyColor)
                 
                 getBreedbyColorQuery = "SELECT DISTINCT breed FROM pet WHERE color = %s"
                 getBreedbyColorResult = await db_connector.execute_query(getBreedbyColorQuery, color)
                 
-                BreedList = [Breed[0] for Breed in getBreedbyColorResult]
-                allBreed.extend(BreedList)
+                breedListbyColor = [breed[0] for breed in getBreedbyColorResult]
+                breedSet.update(breedListbyColor)
+            
+            if speciesList:
+                commonSpecies = list(speciesSet.intersection(set(speciesList)))
+                for species in commonSpecies:
+                    for color in colorList:
+                        getBreedbyColorQuery = "SELECT DISTINCT breed FROM pet WHERE species = %s AND color = %s"
+                        getBreedbyColorResult = await db_connector.execute_query(getBreedbyColorQuery, species, color)
+                        breedListbyColor = [breed[0] for breed in getBreedbyColorResult]
+                        breedSet.update(breedListbyColor)
+                return create_success_response({"species": sorted(list(commonSpecies)), "breed": sorted(list(breedSet)), "color": sorted(list(colorList))})
+            if breedList:
+                commonBreed = list(breedSet.intersection(set(breedList)))
+                for breed in commonBreed:
+                    for color in colorList:
+                        getSpeciesbyColorQuery = "SELECT DISTINCT species FROM pet WHERE breed = %s AND color = %s"
+                        getSpeciesbyColorResult = await db_connector.execute_query(getSpeciesbyColorQuery, breed, color)
+                        speciesListbyColor = [species[0] for species in getSpeciesbyColorResult]
+                        speciesSet.update(speciesListbyColor)
+                return create_success_response({"species": sorted(list(speciesSet)), "breed": sorted(list(commonBreed)), "color": sorted(list(colorList))})
+            return create_success_response({"species": sorted(list(speciesSet)), "breed": sorted(list(breedSet)), "color": sorted(list(colorList))})
         
         if speciesList:
             for species in speciesList:
@@ -493,7 +514,7 @@ async def get_drop_down_colors(request: Request):
                 getColorbySpeciesResult = await db_connector.execute_query(getColorbySpeciesQuery, species)
                 
                 colorList = [color[0] for color in getColorbySpeciesResult]
-                allColors.extend(colorList)
+                speciesColors.update(colorList)
         
         if breedList:
             for breed in breedList:
@@ -501,18 +522,19 @@ async def get_drop_down_colors(request: Request):
                 getColorbyBreedResult = await db_connector.execute_query(getColorbyBreedQuery, breed)
                 
                 colorList = [color[0] for color in getColorbyBreedResult]
-                allColors.extend(colorList)
+                breedColors.update(colorList)
         
-        uniqueSpecies = list(set(allSpecies))
-        sortedSpecies = sorted(uniqueSpecies)
+        if speciesList and breedList:
+            commonColors = list(speciesColors.intersection(breedColors))
+            sortedColors = sorted(commonColors)
+        elif speciesList:
+            commonColors = list(speciesColors)
+            sortedColors = sorted(commonColors)
+        elif breedList:
+            commonColors = list(breedColors)
+            sortedColors = sorted(commonColors)
         
-        uniqueBreed = list(set(allBreed))
-        sortedBreed = sorted(uniqueBreed)
-        
-        uniqueColors = list(set(allColors))
-        sortedColors = sorted(uniqueColors)
-        
-        return create_success_response({"species": sortedColors, "breed": sortedBreed, "color": sortedColors, })
+        return create_success_response({"species": speciesList, "breed": breedList, "color": sortedColors})
     except Exception as e:
         return create_error_response(str(e))
     finally:
