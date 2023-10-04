@@ -15,7 +15,7 @@ services:
     restart: always
   
   mysql:
-    image: public.ecr.aws/docker/library/mysql:latest
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=rootpw
       - MYSQL_DATABASE=project
@@ -26,7 +26,7 @@ services:
     restart: always
   
   phpmyadmin:
-    image: public.ecr.aws/docker/library/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:latest
     ports:
       - "8080:80"
     environment:
@@ -35,7 +35,7 @@ services:
     restart: always
   
   nginx:
-    image: public.ecr.aws/nginx/nginx:mainline-alpine
+    image: nginx:latest
     volumes:
       - ./backend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
@@ -45,7 +45,7 @@ services:
     restart: always
   
   prometheus:
-    image: public.ecr.aws/bitnami/prometheus:latest
+    image: prom/prometheus:latest
     volumes:
       - ./backend/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
@@ -53,13 +53,13 @@ services:
     restart: always
   
   node_exporter:
-    image: public.ecr.aws/bitnami/node-exporter:latest
+    image: prom/node-exporter:latest
     ports:
       - "9100:9100"
     restart: always
   
   grafana:
-    image: public.ecr.aws/bitnami/grafana:latest
+    image: grafana/grafana:latest
     ports:
       - "3333:3333"
     depends_on:
