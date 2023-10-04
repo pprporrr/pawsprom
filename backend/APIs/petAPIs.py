@@ -451,7 +451,7 @@ async def get_drop_down():
         colorList = [Color[0] for Color in getColorResult]
         sortedcolorList = sorted(colorList)
         
-        dropDownDict["Color"] = sortedcolorList
+        dropDownDict["color"] = sortedcolorList
         
         return create_success_response(dropDownDict)
     except Exception as e:
@@ -465,10 +465,27 @@ async def get_drop_down_colors(request: Request):
         await db_connector.connect()
         data = await request.json()
         
+        colorList = data.get("color")
         speciesList = data.get("species")
         breedList = data.get("breed")
         
         allColors = []
+        
+        if colorList:
+            allSpecies = []
+            allBreed = []
+            for color in colorList:
+                getSpeciesbyColorQuery = "SELECT DISTINCT species FROM pet WHERE color = %s"
+                getSpeciesbyColorResult = await db_connector.execute_query(getSpeciesbyColorQuery, color)
+                
+                speciesList = [species[0] for species in getSpeciesbyColorResult]
+                allSpecies.extend(speciesList)
+                
+                getBreedbyColorQuery = "SELECT DISTINCT breed FROM pet WHERE color = %s"
+                getBreedbyColorResult = await db_connector.execute_query(getBreedbyColorQuery, color)
+                
+                BreedList = [Breed[0] for Breed in getBreedbyColorResult]
+                allBreed.extend(BreedList)
         
         if speciesList:
             for species in speciesList:
@@ -486,10 +503,16 @@ async def get_drop_down_colors(request: Request):
                 colorList = [color[0] for color in getColorbyBreedResult]
                 allColors.extend(colorList)
         
+        uniqueSpecies = list(set(allSpecies))
+        sortedSpecies = sorted(uniqueSpecies)
+        
+        uniqueBreed = list(set(allBreed))
+        sortedBreed = sorted(uniqueBreed)
+        
         uniqueColors = list(set(allColors))
         sortedColors = sorted(uniqueColors)
         
-        return create_success_response(sortedColors)
+        return create_success_response({"species": sortedColors, "breed": sortedBreed, "color": sortedColors, })
     except Exception as e:
         return create_error_response(str(e))
     finally:
