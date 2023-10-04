@@ -1,6 +1,6 @@
 import styles from './AddVacinationRecord.module.css'
 import { VaccineRecord } from './VaccineRecord'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 export const AddVacinationRecord = () => {
   const [vaccineRecordList, setVaccineList] = useState([])

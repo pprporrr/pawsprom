@@ -1,6 +1,6 @@
 .container{
   display: grid;
-  background-color: #FFFCF1;
+  background-color: #fff8e0;
   box-shadow: 0px 0px 10px 5px #D1D1D1;
   border-radius: 1.3rem;
   width: 40%;
@@ -12,7 +12,7 @@
   justify-content: center;
   align-items: center;
   color: #66BEF0;
-  padding: 2.5rem 0;
+  padding: 2.5rem 0 2rem;
 }
 
 .container > form{
@@ -42,6 +42,7 @@
   border-radius: 1.6rem;
   background-color: #66BEF0;
   color: #FFFCF1;
+  align-self: center;
 }
 
 .container p{
