@@ -473,6 +473,8 @@ async def get_drop_down_colors(request: Request):
         breedSet = set()
         speciesColors = set()
         breedColors = set()
+        breedSpecies = set()
+        speciesBreed = set()
         
         if colorList:
             for color in colorList:
@@ -513,30 +515,48 @@ async def get_drop_down_colors(request: Request):
                 getColorbySpeciesQuery = "SELECT DISTINCT color FROM pet WHERE species = %s"
                 getColorbySpeciesResult = await db_connector.execute_query(getColorbySpeciesQuery, species)
                 
+                getBreedbySpeciesQuery = "SELECT DISTINCT breed FROM pet WHERE species = %s"
+                getBreedbySpeciesResult = await db_connector.execute_query(getBreedbySpeciesQuery, species)
+                
                 colorList = [color[0] for color in getColorbySpeciesResult]
                 speciesColors.update(colorList)
+                
+                breedList = [breed[0] for breed in getBreedbySpeciesResult]
+                breedSpecies.update(breedList)
         
         if breedList:
             for breed in breedList:
                 getColorbyBreedQuery = "SELECT DISTINCT color FROM pet WHERE breed = %s"
                 getColorbyBreedResult = await db_connector.execute_query(getColorbyBreedQuery, breed)
                 
+                getSpeciesbyBreedQuery = "SELECT DISTINCT breed FROM pet WHERE breed = %s"
+                getSpeciesbyBreedResult = await db_connector.execute_query(getSpeciesbyBreedQuery, breed)
+                
                 colorList = [color[0] for color in getColorbyBreedResult]
                 breedColors.update(colorList)
+                
+                speciesList = [species[0] for species in getSpeciesbyBreedResult]
+                speciesBreed.update(speciesList)
         
         if speciesList and breedList:
             commonColors = list(speciesColors.intersection(breedColors))
             sortedColors = sorted(commonColors)
+            commonSpecies = list(speciesBreed.intersection(set(speciesList)))
+            sortedSpecies = sorted(commonSpecies)
+            commonBreed = list(breedSpecies.intersection(set(breedList)))
+            sortedBreed = sorted(commonBreed)
         elif speciesList:
             commonColors = list(speciesColors)
             sortedColors = sorted(commonColors)
-            breedList = []
+            commonBreed = list(breedSpecies)
+            sortedBreed = sorted(commonBreed)
         elif breedList:
             commonColors = list(breedColors)
             sortedColors = sorted(commonColors)
-            speciesList = []
+            commonSpecies = list(speciesBreed)
+            sortedSpecies = sorted(commonSpecies)
         
-        return create_success_response({"species": speciesList, "breed": breedList, "color": sortedColors})
+        return create_success_response({"species": sortedSpecies, "breed": sortedBreed, "color": sortedColors})
     except Exception as e:
         return create_error_response(str(e))
     finally:
