@@ -1,50 +1,36 @@
 import styles from './LoginPage.module.css'
-import axios from 'axios'
-import { useNavigate, Form } from 'react-router-dom'
-import { FormEvent } from 'react'
+import { Form, redirect } from 'react-router-dom'
+import { baseAPI } from '../../main';
+
+export async function action({ request }: { request: any }) {
+  const formData = await request.formData()
+  const updates = Object.fromEntries(formData)
+  await baseAPI.post('/userAPI/login', updates)
+    .then((response) => {
+      console.log(response.data.data)
+      const clientUsername = response.data.data.username
+      const clientRole = response.data.data.role
+      localStorage.setItem('ID', JSON.stringify({
+        username: clientUsername,
+        role: clientRole
+      }))
+    })
+  return redirect(`/search`)
+}
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
-  const baseAPI = axios.create({
-    baseURL: "http://10.26.10.55"
-  });
-  async function sendForm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const { username, password } = event.target as typeof event.target & {
-      username: { value: string }
-      password: { value: string }
-    };
-    baseAPI.post('/userAPI/login/',
-      { username: username.value, password: password.value })
-      .then((response) => {
-        console.log(response.data)
-        const clientUsername = response.data.data.username
-        const clientRole = response.data.data.role
-        // localStorage.setItem('ID', JSON.stringify({
-        //   username: clientUsername,
-        //   role: clientRole
-        // }))
-        if (clientRole === "User") {
-          navigate(`/userprofile`)
-        }
-        else if (clientRole === "ShelterStaff") {
-          navigate(`/shelterprofile`)
-        }
-      });
-    // navigate(`/petprofileowned/${username.value}`)
-  };
   return (
     <div className={styles.container}>
       <h1>PawsPr้om</h1>
-      <Form onSubmit={evt => { sendForm(evt) }}>
+      <Form method='post'>
         <section>
           <div>
             <label htmlFor="username">Username</label>
-            <input type="text" id='username' required />
+            <input type="text" id='username' name='username' required />
           </div>
           <div>
             <label htmlFor="password">Password</label>
-            <input type="password" id='password' required />
+            <input type="password" id='password' name='password' required />
           </div>
         </section>
         <button >Log in</button>

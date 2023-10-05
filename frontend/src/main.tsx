@@ -6,8 +6,8 @@ import { PetProfileOwned } from './Pages/PetProfileOwned/petProfileOwned.tsx';
 import { PetProfileOthers } from "./Pages/PetProfileOthers/petProfileOthers.tsx";
 import { PetProfileShelter } from "./Pages/PetProfileShelter/petProfileShelter.tsx";
 import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx';
-import { LoginPage } from "./Pages/Login/LoginPage.tsx";
-import { SignUpPage } from './Pages/SignUpPage/SignUpPage.tsx';
+import { LoginPage, action as loginAction } from "./Pages/Login/LoginPage.tsx";
+import { SignUpPage, action as signUpAction } from './Pages/SignUpPage/SignUpPage.tsx';
 import { Home } from './Pages/Home/home.tsx';
 import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
 import { UserProfile } from './Pages/UserProfile/userProfile.tsx';
@@ -17,13 +17,11 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import axios from 'axios'
 
-//! DONT FORGET TO COMMENT <React.StrictMode> 
-//! OR ELSE IT GONNA RENDER TWICE
-
 //* URL for API
 export const baseAPI = axios.create({
-  baseURL: "http://10.26.7.142"
-  });
+  // baseURL: "http://44.203.125.116:8000/"
+  baseURL: "http://10.26.10.55/"
+});
 
 const router = createBrowserRouter([
   {
@@ -32,21 +30,26 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: navLoader,
     children: [
-      { index: true, element: <Home /> },
+      {
+        index: true,
+        element: <Home />
+      },
       {
         path: "login",
         element: <LoginPage />,
+        action: loginAction
       },
       {
         path: "signup",
-        element: <SignUpPage />
+        element: <SignUpPage />,
+        action: signUpAction
       },
       {
         path: "search",
         element: <SearchPage />
       },
       {
-        path: "userprofile",
+        path: "userprofile/",
         element: <UserProfile />
       },
       {
