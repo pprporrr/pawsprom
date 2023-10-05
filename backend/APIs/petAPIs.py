@@ -530,9 +530,11 @@ async def get_drop_down_colors(request: Request):
         elif speciesList:
             commonColors = list(speciesColors)
             sortedColors = sorted(commonColors)
+            breedList = []
         elif breedList:
             commonColors = list(breedColors)
             sortedColors = sorted(commonColors)
+            speciesList = []
         
         return create_success_response({"species": speciesList, "breed": breedList, "color": sortedColors})
     except Exception as e:
