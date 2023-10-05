@@ -1,6 +1,8 @@
 import styles from './NavBar.module.css'
 import { Link, useLoaderData } from 'react-router-dom'
 
+type LoaderState = {username:string, role:string}
+
 export async function loader() {
   const local = localStorage.getItem('ID')
   let username: string = ""
@@ -19,7 +21,7 @@ export async function loader() {
 }
 
 export function NavBar() {
-  const { username, role } = useLoaderData();
+  const { username, role } = useLoaderData() as LoaderState
   return (
     <div className={styles.nav_container}>
       <section className={styles.left_side}>
@@ -37,11 +39,11 @@ export function NavBar() {
             (<p>
               <Link to="/userprofile">{username}</Link>
             </p>
-            ): (
-            <p>
-              <Link to="/shelterprofile">{username}</Link>
-            </p>
-          )
+            ) : (
+              <p>
+                <Link to="/shelterprofile">{username}</Link>
+              </p>
+            )
         }
       </section>
     </div>

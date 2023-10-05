@@ -4,12 +4,9 @@ import { InfoPet } from '../InfoPet/InfoPet'
 import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 import { FormEvent } from 'react'
 import { Form } from 'react-router-dom'
-import axios from 'axios'
+import { baseAPI } from '../../main'
 
 export const CreatePet = () => {
-  const baseAPI = axios.create({
-    baseURL: "http://10.26.10.55"
-  });
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // TODO: post picture
