@@ -521,22 +521,22 @@ async def get_drop_down_colors(request: Request):
                 colorList = [color[0] for color in getColorbySpeciesResult]
                 speciesColors.update(colorList)
                 
-                breedList = [breed[0] for breed in getBreedbySpeciesResult]
-                breedSpecies.update(breedList)
+                breedListbySpecies = [breed[0] for breed in getBreedbySpeciesResult]
+                breedSpecies.update(breedListbySpecies)
         
         if breedList:
             for breed in breedList:
                 getColorbyBreedQuery = "SELECT DISTINCT color FROM pet WHERE breed = %s"
                 getColorbyBreedResult = await db_connector.execute_query(getColorbyBreedQuery, breed)
                 
-                getSpeciesbyBreedQuery = "SELECT DISTINCT breed FROM pet WHERE breed = %s"
+                getSpeciesbyBreedQuery = "SELECT DISTINCT species FROM pet WHERE breed = %s"
                 getSpeciesbyBreedResult = await db_connector.execute_query(getSpeciesbyBreedQuery, breed)
                 
                 colorList = [color[0] for color in getColorbyBreedResult]
                 breedColors.update(colorList)
                 
-                speciesList = [species[0] for species in getSpeciesbyBreedResult]
-                speciesBreed.update(speciesList)
+                speciesListbyBreed = [species[0] for species in getSpeciesbyBreedResult]
+                speciesBreed.update(speciesListbyBreed)
         
         if speciesList and breedList:
             commonColors = list(speciesColors.intersection(breedColors))
@@ -545,18 +545,19 @@ async def get_drop_down_colors(request: Request):
             sortedSpecies = sorted(commonSpecies)
             commonBreed = list(breedSpecies.intersection(set(breedList)))
             sortedBreed = sorted(commonBreed)
+            return create_success_response({"species": sortedSpecies, "breed": sortedBreed, "color": sortedColors})
         elif speciesList:
             commonColors = list(speciesColors)
             sortedColors = sorted(commonColors)
             commonBreed = list(breedSpecies)
             sortedBreed = sorted(commonBreed)
+            return create_success_response({"species": speciesList, "breed": sortedBreed, "color": sortedColors})
         elif breedList:
             commonColors = list(breedColors)
             sortedColors = sorted(commonColors)
             commonSpecies = list(speciesBreed)
             sortedSpecies = sorted(commonSpecies)
-        
-        return create_success_response({"species": sortedSpecies, "breed": sortedBreed, "color": sortedColors})
+            return create_success_response({"species": sortedSpecies, "breed": breedList, "color": sortedColors})
     except Exception as e:
         return create_error_response(str(e))
     finally:
