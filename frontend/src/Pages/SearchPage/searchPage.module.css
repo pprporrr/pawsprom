@@ -10,10 +10,8 @@
 
 
 .cardsWrapper {
-    width: 80%;
+    width: 100%;
     height: fit-content;
-    /* border: solid;
-    border-color: red; */
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;

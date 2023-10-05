@@ -1,0 +1,38 @@
+
+.rangeWrapper {
+    display: grid;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-right: 1rem;
+    grid-template-columns: 10% 40% auto;
+    width: 100%;
+    gap: 2rem;
+    background-color: #ffd8c1;
+    border-radius: 0.75rem;
+}
+
+.rangeWrapper p {
+    margin-left: 1.5rem;
+}
+
+.rangeWrapper button {
+
+    margin-left: 1.5rem;
+}
+
+.InputWrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.InputWrapper input {
+    width: 100%;
+    border: none;
+    margin-left: 1.5rem;
+    border-radius: 1rem;
+    padding-left: 5%;
+    padding-right: 0.05rem;
+    color: #9E6D51;
+    background: #ffecd6;
+}

@@ -8,12 +8,12 @@ type MoreFilterButtonProps = {
     handleSelects: (catergory: keyof filterListProps, selectedValue: any[]) => void
     onClick: () => void,
     colorList: string[]
-    // ageList: Number[]
+    ageRange:number[]
     // weightList: Number[]
 }
 
 export const MoreFilterButton: React.FC<MoreFilterButtonProps> = (
-    {onClick, handleSelects, colorList}) => {
+    {onClick, handleSelects, colorList, ageRange}) => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
     //* when click more button
@@ -32,6 +32,7 @@ export const MoreFilterButton: React.FC<MoreFilterButtonProps> = (
         onClick()
         setIsConfirmOpen(false)
     }
+
     
     return (
         <div>
@@ -47,6 +48,7 @@ export const MoreFilterButton: React.FC<MoreFilterButtonProps> = (
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         colorList={colorList}
+        ageRange={ageRange}
         ></MorePop>
         </div>
     )

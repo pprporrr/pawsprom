@@ -3,14 +3,11 @@ import { filterProps } from './searchBar';
 import { DropCheckbox } from '../Dropdown/dropcheckbox';
 import { useEffect, useState } from 'react';
 import { MoreFilterButton } from './moreFilterButton';
-
-type DropdownNFilterProps = filterProps & {
-    isGetData: boolean
-}
+import { SearchProps } from './searchBar';
 
 
-export const DropdownNFilter:  React.FC<DropdownNFilterProps> = ({
-    filterList,getFilter ,handleSelects, isGetData}) => {
+export const DropdownNFilter:  React.FC<SearchProps> = ({
+    filterList,getFilter ,handleSelects, isGetData, handleSearch}) => {
     // seperate in each dropdown
     // const [speciesNbreed, setSpeciesNbreed] =  useState<stringNbreedProps>({
     //     'species': [],
@@ -19,6 +16,7 @@ export const DropdownNFilter:  React.FC<DropdownNFilterProps> = ({
     const [speciesList, setSpeciesList] = useState<string[]>([])
     const [breedList, setBreedList] = useState<string[]>([])
     const [colorList, setColorList] = useState<string[]>([])
+
 
     // useEffect(() => {
         
@@ -33,39 +31,49 @@ export const DropdownNFilter:  React.FC<DropdownNFilterProps> = ({
     // }, [handleSelects])
 
     const moreFilterClick = () => {
-        console.log('Trigger Click')
+        // console.log('Trigger Click')
     }
 
     useEffect(() => {
-        
-        // TODO: fix update option
-        console.log('current', filterList['color'])
-        setNewFilter()
+        let optionSelect = Object.values(getFilter)
+                    .filter(value => Array.isArray(value) 
+                            && value.length != 0).length
+        if (optionSelect === 0){
+            //* for default options
+            setNewFilter()
+        } else {
+            setBreedList(filterList['breed'])
+            setColorList(filterList['color'])
 
-    }, [handleSelects])
+        }
+
+    }, [isGetData])
 
     async function setNewFilter() {
-        let temp = Object.values(getFilter)
-                    .filter(value => Array.isArray(value) 
-                            && value.length != 0)
+        //* set data for default when no selection
+        // let temp = Object.values(getFilter)
+        //             .filter(value => Array.isArray(value) 
+        //                     && value.length != 0)
 
         let speciesNbreed = Object.entries(filterList)
                                 .filter(([key, _]) => key != 'color')
         
-        if (temp.length === 0) {
+        // if (temp.length === 0) {
             setSpeciesList(speciesNbreed.map(category => category[0]))
             setBreedList(speciesNbreed.map(category => category[1]).flat())
             setColorList(filterList['color'])
-        } else {
+        // } else {
             
-            let wantedSpecies = getFilter['species']
-            setSpeciesList(speciesNbreed.map(category => category[0]))
-            setBreedList(wantedSpecies.map(key => filterList[key]).flat())
-            if (getFilter['color'].length === 0){
+        //     let wantedSpecies = getFilter['species']
+        //     setSpeciesList(speciesNbreed.map(category => category[0]))
+        //     console.log('wanted breed',wantedSpecies
+        //         .filter(key => key in filterList))
+        //     setBreedList( speciesNbreed.map(category => category[1]))
+        //     if (getFilter['color'].length === 0){
                 
-                setColorList(filterList['color'])
-            }
-        }
+        //         setColorList(filterList['color'])
+        //     }
+        // }
     }
 
     return (
@@ -89,11 +97,15 @@ export const DropdownNFilter:  React.FC<DropdownNFilterProps> = ({
                 updateValue={handleSelects}/>
             </div> */}
             <div className={styles.buttonWrapper}>
-                <button>Search</button>
+                {/* //! Search Button */}
+                <button 
+                id='searchButton' 
+                onClick={handleSearch}>Search</button>
                 <MoreFilterButton
                 onClick={moreFilterClick}
                 handleSelects={handleSelects}
                 colorList={colorList}
+                ageRange={getFilter['ageRange']}
                 ></MoreFilterButton>
             </div>
         </div>

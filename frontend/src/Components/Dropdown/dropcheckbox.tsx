@@ -33,6 +33,7 @@ export const DropCheckbox: React.FC<InputSearchProps> = ({category, options, upd
     }
 
 
+
     return (
         <div id="dropdown" 
         className={`${styles.dropdown} ${isActive ? styles.active : styles.inactive}`}>
@@ -43,7 +44,7 @@ export const DropCheckbox: React.FC<InputSearchProps> = ({category, options, upd
             :selectedNumber + " selected"}
             onClick={handleToggleDropdown} 
             readOnly></input>
-            <div className={styles.options}>
+            {options != undefined && <div className={styles.options}>
             {options.map((option) => {
                 const key = category + "-" + option
                 return (
@@ -59,7 +60,7 @@ export const DropCheckbox: React.FC<InputSearchProps> = ({category, options, upd
                 </div>
                 )
                 })}
-            </div>
+            </div>}
         </div>
     )
 }

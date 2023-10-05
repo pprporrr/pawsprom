@@ -2,12 +2,10 @@ import styles from './LoginPage.module.css'
 import axios from 'axios'
 import { useNavigate, Form } from 'react-router-dom'
 import { FormEvent } from 'react'
+import { baseAPI } from '../../main'
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const baseAPI = axios.create({
-    baseURL: "http://10.26.10.55"
-  });
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const { username, password } = event.target as typeof event.target & {

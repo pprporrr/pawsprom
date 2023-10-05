@@ -1,5 +1,7 @@
 
-
+.featureDeco {
+    height: 6rem;
+}
 .featureDeco img {
     padding: 0.5rem;
 }

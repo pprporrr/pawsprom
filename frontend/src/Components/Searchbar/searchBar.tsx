@@ -27,40 +27,60 @@ import { DropdownNFilter } from './dropdownNfilter'
 
 // ! let's me think first
 export type displayfilterProps = {
-    [key: string] : string[]
+    [K in keyof filterListProps] : any
+}
+
+type featuresProps = {
+    [key: string]: boolean
 }
 
 
 // * For display list in dropdown
+// export type filterListProps = {
+//     species: string[]
+//     breed: string[]
+//     ageRange: number[]
+//     gender: string[]
+//     weightRange: number[]
+//     color: string[]
+//     features: {
+//         feature1: boolean,
+//         feature2: boolean,
+//         feature3: boolean,
+//         feature4: boolean,
+//         feature5: boolean,
+//         feature6: boolean,
+//         feature7: boolean,
+//         feature8: boolean,
+//         feature9: boolean,
+//         feature10: boolean,
+//     }
+// }
+
 export type filterListProps = {
     species: string[]
     breed: string[]
-    ageRange: Number[]
+    ageRange: number[]
     gender: string[]
-    weight: Number[]
+    weightRange: number[]
     color: string[]
-    features: {
-        feature1: boolean,
-        feature2: boolean,
-        feature3: boolean,
-        feature4: boolean,
-        feature5: boolean,
-        feature6: boolean,
-        feature7: boolean,
-        feature8: boolean,
-        feature9: boolean,
-        feature10: boolean,
-    }
+    features: featuresProps
 }
 
 // * type for filter
 export type filterProps = {
+    isGetData: boolean
     getFilter: filterListProps
     filterList: displayfilterProps
     handleSelects: (catergory: keyof filterListProps, selectedValue: any[]) => void
 }
 
-export const SearchBar: React.FC<filterProps> = ({filterList, getFilter, handleSelects}) => {
+export type SearchProps = filterProps & {
+    handleSearch: () => void
+}
+
+export const SearchBar: React.FC<SearchProps> = (
+    {filterList, getFilter, handleSelects, isGetData, handleSearch}) => {
     // * now 'getfilter' is not use
 
     return (
@@ -69,7 +89,8 @@ export const SearchBar: React.FC<filterProps> = ({filterList, getFilter, handleS
             <ToggleButton/>
             {/* // ! for pet filter */}
             <DropdownNFilter
-            isGetData={true}
+            handleSearch={handleSearch}
+            isGetData={isGetData}
             filterList={filterList} 
             getFilter={getFilter}
             handleSelects={handleSelects}/>

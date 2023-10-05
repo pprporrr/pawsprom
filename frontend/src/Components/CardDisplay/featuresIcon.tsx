@@ -13,7 +13,6 @@ type FeatureIconProps = {
         feature8: boolean
         feature9: boolean
         feature10: boolean
-        feature11: boolean
     }
 }
 

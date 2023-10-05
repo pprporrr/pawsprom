@@ -22,7 +22,7 @@ import axios from 'axios'
 
 //* URL for API
 export const baseAPI = axios.create({
-  baseURL: "http://10.26.7.142"
+  baseURL: "http://10.26.10.55"
   });
 
 const router = createBrowserRouter([
@@ -74,7 +74,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  // </React.StrictMode>
 )
