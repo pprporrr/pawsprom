@@ -615,6 +615,26 @@ async def search_pet(request: Request):
     finally:
         await db_connector.disconnect()
 
+@router.post("/search-pet/ids/", response_model=dict)
+async def get_pet_profiles_short(request: Request):
+    try:
+        await db_connector.connect()
+        
+        petIDs = []
+        
+        getPetDetailsQuery = "SELECT petID FROM pet WHERE availabilityStatus = %s"
+        getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, "Available")
+        
+        for petID in getPetDetailsResult:
+            petIDs.append(petID[0])
+        
+        return create_success_response(petIDs)
+        
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
 @router.post("/dashboard/info/", response_model=dict)
 async def get_user_dashboard_info(request: Request):
     try:

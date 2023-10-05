@@ -232,15 +232,14 @@ async def login_user(request: Request):
                     return create_error_response("user not found")
                 
                 userDetails = {
-                    "userID": getUserInfoResult[0][0],
                     "username": getUserInfoResult[0][1],
+                    "userRole": getUserInfoResult[0][7],
                     "firstName": getUserInfoResult[0][3],
                     "lastName": getUserInfoResult[0][4],
                     "phoneNumber": getUserInfoResult[0][5],
-                    "address": getUserInfoResult[0][6],
-                    "image": getUserInfoResult[0][8]
+                    "address": getUserInfoResult[0][6]
                 }
-                return create_success_response({"username": username, "role": userRole, "info": userDetails})
+                return create_success_response(userDetails)
             elif userRole == "ShelterStaff":
                 getUserInfoQuery = "SELECT * FROM user WHERE username = %s AND userRole = %s"
                 getUserInfoResult = await db_connector.execute_query(getUserInfoQuery, username, userRole)
@@ -257,13 +256,15 @@ async def login_user(request: Request):
                     return create_error_response("shelter not found")
                 
                 shelterDetails = {
+                    "username": username, 
+                    "userRole": userRole,
                     "shelterID": getShelterResult[0][0],
                     "shelterName": getShelterResult[0][1],
                     "shelterAddress": getShelterResult[0][2],
                     "sheltercontactInfo": getShelterResult[0][3],
                     "shelterphoneNumber": getShelterResult[0][4]
                 }
-                return create_success_response({"username": username, "role": userRole, "info": shelterDetails})
+                return create_success_response(shelterDetails)
         else:
             return create_error_response("invalid credentials")
         
