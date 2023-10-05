@@ -5,14 +5,19 @@ import { baseAPI } from '../../main';
 export async function action({ request }: { request: any }) {
   const formData = await request.formData()
   const updates = Object.fromEntries(formData)
-  await baseAPI.post('/userAPI/login', updates)
+  await baseAPI.post('/userAPI/login/', updates)
     .then((response) => {
-      console.log(response.data.data)
-      const clientUsername = response.data.data.username
-      const clientRole = response.data.data.role
       localStorage.setItem('ID', JSON.stringify({
-        username: clientUsername,
-        role: clientRole
+        username: response.data.data.username,
+        role: response.data.data.userRole,
+        firstName: response.data.data.firstName,
+        lastName: response.data.data.lastName,
+        phoneNumber: response.data.data.phoneNumber,
+        address: response.data.data.address,
+        shelterName: response.data.data.shelterName,
+        shelterAddress: response.data.data.shelterAddress,
+        sheltercontactInfo: response.data.data.sheltercontactInfo,
+        shelterphoneNumber: response.data.data.shelterphoneNumber,
       }))
     })
   return redirect(`/search`)

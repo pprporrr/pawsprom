@@ -10,8 +10,8 @@ import { LoginPage, action as loginAction } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage, action as signUpAction } from './Pages/SignUpPage/SignUpPage.tsx';
 import { Home } from './Pages/Home/home.tsx';
 import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
-import { UserProfile } from './Pages/UserProfile/userProfile.tsx';
-import { ShelterProfile } from './Pages/ShelterProfile/shelterProfile.tsx';
+import { UserProfile, loader as userLoader } from './Pages/UserProfile/userProfile.tsx';
+import { ShelterProfile, loader as shelterLoader } from './Pages/ShelterProfile/shelterProfile.tsx';
 import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
@@ -20,7 +20,7 @@ import axios from 'axios'
 //* URL for API
 export const baseAPI = axios.create({
   // baseURL: "http://44.203.125.116:8000/"
-  baseURL: "http://10.26.10.55/"
+  baseURL: "http://10.26.10.55"
 });
 
 const router = createBrowserRouter([
@@ -50,14 +50,16 @@ const router = createBrowserRouter([
       },
       {
         path: "userprofile/",
-        element: <UserProfile />
+        element: <UserProfile />,
+        loader: userLoader
       },
       {
         path: "shelterprofile",
-        element: <ShelterProfile />
+        element: <ShelterProfile />,
+        loader: shelterLoader
       },
       {
-        path: "petprofileowned/:username",
+        path: "petprofileowned/",
         element: <PetProfileOwned />
       },
       {
