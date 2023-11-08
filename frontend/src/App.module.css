@@ -1,7 +1,7 @@
 .main_container{
   display: grid;
   grid-template-rows: 100px 1fr 100px;
-  row-gap: 4rem;
+  row-gap: 3rem;
   width: auto;
   height: 100dvh;
 }

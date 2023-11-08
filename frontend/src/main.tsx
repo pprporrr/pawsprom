@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         loader: defaultLoader
       },
       {
-        path: "userprofile/",
+        path: "userprofile/:username",
         element: <UserProfile />,
         loader: userLoader
       },
