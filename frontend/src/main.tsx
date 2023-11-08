@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <SearchPage />
       },
       {
-        path: "userprofile/",
+        path: "userprofile/:username",
         element: <UserProfile />,
         loader: userLoader
       },

@@ -10,9 +10,14 @@
 .left_side{
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .left_side > p{
   padding-left: 1rem;
+}
+.left_side > img{
+  width: 3rem;
+  height: auto;
 }
 
 .right_side{

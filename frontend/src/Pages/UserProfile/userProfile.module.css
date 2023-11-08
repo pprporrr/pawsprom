@@ -1,6 +1,6 @@
 .container{
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  display:grid;
+  grid-template-rows: 10rem minmax(15rem ,1fr) minmax(15rem ,1fr);
   row-gap: 1rem;
   background-color: #fff8e0;
   box-shadow: 0px 0px 10px 5px #D1D1D1;
@@ -12,21 +12,62 @@
 .profile_info{
   display: grid;
   grid-template-columns: 30% 70%;
-  padding-bottom: 3rem;
+  /* padding-bottom: 2rem; */
 }
 .owned_pet{
+  display: grid;
+  grid-template-rows: 2rem 1fr;
   background-color: #FFE9DA;
   border-radius: 1.8rem;
   padding: 1.5rem;
 }
-.owned_pet > h2{
+.owned_pet > h3{
   color: brown;
 }
+.owned_pet > a{
+  color: #FF9065;
+  justify-self: center;
+  align-self: center;
+}
+.owned_pet > a > button{
+  display: inline;
+  width: 2rem;
+  height: 2rem;
+  color: #FFE9DA;
+  background-color: #FF9065;
+  border: none;
+  border-radius: 50%;
+}
+.owned_pet > a > p{
+  display: inline;
+  padding-left: 0.5rem;
+}
+
 .requested_pet{
+  display: grid;
+  grid-template-rows: 2rem 1fr;
   background-color: #FFE9DA;
   border-radius: 1.8rem;
   padding: 1.5rem;
 }
-.requested_pet > h2{
+.requested_pet > h3{
   color: brown;
+}
+.requested_pet > a{
+  color: #FF9065;
+  justify-self: center;
+  align-self: center;
+}
+.requested_pet > a > button{
+  display: inline;
+  width: 2rem;
+  height: 2rem;
+  color: #FFE9DA;
+  background-color: #FF9065;
+  border: none;
+  border-radius: 50%;
+}
+.requested_pet > a > p{
+  display: inline;
+  padding-left: 0.5rem;
 }

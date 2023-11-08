@@ -1,5 +1,5 @@
 import styles from './userProfile.module.css'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, Link } from 'react-router-dom'
 
 type LoaderState = {
   username:string,
@@ -52,10 +52,29 @@ export const UserProfile = () => {
         </div>
       </section>
       <section className={styles.owned_pet}>
-        <h2>Pets</h2>
+        <h3>Pets</h3>
+        {
+          username === '' ? 
+          (
+            <Link to='/'>
+              <button>&#43;</button> 
+              <p>Start adding your pet!</p>
+            </Link>
+          )
+          :
+          (
+            <div>
+              
+            </div>
+          )
+        }
       </section>
       <section className={styles.requested_pet}>
-        <h2>Request</h2>
+        <h3>Request</h3>
+        <Link to='/'>
+          <button>&#43;</button> 
+          <p>No request</p>
+        </Link>
       </section>
     </div>
   )

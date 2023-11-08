@@ -25,24 +25,22 @@ export function NavBar() {
   return (
     <div className={styles.nav_container}>
       <section className={styles.left_side}>
-        <section >pic</section>
+        <img src="/pawsprom_logo.svg" />
         <p>PawsPr้om</p>
       </section>
       <section className={styles.right_side}>
         <Link to="/">Home</Link>
         <Link to="/search">Search</Link>
         {username === "" ?
-          (<p>
-            <Link to="/login">Login</Link> / <Link to="/signup">Register</Link>
-          </p>
-          ) : role === "User" ?
-            (<p>
-              <Link to="/userprofile">{username}</Link>
+          (
+            <p>
+              <Link to="/login">Login</Link> / <Link to="/signup">Register</Link>
             </p>
+          ) : role === "User" ?
+            (
+              <Link to={`/userprofile/${username}`}>{username}</Link>
             ) : (
-              <p>
-                <Link to="/shelterprofile">{username}</Link>
-              </p>
+              <Link to={`/shelterprofile/${username}`}>{username}</Link>
             )
         }
       </section>
