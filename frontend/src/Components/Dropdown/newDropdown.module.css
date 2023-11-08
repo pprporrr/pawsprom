@@ -1,0 +1,25 @@
+
+.selectDeco {
+    align-items: right;
+    color: black;
+}
+
+.inputOption {
+    align-items: center;
+    color: inherit;
+    display: flex;
+}
+
+.bg {
+    background-color: transparent;
+    background-color: black;
+}
+
+.bgFocused {
+    background-color: black;
+}
+
+.bgActive {
+    color: aquamarine;
+}
+

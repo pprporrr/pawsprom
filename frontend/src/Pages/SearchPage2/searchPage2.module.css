@@ -1,0 +1,27 @@
+.bgContainer {
+    justify-content: center;
+    width: 100%;
+}
+
+.bodyWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.cardsWrapper {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.shelterWrapper {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}

@@ -129,26 +129,19 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 
 	return (
 		<div className={styles.cardWrapper}>
-			{/* //!Title Section */}
 			<section className={styles.topContainer}>
 				<div className={styles.titleContainer}>
 					<h1 className={styles.title}>Pet Profile</h1>
 					<div style={{ width: '2.813rem', height: '2.813rem' }}>
-						{/* <SpeciesSymbol></SpeciesSymbol> change later na vvvvvvvvvvv svg*/}
 						<img src="../../cat.svg" alt="edit-symbol" />
 					</div>
 					<p className={styles.title}>Edit pet profile</p>
 					<div  style={{ width: '1.563rem', height: '1.563rem' }}>
-						{/* // change later na vvvvvvvvvvv svg  */}
 						<img src="../../edit-symbol.svg" alt="edit-symbol" />
 					</div>
 				</div>
 			</section>
-			
-			{/* //!General Information Section */}
 			<section className={styles.firstRowWrapper}>
-				{/* <ImageSlider imageIDs={data.imageIDs} baseAPI={baseAPI}></ImageSlider> */}
-				{/* <div className={styles.infoContainer1}> */}
 					<div className={styles.imageAndInfo}>
 						<ImageSlider
 						imageIDs={data.imageIDs} 
@@ -179,21 +172,18 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 			</section>
 			
 			<div className={styles.secondRowWrapper}>
-			{/* //!Vaccine Records Section */}
 			<section className={styles.vaccineContainer}>
 				<h2>Vaccine Records</h2>
 				<VaccineRecords 
 				vaccinationName={data.vaccinationName} 
 				vaccinationDate={vaccineDateObjects}></VaccineRecords>
 			</section>
-			{/* //!Features Section */}
 			<section className={styles.featuresContainer}>
 				<h2>Features</h2>
 				<Features features={data.features}></Features>
 			</section>
 			</div>
 			<div>
-			{/* //!Button/Request Section */}
 			<section className={styles.bottomContainer}>
 				{page === 'PetProfileOwned' && <DeleteButton 
 				onClick={handleDeleteClick}

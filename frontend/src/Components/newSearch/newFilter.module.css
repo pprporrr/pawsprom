@@ -22,3 +22,21 @@
     height: 100%;
     align-items: end;
 }
+
+.searchButton {
+    background-color: transparent;
+    border: none;
+}
+
+.searchImg {
+    cursor: pointer;
+}
+
+.moreButton {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    gap: 0.5rem;
+}
+
+

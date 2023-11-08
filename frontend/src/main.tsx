@@ -9,18 +9,18 @@ import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx'
 import { LoginPage, action as loginAction } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage, action as signUpAction } from './Pages/SignUpPage/SignUpPage.tsx';
 import { Home } from './Pages/Home/home.tsx';
-import { SearchPage } from './Pages/SearchPage/searchPage.tsx';
 import { UserProfile, loader as userLoader } from './Pages/UserProfile/userProfile.tsx';
 import { ShelterProfile, loader as shelterLoader } from './Pages/ShelterProfile/shelterProfile.tsx';
 import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import axios from 'axios'
+import { SearchPage2, defaultLoader } from './Pages/SearchPage2/searchPage2.tsx';
 
 //* URL for API
 export const baseAPI = axios.create({
   // baseURL: "http://44.203.125.116:8000/"
-  baseURL: "http://10.26.10.55"
+  baseURL: "http://10.26.2.180"
 });
 
 const router = createBrowserRouter([
@@ -46,7 +46,8 @@ const router = createBrowserRouter([
       },
       {
         path: "search",
-        element: <SearchPage />
+        element: <SearchPage2 />,
+        loader: defaultLoader
       },
       {
         path: "userprofile/",
