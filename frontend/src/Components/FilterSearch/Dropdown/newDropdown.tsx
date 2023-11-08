@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Select, { OptionProps, components } from "react-select";
 import styles from './newDropdown.module.css'
-import { SelectedFilter } from "../newSearch/newFilter";
+import { SelectedFilter } from "../../newSearch/newFilter";
 
 type InputOptionProps = OptionProps<any> & {
     getStyles: any;
@@ -89,8 +89,6 @@ export const NewDropDown: React.FC<OptionsProps> = (
         handleSelect(category, options.map(
             (option: any) => option.value))
     }
-
-    console.log(options)
 
 
     return (

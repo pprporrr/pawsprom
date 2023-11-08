@@ -15,6 +15,7 @@
 .modalcontent {
     background-color: #FFFCF1;
     width: 60%;
+    height: 80%;
     border-style: solid;
     border-width: 0.2rem;
     border-color: #FFB184;
@@ -22,6 +23,27 @@
     border-radius: 1rem;
     text-align: center;
     color:  #F57E85;
+    overflow-y: auto
+}
+
+.modalcontent::-webkit-scrollbar {
+    width: 1rem;
+}
+
+.modalcontent::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* Define the thumb style */
+.modalcontent::-webkit-scrollbar-thumb {
+    background-color: #ffd8c1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+}
+
+.modalcontent::-webkit-scrollbar-thumb:hover {
+    background-color: #92d6fd;
 }
 
 .dropWrapper {
@@ -43,6 +65,30 @@
 .buttonWrapper {
     display: flex;
     width: 100%;
-    gap: 1rem;
-    justify-content: center;
+    justify-content: end;
 }
+
+.buttonClose {
+    position: fixed;
+    background-size: contain; 
+    height: 1.5rem;
+    width: 1.5rem;
+    font-size: 2rem;
+    border: none;
+    background-color: transparent;
+    border-radius: 0.3rem;
+    background-color: #ffbf99;
+    
+    -webkit-mask-image: url(closed-symbol.svg);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+
+    mask-image: url(closed-symbol.svg);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+.buttonClose:hover {
+    background-color: #66BEF0;
+}
+

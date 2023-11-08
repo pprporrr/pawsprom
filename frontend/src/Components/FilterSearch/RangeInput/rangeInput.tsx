@@ -1,6 +1,6 @@
 import styles from './rangeInput.module.css'
 import { useEffect, useState } from 'react'
-import { SelectedFilter } from '../newSearch/newFilter'
+import { SelectedFilter } from '../../newSearch/newFilter'
 
 type InputRangeProps = {
     category: keyof SelectedFilter
@@ -27,8 +27,6 @@ export const RangeInput: React.FC<InputRangeProps> = (
             updateValue(category, range) 
         }
 
-        console.log('range:  ',range)
-
         useEffect(() => {
             if (category === 'ageRange') {
                 setTextDisplay('Age')
@@ -43,15 +41,19 @@ export const RangeInput: React.FC<InputRangeProps> = (
 
 
         return (
-            <div className={styles.rangeWrapper}>
+            <div>
                 <p>{textDisplay}</p>
+            <div className={styles.rangeWrapper}>
                 <div className={styles.InputWrapper}>
                     <p>From</p>
                     <input 
                     type='number'
                     id={category + 'From'}
                     onChange={handleChange}
-                    value={range.length >= 1 && range[0] !== 0? range[0].toString() : ''}
+                    value={range.length >= 1 
+                    && range[0] !== 0
+                    && range[0] !== 100
+                    ? range[0].toString() : ''}
                     ></input>
                 </div>
                 <div className={styles.InputWrapper}>
@@ -60,9 +62,13 @@ export const RangeInput: React.FC<InputRangeProps> = (
                     id={category + 'To'} 
                     type='number'
                     onChange={handleChange}
-                    value={range.length >= 2 && range[1] !== 0? range[1].toString() : ''}
+                    value={range.length >= 2 
+                    && range[1] !== 0
+                    && range[1] !== 100
+                    ? range[1].toString() : ''}
                     ></input>
                 </div>
+            </div>
             </div>
         )
     }
