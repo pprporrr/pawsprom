@@ -1,9 +1,5 @@
 import styles from './searchPage2.module.css'
-import { NewDropDown } from '../../Components/Dropdown/newDropdown'
-import { OptionsProps } from '../../Components/Dropdown/newDropdown';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { baseAPI } from '../../main';
+import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { NewSearchBar } from '../../Components/newSearch/newSearchBar';
 import { CardDisplay } from '../../Components/CardDisplay/cardDisplay';
@@ -172,14 +168,15 @@ export const SearchPage2 = () => {
     const defaultPets: any = useLoaderData()
     const [pets, setPets] = useState(defaultPets['pets'])
     const [searchType, setSearchType] = useState<string>('Pets')
-    const [shelters, setShelters] = useState<any>(defaultPets['pets'])
+    const [shelters, setShelters] = useState(defaultPets['pets'])
 
     const handlePets = ( pets: singleResult[]) => {
-        setPets(pets)
-    }
+        setPets(pets)}
 
     const handleShelters = ( shelters: any[]) => {
-        setShelters(shelters)
+
+        console.log('pass Shelter')
+        //setShelters(shelters)
     }
 
     const selectType = (toggle: boolean) => {
@@ -187,8 +184,7 @@ export const SearchPage2 = () => {
             setSearchType('Shelters')
         } else {
             setSearchType('Pets')
-        } 
-    }
+        }}
 
     return (
         <div className={styles.bgContainer}>
@@ -199,8 +195,7 @@ export const SearchPage2 = () => {
                 {searchType === 'Pets' && (
                 <>
                 <NewSearchBar
-                handlePets={handlePets}
-                />
+                handlePets={handlePets}/>
                 <div className={styles.cardsWrapper}>
                 {pets.map((petData: singleResult) => {
                     return (  
@@ -210,28 +205,26 @@ export const SearchPage2 = () => {
                     data={petData}
                     ></CardDisplay>
                     )})}
-                </div>
-                </>)}
+                </div></>)}
+
                 {searchType === 'Shelters' && (
                 <>
                 <SearchShelter
-                handleShelter={handlePets}
+                handleShelter={handleShelters}
                 ></SearchShelter>
                 <div className={styles.shelterWrapper}>
-                {shelters.map((petData: singleResult) => {
+                {shelters.map((shelterData: singleResult) => {
                     return (  
                     <ShelterCard
-                    name={petData.name}
-                    phone={petData.phone}
-                    address={petData.address}
-                    key={petData.name} 
+                    name={shelterData.name}
+                    phone={shelterData.phone}
+                    address={shelterData.address}
+                    key={shelterData.name} 
                     url="https://www.google.com"
                     ></ShelterCard>
                     )
                 })}
-                </div>
-                </>
-                )}
+                </div></>)}
             </div>
         </div>
     )

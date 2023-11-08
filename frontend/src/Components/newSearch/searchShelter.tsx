@@ -1,8 +1,5 @@
-import { useState } from 'react';
 import styles from './searchShelter.module.css'
-import Select from 'react-select'
 import { baseAPI } from '../../main';
-import { singleResult } from '../../Pages/SearchPage2/searchPage2';
 
 type SearchShelterProps = {
     handleShelter: (shelters: any) => void

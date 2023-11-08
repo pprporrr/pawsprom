@@ -27,7 +27,7 @@ export const RangeInput: React.FC<InputRangeProps> = (
             updateValue(category, range) 
         }
 
-        console.log('range:   ',range)
+        console.log('range:  ',range)
 
         useEffect(() => {
             if (category === 'ageRange') {
