@@ -11,12 +11,40 @@
 }
 .profile_info{
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 10rem 1fr 10rem;
+  gap: 2rem;
+  margin-left: 3rem;
+
   /* padding-bottom: 2rem; */
+}
+.profile_info > .profile_pic{
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: solid 0.3rem #FF9065;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile_info > a{
+  color: #66BEF0;
+}
+.profile_info > a > button{
+  display: inline;
+  width: 2rem;
+  height: 2rem;
+  color: #FFE9DA;
+  background-color: #66BEF0;
+  border: none;
+  border-radius: 50%;
+}
+.profile_info > a > p{
+  display: inline;
+  padding-left: 0.5rem;
 }
 .owned_pet{
   display: grid;
   grid-template-rows: 2rem 1fr;
+  gap: 1rem;
   background-color: #FFE9DA;
   border-radius: 1.8rem;
   padding: 1.5rem;
@@ -42,10 +70,41 @@
   display: inline;
   padding-left: 0.5rem;
 }
+.cards_container{
+  display: grid;
+  grid-template-rows: 1fr 2rem;
+  gap: 1rem;
+}
+.cards_container > a{
+  color: #FF9065;
+  justify-self: end;
+  align-self: center;
+}
+.cards_container > a > button{
+  display: inline;
+  width: 2rem;
+  height: 2rem;
+  color: #FFE9DA;
+  background-color: #FF9065;
+  border: none;
+  border-radius: 50%;
+}
+.cards_container > a > p{
+  display: inline;
+  padding-left: 0.5rem;
+}
+.cards_wrapper{
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
 
 .requested_pet{
   display: grid;
   grid-template-rows: 2rem 1fr;
+  gap: 1rem;
   background-color: #FFE9DA;
   border-radius: 1.8rem;
   padding: 1.5rem;

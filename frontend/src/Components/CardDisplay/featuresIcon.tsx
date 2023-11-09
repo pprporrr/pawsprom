@@ -18,17 +18,17 @@ type FeatureIconProps = {
 
 export const FeaturesIcon: React.FC<FeatureIconProps> = ({features}) => {
     const featuresSvg = [
-        'feature1-symbol.svg',
-        'feature2-symbol.svg',
-        'feature3-symbol.svg',
-        'feature4-symbol.svg',
-        'feature5-symbol.svg',
-        'feature6-symbol.svg',
-        'feature7-symbol.svg',
-        'feature8-symbol.svg',
-        'feature9-symbol.svg',
-        'feature10-symbol.svg',
-        'feature11-symbol.svg',
+        '/feature1-symbol.svg',
+        '/feature2-symbol.svg',
+        '/feature3-symbol.svg',
+        '/feature4-symbol.svg',
+        '/feature5-symbol.svg',
+        '/feature6-symbol.svg',
+        '/feature7-symbol.svg',
+        '/feature8-symbol.svg',
+        '/feature9-symbol.svg',
+        '/feature10-symbol.svg',
+        '/feature11-symbol.svg',
     ]
 
 

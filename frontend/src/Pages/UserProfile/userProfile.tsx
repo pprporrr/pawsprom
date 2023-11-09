@@ -1,16 +1,188 @@
 import styles from './userProfile.module.css'
 import { useLoaderData, Link } from 'react-router-dom'
+import { StyledCardDisplay } from '../../Components/CardDisplay/Card.styles' 
 
 type LoaderState = {
-  username:string,
-  firstName:string,
-  lastName:string,
-  phoneNumber:string,
-  address:string,
+  username:string
+  firstName:string
+  lastName:string
+  phoneNumber:string
+  address:string
   role:string
+  pets:any
+}
+
+type singleResult = {
+  petName: string
+  species: string
+  breed: string
+  availabilityStatus: string
+  imageIDs: number[]
+  features: {
+  feature1: boolean
+  feature2: boolean
+  feature3: boolean
+  feature4: boolean
+  feature5: boolean
+  feature6: boolean
+  feature7: boolean
+  feature8: boolean
+  feature9: boolean
+  feature10: boolean
+  feature11: boolean
+  },
+  name: string
+  phone: string
+  address: string
 }
 
 export async function loader() {
+  const response = {
+    'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
+            'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
+            'Boxer','Dachshund'],
+    'Cat': ['Siamese','Maine Coon','Persian','Ragdoll','British Shorthair',
+            'Bengal','Sphynx','Abyssinian','Scottish Fold','Burmese'],
+  
+    'color' : ['Black','White','Gray','Brown','Orange']}
+      // ! test
+  const resOptions: any = response
+  const pets = Object.entries(resOptions)
+      .filter(([key, value]) => key != 'color')
+
+  const defaultSpecies = pets.map(([key, _]) => ({
+      label: key,
+      value: key
+    }))
+  const defaultBreed = pets
+    .map(([_, value]) => value).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+  const defaultColor = Object.entries(resOptions)
+    .filter(([key, _]) => key === 'color')
+    .map(([_, value]) => (value)).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+    // ! test
+  const defaultPets = [{
+    petName: 'Max',
+    species: 'Dog',
+    breed: 'Labrador',
+    age: 1,
+    availabilityStatus: 'Available',
+    imageIDs: [1],
+    features: {
+    feature1: true,
+    feature2: false,
+    feature3: true,
+    feature4: false,
+    feature5: true,
+    feature6: false,
+    feature7: false,
+    feature8: false,
+    feature9: false,
+    feature10: false,
+    feature11: false,
+    },
+    name: 'Happy Paws',
+    phone: '0922607795',
+    address: 'bangkok soi 1 thailand pathumwan'
+},{
+    petName: 'Max',
+    species: 'Dog',
+    breed: 'Shiba',
+    availabilityStatus: 'Available',
+    age: 5,
+    imageIDs: [2],
+    features: {
+    feature1: true,
+    feature2: false,
+    feature3: true,
+    feature4: false,
+    feature5: true,
+    feature6: false,
+    feature7: false,
+    feature8: false,
+    feature9: false,
+    feature10: false,
+    feature11: false,
+    },
+    name: 'Hapy Paws',
+    phone: '0922607795',
+    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+},{
+    petName: 'Max',
+    species: 'Dog',
+    breed: 'Siba',
+    availabilityStatus: 'Available',
+    imageIDs: [2],
+    features: {
+    feature1: true,
+    feature2: false,
+    feature3: true,
+    feature4: false,
+    feature5: true,
+    feature6: false,
+    feature7: false,
+    feature8: false,
+    feature9: false,
+    feature10: false,
+    feature11: false,
+    },
+    name: 'Happy',
+    phone: '0922607795',
+    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+},{
+    petName: 'Max',
+    species: 'Dog',
+    breed: 'Siba',
+    availabilityStatus: 'Available',
+    imageIDs: [2],
+    features: {
+    feature1: true,
+    feature2: false,
+    feature3: true,
+    feature4: false,
+    feature5: true,
+    feature6: false,
+    feature7: false,
+    feature8: false,
+    feature9: false,
+    feature10: false,
+    feature11: false,
+    },
+    name: 'Happy',
+    phone: '0922607795',
+    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+},{
+    petName: 'Max',
+    species: 'Dog',
+    breed: 'Siba',
+    availabilityStatus: 'Available',
+    imageIDs: [2],
+    features: {
+    feature1: true,
+    feature2: false,
+    feature3: true,
+    feature4: false,
+    feature5: true,
+    feature6: false,
+    feature7: false,
+    feature8: false,
+    feature9: false,
+    feature10: false,
+    feature11: false,
+    },
+    name: 'Happy',
+    phone: '0922607795',
+    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+}
+]
+
   const local = localStorage.getItem('ID')
   let username: string = ""
   let firstName: string = ""
@@ -32,17 +204,21 @@ export async function loader() {
   catch (error) {
     console.error('Error parsing localStorage data:', error)
   }
-  return { username, firstName, lastName, phoneNumber, address, role };
+  return {username, firstName, lastName, phoneNumber, address, role,
+          species: defaultSpecies, 
+          breed: defaultBreed,
+          color: defaultColor,
+          pets: defaultPets};
 }
 
 //todo: add profile pic
 export const UserProfile = () => {
-  const { username, firstName, lastName, phoneNumber,address} = useLoaderData() as LoaderState
+  const { username, firstName, lastName, phoneNumber,address,pets} = useLoaderData() as LoaderState
+  
   return (
     <div className={styles.container}>
       <section className={styles.profile_info}>
-        {/* <img src="" alt="" /> */}
-        <p>pic</p>
+        <img className={styles.profile_pic} src="/testpic.jpg" alt="profile" />
         <div className={styles.user_info}>
           <h2>{username}</h2>
           <p>{firstName} {lastName}</p>
@@ -50,11 +226,14 @@ export const UserProfile = () => {
           <p>{phoneNumber}</p>
           {/* <p>number pets</p> */}
         </div>
+        <Link to={`/edit/${username}`}>
+          <p>Start adding </p>
+          <button>&#43;</button> 
+        </Link>
       </section>
       <section className={styles.owned_pet}>
         <h3>Pets</h3>
-        {
-          username === '' ? 
+        { username === '' ? 
           (
             <Link to='/'>
               <button>&#43;</button> 
@@ -63,18 +242,56 @@ export const UserProfile = () => {
           )
           :
           (
-            <div>
-              
+            <div className={styles.cards_container}>
+              <div className={styles.cards_wrapper}>
+              {pets.map((petData: singleResult)=>{
+                return (
+                  <StyledCardDisplay 
+                  width='16rem'
+                  height='fit-content'
+                  bg='#FFE9DA'
+                  border='none'
+                  url="https://www.google.com"
+                  key={petData.breed + petData.petName} 
+                  data={petData}/>
+                )
+              })}
+              </div>
+              <Link to='/'>
+                <button>&#43;</button> 
+                <p>Adding more pets</p>
+              </Link>
             </div>
           )
         }
       </section>
       <section className={styles.requested_pet}>
         <h3>Request</h3>
-        <Link to='/'>
-          <button>&#43;</button> 
-          <p>No request</p>
-        </Link>
+        { username === '' ? 
+          (
+            <Link to='/'>
+              <button>&#43;</button> 
+              <p>No request</p>
+          </Link>
+          )
+          :
+          (
+          <div className={styles.cards_wrapper}>
+          {pets.map((petData: singleResult)=>{
+            return (
+              <StyledCardDisplay 
+              width='16rem'
+              height='fit-content'
+              bg='#FFE9DA'
+              border='none'
+              url="https://www.google.com"
+              key={petData.breed + petData.petName} 
+              data={petData}/>
+            )
+          })}
+          </div>
+          )
+        }
       </section>
     </div>
   )
