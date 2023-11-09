@@ -139,38 +139,64 @@ async def delete_shelter(request: Request):
 
 ##########################################################
 
-@router.get("/shelter/list/", response_model=dict)
-async def read_shelter_details_list(request: Request):
+@router.post("/list-shelter/", response_model=dict)
+async def get_list_shelter(request: Request):
+    try:
+        await db_connector.connect()
+        
+        searchQuery = "SELECT * FROM shelter"
+        searchResults = await db_connector.execute_query(searchQuery)
+        
+        shelters = []
+        
+        if not searchResults:
+            return create_error_response("shelter not found")
+        
+        for shelter in searchResults:
+            shelterDetails = {
+                "shelterID": shelter[0],
+                "shelterName": shelter[1],
+                "shelterAddress": shelter[2],
+                "sheltercontactInfo": shelter[3],
+                "shelterphoneNumber": shelter[4],
+                "shelterImage": shelter[5]
+            }
+            shelters.append(shelterDetails)
+        
+        return create_success_response(shelters)
+    except Exception as e:
+        return create_error_response(str(e))
+    finally:
+        await db_connector.disconnect()
+
+@router.post("/search-shelter/", response_model=dict)
+async def search_shelter(request: Request):
     try:
         await db_connector.connect()
         data = await request.json()
         
-        limit = data.get("limitNumber")
+        shelterName = data.get("shelterName")
         
-        if limit is None:
-            return create_error_response("missing 'limitNumber' in the request data")
+        if shelterName is None:
+            return create_error_response("missing 'shelterName' in the request data")
         
-        try:
-            limit = int(limit)
-        except ValueError:
-            return create_error_response("'limitNumber' must be an integer")
-        
-        query = "SELECT * FROM shelter LIMIT %s"
-        results = await db_connector.execute_query(query, limit)
+        searchQuery = "SELECT * FROM shelter WHERE shelterName LIKE %s"
+        shelter_name_with_wildcard = f"%{shelterName}%"
+        searchResults = await db_connector.execute_query(searchQuery, shelter_name_with_wildcard)
         
         shelters = []
         
-        if not results:
+        if not searchResults:
             return create_error_response("shelter not found")
         
-        for result in results:
+        for shelter in searchResults:
             shelterDetails = {
-                "shelterID": result[0],
-                "shelterName": result[1],
-                "shelterAddress": result[2],
-                "sheltercontactInfo": result[3],
-                "shelterphoneNumber": result[4],
-                "shelterImage": result[5]
+                "shelterID": shelter[0],
+                "shelterName": shelter[1],
+                "shelterAddress": shelter[2],
+                "sheltercontactInfo": shelter[3],
+                "shelterphoneNumber": shelter[4],
+                "shelterImage": shelter[5]
             }
             shelters.append(shelterDetails)
         
