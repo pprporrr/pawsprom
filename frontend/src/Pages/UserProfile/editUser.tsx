@@ -1,28 +1,11 @@
 import styles from './editUser.module.css'
-import { useState } from 'react'
 import { Form } from 'react-router-dom'
 
 export const EditUser = () => {
-  const [password, setPassword] = useState("")
-  const [checkPassword, setCheckPassword] = useState("")
-  const PasswordHandler = evt => {
-    setPassword(evt.target.value)
-
-    // console.log(evt.target.value)
-  }
-  const CheckPasswordHandler = evt => {
-    setCheckPassword(evt.target.value)
-    if (checkPassword === password && checkPassword !== "") {
-      console.log('pass')
-    } else {
-      console.log('not matched')
-    }
-    // console.log(evt.target.value)
-  }
 
   return (
     <div className={styles.container}>
-      <h1>Create Account</h1>
+      <h1>Edit User Profile</h1>
       <Form method='post' className={styles.create_form}>
         <label htmlFor="profile_image">img</label>
         <input type="file" id='profile_image' hidden />
@@ -34,16 +17,6 @@ export const EditUser = () => {
           <div className={styles.phone_signup}>
             <label htmlFor="phone_signup">Phone</label>
             <input type="text" id='phone_signup' name='phoneNumber' required />
-          </div>
-          <div className={styles.password_signup}>
-            <label htmlFor="password_signup">Password</label>
-            {/* <input type="password" id='password_signup' name='password' required /> */}
-            <input onBlur={PasswordHandler} type="password" id='password_signup' name='password' required />
-          </div>
-          <div className={styles.check_password_signup}>
-            <label htmlFor="check_password_signup">Confirm Password</label>
-            {/* <input type="password" id='check_password_signup' required /> */}
-            <input onBlur={CheckPasswordHandler} type="password" id='check_password_signup' required />
           </div>
           <div className={styles.name_signup}>
             <label htmlFor="name_signup">Name</label>
