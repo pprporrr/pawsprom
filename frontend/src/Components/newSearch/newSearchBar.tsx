@@ -2,7 +2,7 @@ import { useState } from "react"
 import styles from './newSearchBar.module.css'
 import { useLoaderData } from "react-router-dom"
 import { baseAPI } from "../../main"
-import { NewDropDown } from "../Dropdown/newDropdown"
+import { NewDropDown } from "../FilterSearch/Dropdown/newDropdown"
 import { ToggleButton } from "../Searchbar/toggleButton"
 import { NewFilter } from "./newFilter"
 import { singleResult } from "../../Pages/SearchPage2/searchPage2"

@@ -4,9 +4,9 @@
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     padding-right: 1rem;
-    grid-template-columns: 10% 40% auto;
+    grid-template-columns: 49% auto;
     width: 100%;
-    gap: 2rem;
+    gap: 2%;
     background-color: #ffd8c1;
     border-radius: 0.75rem;
 }
@@ -35,4 +35,5 @@
     padding-right: 0.05rem;
     color: #9E6D51;
     background: #ffecd6;
+    left: 0rem;
 }

@@ -2,7 +2,7 @@ import { useState } from "react"
 import styles from './newFilter.module.css'
 import { useLoaderData } from "react-router-dom"
 import { baseAPI } from "../../main"
-import { NewDropDown } from "../Dropdown/newDropdown"
+import { NewDropDown } from "../FilterSearch/Dropdown/newDropdown"
 import { singleResult } from "../../Pages/SearchPage2/searchPage2"
 import Popup from "reactjs-popup"
 import { NewMoreFilter } from "./newMoreFilter"
@@ -10,6 +10,11 @@ import { NewMoreFilter } from "./newMoreFilter"
 type NewFilterProps = {
 	handlePets: (pets: singleResult[]) => void
 }
+
+type FeatureFilter = {
+    [key:string]: boolean
+}
+
 
 export type SelectedFilter = {
 	species?: string[]
@@ -33,6 +38,19 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	const [weightRange, setWeightRange] = useState<number[]>([])
 	const [selectedOptions, setSelectedOptions] = useState<SelectedFilter>() 
 	const [pets, setPets] = useState<singleResult[]>()
+    
+    const [features, setFeature] = useState<FeatureFilter>(
+        {   'feature1': false,
+            'feature2': false,
+            'feature3': false,
+            'feature4': false,
+            'feature5': false,
+            'feature6': false,
+            'feature7': false,
+            'feature8': false,
+            'feature9': false,
+            'feature10': false,
+            'feature11': false,})
 
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
@@ -63,6 +81,15 @@ export const NewFilter: React.FC<NewFilterProps> = (
 		}
 	}
 
+    const handleFeatures = 
+    async(category:keyof SelectedFilter, options: any) => {
+        let tempSelected = selectedOptions
+		tempSelected = {...tempSelected, 
+				[category]: options}
+        setSelectedOptions(tempSelected)
+    }
+        
+
 	const handleMoreFilter = () => {
 		setIsConfirmOpen(!isConfirmOpen)
 	}
@@ -72,12 +99,15 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	const getFilterData = async(tempSelected: any, category: keyof SelectedFilter) => {
 		console.log('length',Object.keys(tempSelected))
 		//* no filter selected set to default
-		if (Object.keys(tempSelected).length === 0) {
+
+		if (Object.keys(tempSelected).length === 0 ||
+        (Object.keys(tempSelected).length === 1 && tempSelected['features'] !== undefined)) {
 			setSpecies(defaultOptions["species"])
 			setBreed(defaultOptions["breed"])
 			setColor(defaultOptions["color"])
-			let res = await getPetData(tempSelected)
-			handlePets(res)
+            // ! test dont forget to uncomment
+			// let res = await getPetData(tempSelected)
+			// handlePets(res)
 		}
 		else {
 			try {
@@ -141,13 +171,15 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	return (
 		<div className={styles.searchBarWrapper}>
 			<NewDropDown
-				currentOption={selectedOptions? 
+				currentOption={selectedOptions !== undefined
+                && selectedOptions['species']? 
 				selectedOptions['species']: []}
 				category={"species"}
 				options={species}
 				handleSelect={handleFilterSelect}/>
 			<NewDropDown
-					currentOption={selectedOptions? 
+					currentOption={selectedOptions !== undefined
+                    && selectedOptions['breed']?
 					selectedOptions['breed']: []}
 					category={"breed"}
 					options={breed}
@@ -163,6 +195,10 @@ export const NewFilter: React.FC<NewFilterProps> = (
 				<Popup open={isConfirmOpen}>
 					<NewMoreFilter
 						color={color}
+                        features={selectedOptions !== undefined
+                        && selectedOptions['features']?
+                        selectedOptions['features']: features}
+                        handleFeatures={handleFeatures}
 						onConfirm={handleMoreFilter}
 						handleSelectsOption={handleFilterSelect}
 						handleSelectsRange={handleFilterRange}

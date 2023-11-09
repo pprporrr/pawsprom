@@ -1,0 +1,81 @@
+
+.featuresWrapper {
+    display: grid;
+    grid-template-columns: 50% auto;
+    align-items: flex-start;
+}
+
+.flexFeature {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.featureBox {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Hide the browser's default checkbox */
+.featureBox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    top: 0;
+    left: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: #ffd8c1;
+    -webkit-mask-image: url(check-line.svg);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+
+    mask-image: url(check-line.svg);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+}
+
+/* On mouse-over, add a grey background color */
+.featureBox:hover input ~ .checkmark {
+    background-color: #ffbf99;
+}
+
+.featureBox input:checked ~ .checkmark {
+    -webkit-mask-image: none;
+    mask-image: none;
+    background-image: url(check-color.svg);
+    background-size: contain;
+    background-color: transparent;
+    background-repeat: no-repeat;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.featureBox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.featureBox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
