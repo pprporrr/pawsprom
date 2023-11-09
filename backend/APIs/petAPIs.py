@@ -684,7 +684,34 @@ async def get_user_dashboard_info(request: Request):
                 
                 pet_info_list.append(petInfo)
             
-            return create_success_response(pet_info_list)
+            getRequestedQuery = "SELECT pet_petID FROM adoptionApplication WHERE user_userID = %s AND approvalStatus = %s"
+            getRequestedResult = await db_connector.execute_query(getRequestedQuery, getUserResult[0], "Pending")
+            
+            pet_info_list_requested = []
+            
+            for petID in getRequestedResult:
+                try:
+                    getPetDetailsQuery = "SELECT * FROM pet WHERE petID = %s"
+                    getPetDetailsResult = await db_connector.execute_query(getPetDetailsQuery, petID)
+                    
+                    getPetImagesQuery = "SELECT imageID FROM petImages WHERE pet_petID = %s"
+                    getPetImagesResult = await db_connector.execute_query(getPetImagesQuery, petID)
+                except:
+                    pet_info_list_requested.append({"petID": petID, "error": "pet not found"})
+                
+                petInfo = {
+                    "petName": getPetDetailsResult[0][1],
+                    "species": getPetDetailsResult[0][2],
+                    "breed": getPetDetailsResult[0][3],
+                    "availabilityStatus": getPetDetailsResult[0][11],
+                    "vaccinationRecord": getPetDetailsResult[0][12],
+                    "imageIDs": [imageID for sublist in getPetImagesResult for imageID in sublist],
+                    "features": json.loads(getPetDetailsResult[0][10])
+                }
+                
+                pet_info_list_requested.append(petInfo)
+            
+            return create_success_response({"Owned": pet_info_list, "Requested": pet_info_list_requested})
         elif userRole == "ShelterStaff":
             getShelterIDQuery = "SELECT shelter_shelterID FROM user WHERE username = %s AND userRole = %s"
             getShelterIDResult = await db_connector.execute_query(getShelterIDQuery, username, userRole)
