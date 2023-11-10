@@ -1,0 +1,16 @@
+aiomysql==0.2.0
+aioredis==2.0.1
+aiosqlite==0.17.0
+bcrypt==4.0.1
+cryptography==41.0.3
+fastapi==0.103.1
+fastapi-admin==1.0.4
+iso8601==1.1.0
+prometheus-fastapi-instrumentator==6.1.0
+pydantic==2.3.0
+pydantic-core==2.6.3
+PyJWT==2.8.0
+python-multipart==0.0.6
+starlette==0.27.0
+tortoise-orm==0.19.3
+uvicorn==0.23.1
