@@ -1,4 +1,5 @@
 import styles from './userProfile.module.css'
+import { useRef } from 'react'
 import { useLoaderData, Link } from 'react-router-dom'
 import { StyledCardDisplay } from '../../Components/CardDisplay/Card.styles' 
 
@@ -211,10 +212,28 @@ export async function loader() {
           pets: defaultPets};
 }
 
+const sideScroll = (
+  element: HTMLDivElement,
+  speed: number,
+  distance: number,
+  step: number
+) => {
+  let scrollAmount = 0;
+  const slideTimer = setInterval(() => {
+    element.scrollLeft += step;
+    scrollAmount += Math.abs(step);
+    if (scrollAmount >= distance) {
+      clearInterval(slideTimer);
+    }
+  },speed);
+}
+
 //todo: add profile pic
 export const UserProfile = () => {
+  const cardWrapper = useRef(null);
+  const requestCardWrapper = useRef(null);
   const { username, firstName, lastName, phoneNumber,address,pets} = useLoaderData() as LoaderState
-  
+
   return (
     <div className={styles.container}>
       <section className={styles.profile_info}>
@@ -227,7 +246,7 @@ export const UserProfile = () => {
           {/* <p>number pets</p> */}
         </div>
         <Link to={`/edit/${username}`}>
-          <p>Start adding </p>
+          <p>Edit user profile</p>
           <button>&#43;</button> 
         </Link>
       </section>
@@ -243,20 +262,22 @@ export const UserProfile = () => {
           :
           (
             <div className={styles.cards_container}>
-              <div className={styles.cards_wrapper}>
-              {pets.map((petData: singleResult)=>{
-                return (
-                  <StyledCardDisplay 
-                  width='16rem'
-                  height='fit-content'
-                  bg='#FFE9DA'
-                  border='none'
-                  url="https://www.google.com"
-                  key={petData.breed + petData.petName} 
-                  data={petData}/>
-                )
-              })}
+              <button onClick={() => {sideScroll(cardWrapper.current,1,350,-10)}}>l</button>
+              <div className={styles.cards_wrapper} ref={cardWrapper}>
+                {pets.map((petData: singleResult)=>{
+                  return (
+                    <StyledCardDisplay 
+                    width='16rem'
+                    height='fit-content'
+                    bg='#FFE9DA'
+                    border='none'
+                    url="https://www.google.com"
+                    key={petData.breed + petData.petName} 
+                    data={petData}/>
+                  )
+                })}
               </div>
+              <button onClick={() => {sideScroll(cardWrapper.current,1,350,13)}}>r</button>
               <Link to='/'>
                 <button>&#43;</button> 
                 <p>Adding more pets</p>
@@ -276,19 +297,23 @@ export const UserProfile = () => {
           )
           :
           (
-          <div className={styles.cards_wrapper}>
-          {pets.map((petData: singleResult)=>{
-            return (
-              <StyledCardDisplay 
-              width='16rem'
-              height='fit-content'
-              bg='#FFE9DA'
-              border='none'
-              url="https://www.google.com"
-              key={petData.breed + petData.petName} 
-              data={petData}/>
-            )
-          })}
+          <div className={styles.request_card_container}>
+            <button onClick={() => {sideScroll(requestCardWrapper.current,1,350,-10)}}>l</button>
+            <div className={styles.cards_wrapper} ref={requestCardWrapper}>
+            {pets.map((petData: singleResult)=>{
+              return (
+                <StyledCardDisplay 
+                width='16rem'
+                height='fit-content'
+                bg='#FFE9DA'
+                border='none'
+                url="https://www.google.com"
+                key={petData.breed + petData.petName} 
+                data={petData}/>
+              )
+            })}
+            </div>
+            <button onClick={() => {sideScroll(requestCardWrapper.current,1,350, 10)}}>r</button>
           </div>
           )
         }

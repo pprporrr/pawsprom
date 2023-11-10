@@ -13,8 +13,7 @@
   display: grid;
   grid-template-columns: 10rem 1fr 10rem;
   gap: 2rem;
-  margin-left: 3rem;
-
+  margin-left: 2rem;
   /* padding-bottom: 2rem; */
 }
 .profile_info > .profile_pic{
@@ -39,10 +38,12 @@
 }
 .profile_info > a > p{
   display: inline;
-  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
+
 .owned_pet{
   display: grid;
+  width: 100%;
   grid-template-rows: 2rem 1fr;
   gap: 1rem;
   background-color: #FFE9DA;
@@ -72,10 +73,15 @@
 }
 .cards_container{
   display: grid;
-  grid-template-rows: 1fr 2rem;
+  grid-template-rows: 33rem 2rem;
+  grid-template-columns: 1rem 1fr 1rem;
+  grid-template-areas: 
+  "left cards right"
+  "nothing buttonArea -";
   gap: 1rem;
 }
 .cards_container > a{
+  grid-area: buttonArea;
   color: #FF9065;
   justify-self: end;
   align-self: center;
@@ -96,9 +102,21 @@
 .cards_wrapper{
   display: flex;
   width: 100%;
-  height: fit-content;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  height: 33rem;
+  overflow: hidden;
+  /* height: fit-content; */
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+  padding: 1rem 0.3rem;
+}
+
+.request_card_container{
+  display: grid;
+  grid-template-rows: 33rem;
+  grid-template-columns: 1rem 1fr 1rem;
+  grid-template-areas: 
+  "left cards right";
+  gap: 1rem;
 }
 
 .requested_pet{

@@ -7,8 +7,10 @@ export const EditUser = () => {
     <div className={styles.container}>
       <h1>Edit User Profile</h1>
       <Form method='post' className={styles.create_form}>
-        <label htmlFor="profile_image">img</label>
-        <input type="file" id='profile_image' hidden />
+        <div className={styles.profile_container}>
+          <img className={styles.profile_image} src="/testpic.jpg" alt="" />
+          <input type="file" id='profile_image' hidden />
+        </div>
         <div className={styles.input_container}>
           <div className={styles.username_signup}>
             <label htmlFor="username_signup">Username</label>
