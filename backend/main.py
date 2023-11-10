@@ -38,4 +38,3 @@ app.include_router(adoptionApplication_router, prefix="/adoptionAPI", tags=["ado
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-    #http://prometheus:9090
