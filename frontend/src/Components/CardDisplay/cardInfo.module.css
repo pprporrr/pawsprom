@@ -1,5 +1,22 @@
-
 .infoDeco p {
     line-height: 1.25rem;
     margin-bottom: 0.5rem;
+}
+.addressContainer{
+    display: flex;
+}
+.addressContainer > .image{
+    width: 35px;
+    height: 35px;
+    margin-right: 0.7rem;
+}
+.addressContainer > .image > img{
+    width: 30px;
+    height: 30px;
+}
+.addressContainer > .address{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }

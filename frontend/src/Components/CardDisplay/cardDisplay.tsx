@@ -3,33 +3,33 @@ import styles from './cardDisplay.module.css'
 import { CardInfo } from './cardInfo'
 import { FeaturesIcon } from './featuresIcon'
 import { useEffect, useState } from 'react'
-import { baseAPI } from '../../main'
-import { AxiosResponse } from 'axios'
 
 type cardDisplayProps = {
-    data: {
-        petName: string,
-        species: string,
-        breed: string,
-        availabilityStatus: string,
-        imageIDs: number[]
-        features: {
-            feature1: boolean
-            feature2: boolean
-            feature3:boolean
-            feature4: boolean
-            feature5: boolean
-            feature6: boolean
-            feature7: boolean
-            feature8: boolean
-            feature9: boolean
-            feature10: boolean
-        },
-        name: string,
-        phone: string,
-        address: string,
-    }
-    url: string
+  className?: string,
+  triggerDefault?: boolean,
+  data: {
+    petName: string,
+    species: string,
+    breed: string,
+    availabilityStatus: string,
+    imageIDs: number[]
+    features: {
+      feature1: boolean
+      feature2: boolean
+      feature3:boolean
+      feature4: boolean
+      feature5: boolean
+      feature6: boolean
+      feature7: boolean
+      feature8: boolean
+      feature9: boolean
+      feature10: boolean
+    },
+    name: string,
+    phone: string,
+    address: string,
+  }
+  url: string,
 }
 
 export const CardDisplay: React.FC<cardDisplayProps> = ({data, url}) => {

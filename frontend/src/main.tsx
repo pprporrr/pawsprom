@@ -2,13 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import ErrorPage from './Pages/Error/ErrorPage.tsx'
+import { Home } from './Pages/Home/home.tsx';
 import { PetProfileOwned } from './Pages/PetProfileOwned/petProfileOwned.tsx';
 import { PetProfileOthers } from "./Pages/PetProfileOthers/petProfileOthers.tsx";
 import { PetProfileShelter } from "./Pages/PetProfileShelter/petProfileShelter.tsx";
 import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx';
+import { EditUser } from './Pages/UserProfile/editUser.tsx';
 import { LoginPage, action as loginAction } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage, action as signUpAction } from './Pages/SignUpPage/SignUpPage.tsx';
-import { Home } from './Pages/Home/home.tsx';
 import { UserProfile, loader as userLoader } from './Pages/UserProfile/userProfile.tsx';
 import { ShelterProfile, loader as shelterLoader } from './Pages/ShelterProfile/shelterProfile.tsx';
 import { loader as navLoader } from './Components/NavBar/NavBar.tsx'
@@ -56,7 +57,12 @@ const router = createBrowserRouter([
         loader: userLoader
       },
       {
-        path: "shelterprofile",
+        path: "edit/:username",
+        element: <EditUser />,
+        // loader: userLoader
+      },
+      {
+        path: "shelterprofile/:username",
         element: <ShelterProfile />,
         loader: shelterLoader
       },
