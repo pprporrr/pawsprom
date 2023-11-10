@@ -20,24 +20,30 @@ async def create_pet_vaccination(request: Request):
         data = await request.json()
         
         pet_petID = data.get("petID")
-        vaccinationName = data.get("vaccinationName")
-        vaccinationDate = data.get("vaccinationDate")
+        vaccinations = data.get("vaccinations")
         
-        if None in (pet_petID, vaccinationName, vaccinationDate):
+        if None in (pet_petID, vaccinations):
             return create_error_response("missing required fields")
         
         createVaccineQuery = "INSERT INTO petVaccinations (pet_petID, vaccinationName, vaccinationDate) VALUES (%s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(createVaccineQuery, (pet_petID, vaccinationName, vaccinationDate))
+                for vaccination in vaccinations:
+                    vaccinationName = vaccination.get("vaccinationName")
+                    vaccinationDate = vaccination.get("vaccinationDate")
+                    
+                    if None in (vaccinationName, vaccinationDate):
+                        return create_error_response("missing required fields in vaccination")
+                    
+                    await cursor.execute(createVaccineQuery, (pet_petID, vaccinationName, vaccinationDate))
         
-        checkVaccineQuery = "SELECT * FROM petVaccinations WHERE vaccinationID = LAST_INSERT_ID()"
-        checkVaccineResult = await db_connector.execute_query(checkVaccineQuery)
+        checkVaccineQuery = "SELECT * FROM petVaccinations WHERE pet_petID = %s"
+        checkVaccineResult = await db_connector.execute_query(checkVaccineQuery, (pet_petID,))
         
         if not checkVaccineResult:
-            return create_error_response("failed to create pet vaccination record")
+            return create_error_response("failed to create pet vaccination records")
         
-        return create_success_response("created pet vaccination record")
+        return create_success_response("created pet vaccination records")
     except Exception as e:
         return create_error_response(str(e))
     finally:
