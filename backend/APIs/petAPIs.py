@@ -71,7 +71,7 @@ async def create_pet_profile_by_User(request: Request):
         if not checkOwnerShipResult:
             return create_error_response("failed to create pet ownership record")
         
-        return create_success_response("pet created")
+        return create_success_response(int(checkPetResult[0][0]))
     except Exception as e:
         return create_error_response(str(e))
     finally:
@@ -122,7 +122,7 @@ async def create_pet_profile_by_Shelter(request: Request):
         if not checkPetResult:
             return create_error_response("failed to create pet")
         
-        return create_success_response("pet created")
+        return create_success_response(int(checkPetResult[0][0]))
     except Exception as e:
         return create_error_response(str(e))
     finally:
