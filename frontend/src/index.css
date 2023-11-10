@@ -54,6 +54,22 @@ input[type = text]{
   outline: none;
 }
 
+input[type = date]{
+  padding-left: 1rem;
+  border: 2.5px solid #ffaa78;
+  border-radius: 1.25rem;
+  color: #5e5e5e;
+  outline: none;
+}
+
+input[type = number]{
+  padding-left: 1rem;
+  border: 2.5px solid #ffaa78;
+  border-radius: 1.25rem;
+  color: #5e5e5e;
+  outline: none;
+}
+
 input[type = password]{
   padding-left: 1rem;
   border: 2.5px solid #ffaa78;
@@ -62,9 +78,23 @@ input[type = password]{
   outline: none;
 }
 
+input {
+  background-color: transparent;
+}
+
+textarea {
+  padding-left: 1rem;
+  border: 2.5px solid #ffaa78;
+  border-radius: 1.25rem;
+  color: #5e5e5e;
+  outline: none;
+  background-color: transparent;
+}
+
 div > label{
   color: #ffaa78;
 }
+
 
 /* 
 @media (prefers-color-scheme: light) {

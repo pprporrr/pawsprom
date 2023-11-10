@@ -2,6 +2,7 @@ import styles from './petProfileOwned.module.css'
 import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { baseAPI } from '../../main';
 
 
 export const PetProfileOwned = () => {
@@ -73,10 +74,10 @@ export const PetProfileOwned = () => {
     // * for adoption button by P'Porpor ======================================
     const [adoptiondata, setAdoptionData] = useState("");
     
-    //* URL for API
-    const baseAPI = axios.create({
-		baseURL: "http://10.100.7.88"
-		});
+    // //* URL for API
+    // const baseAPI = axios.create({
+		// baseURL: "http://10.100.7.88"
+		// });
 
     // *---------------- POST to API ----------------* //
     useEffect(() => {

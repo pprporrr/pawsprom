@@ -1,15 +1,15 @@
-import styles from './UploadPhoto.module.css'
+import styles from './EditPhoto.module.css'
 // import upload_icon from '../../../public/camera-symbol.svg'
 import {useEffect, useRef, useState} from 'react'
 
 type UploadPhotoProps = {
   id: string
+  currentPhoto: string
 }
 
-export const UploadPhoto: React.FC<UploadPhotoProps> = ({id}) => {
+export const EditPhoto: React.FC<UploadPhotoProps> = ({id, currentPhoto}) => {
   // const iconRef = useRef<HTMLInputElement>(null!);
-  const [previewImage, setPreviewImage] = useState(null)
-  const [file, setFile] = useState<string>();
+  const [file, setFile] = useState<string>(currentPhoto);
 
   const handleFileChange = (event: any) => {
     let blob = new Blob([event.target.files[0]])

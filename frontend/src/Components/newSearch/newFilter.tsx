@@ -8,7 +8,7 @@ import Popup from "reactjs-popup"
 import { NewMoreFilter } from "./newMoreFilter"
 
 type NewFilterProps = {
-	handlePets: (pets: singleResult[]) => void
+	handlePets: (pets: singleResult[]| string) => void
 }
 
 type FeatureFilter = {
@@ -38,8 +38,7 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	const [weightRange, setWeightRange] = useState<number[]>([])
 	const [selectedOptions, setSelectedOptions] = useState<SelectedFilter>() 
 	const [pets, setPets] = useState<singleResult[]>()
-    
-    const [features, setFeature] = useState<FeatureFilter>(
+    const features = 
         {   'feature1': false,
             'feature2': false,
             'feature3': false,
@@ -50,7 +49,7 @@ export const NewFilter: React.FC<NewFilterProps> = (
             'feature8': false,
             'feature9': false,
             'feature10': false,
-            'feature11': false,})
+            'feature11': false,}
 
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
@@ -93,7 +92,6 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	const handleMoreFilter = () => {
 		setIsConfirmOpen(!isConfirmOpen)
 	}
-	console.log(isConfirmOpen)
 
 	//* get new options according to the selected options
 	const getFilterData = async(tempSelected: any, category: keyof SelectedFilter) => {
@@ -105,21 +103,20 @@ export const NewFilter: React.FC<NewFilterProps> = (
 			setSpecies(defaultOptions["species"])
 			setBreed(defaultOptions["breed"])
 			setColor(defaultOptions["color"])
-            // ! test dont forget to uncomment
-			// let res = await getPetData(tempSelected)
-			// handlePets(res)
+			handlePets('default')
 		}
 		else {
 			try {
-				// let resOptions = await baseAPI.post('/petAPI/drop-down/filter/',
-				//     tempSelected )
-				// let data =  resOptions.data.data
+				let resOptions = await baseAPI.post('/petAPI/drop-down/filter/',
+				tempSelected )
+				let data =  resOptions.data.data
+				console.log('from api', data)
 				//! test
-				let data = {
-					'species': ['Dog', 'Cat', 'Horse', 'Bird', 'Fish'],
-					'breed': ['Labrador Retriever'],
-					'color' : ['Black','White']
-				}
+				// let data = {
+				// 	'species': ['Dog', 'Cat', 'Horse', 'Bird', 'Fish'],
+				// 	'breed': ['Labrador Retriever'],
+				// 	'color' : ['Black','White']
+				// }
 				if (category !== 'species'){
 				setSpecies(data.species.map((value: string) => ({
 					label: value,

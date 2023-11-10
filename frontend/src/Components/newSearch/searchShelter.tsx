@@ -8,15 +8,21 @@ type SearchShelterProps = {
 export const SearchShelter: React.FC<SearchShelterProps> = ({handleShelter}) => {
   const handleChange = async(event: any) => {
     const target = event.target as HTMLInputElement;
-    let response = getShelter(target.value)
+    let response = await getShelter(target.value)
     handleShelter(response)
   }
 
   const getShelter = async(inputText: string) => {
     try {
         let resData = await baseAPI.post(
-          '', inputText )
-        return resData
+          '/shelterAPI/search-shelter/', 
+          { shelterName: inputText } )
+          console.log(resData)
+          if (resData.data.success === true) {
+            return resData.data.data
+          } else {
+            return {}
+          }
         } catch (error) {
           console.log((error as Error).message)
   }}

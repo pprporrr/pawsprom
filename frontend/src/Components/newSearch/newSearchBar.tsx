@@ -9,7 +9,7 @@ import { singleResult } from "../../Pages/SearchPage2/searchPage2"
 
 
 type NewSearchBarProps = {
-	handlePets: (pets: singleResult[]) => void
+	handlePets: (pets: singleResult[] | string) => void
 }
 
 export const NewSearchBar: React.FC<NewSearchBarProps> = ({handlePets}) => {

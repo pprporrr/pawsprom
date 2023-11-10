@@ -1,12 +1,12 @@
-import styles from './AddVacinationRecord.module.css'
+import styles from './EditVacinationRecord.module.css'
 import { VaccineRecord } from './VaccineRecord'
 import { ChangeEvent, useEffect, useState } from 'react'
 
-type AddVacinationProps = {
+type EditVacinationProps = {
   handleVaccine: (vaccines: string[], dates: Date[]) => Promise<void>
 }
 
-export const AddVacinationRecord: React.FC<AddVacinationProps> = ({handleVaccine}) => {
+export const EditVacinationRecord: React.FC<EditVacinationProps> = ({handleVaccine}) => {
   const [vaccineRecordList, setVaccineList] = useState([])
   const [vaccineComponents, setVaccineComponents] = useState<string[]>(["init"])
   const [vaccineName, setVaccineName] = useState<string[]>([])

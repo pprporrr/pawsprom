@@ -1,18 +1,23 @@
-import styles from './CreatePet.module.css'
-import { UploadPhoto } from './UploadPhoto'
-import { InfoPet } from '../InfoPet/InfoPet'
+import styles from './EditPet.module.css'
+import { EditPhoto } from './EditPhoto'
+
 import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 import { FormEvent, useState } from 'react'
-import { Form, useNavigate } from 'react-router-dom'
+import { Form, useLoaderData, useNavigate } from 'react-router-dom'
 import { baseAPI } from '../../main'
+import { InfoPet } from '../InfoPet/InfoPet'
+import { EditInfoPet } from '../EditInfoPet/editInfoPet'
+import { mockPet } from '../mockData/mockData'
 
-export const CreatePet = () => {
+
+export const EditPet = () => {
   const navigate = useNavigate()
   const [VaccineName, setVaccineName] = useState<string[]>()
   const [VaccineDate, setVaccineDate] = useState<Date[]>()
   
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    // const currentData: any = useLoaderData()
     // TODO: post picture
     const { name, dob, age, address, gender, weight, breed, bio, color, species,
       feature1, feature2, feature3, feature4, feature5, feature6, feature7,
@@ -133,11 +138,16 @@ export const CreatePet = () => {
       <h1 className={styles.head}>Create Pet Profile</h1>
       <Form onSubmit={evt => { sendForm(evt) }}>
         <section className={styles.photo_area}>
-          <UploadPhoto id={'photoUpload1'}/>
-          <UploadPhoto id={'photoUpload2'}/>
-          <UploadPhoto id={'photoUpload3'}/>
+          <EditPhoto id={'photoUpload1'}
+          currentPhoto={'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}/>
+          <EditPhoto id={'photoUpload2'}
+          currentPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/1200px-RedCat_8727.jpg'}/>
+          <EditPhoto id={'photoUpload3'}
+          currentPhoto={'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1240w,f_auto,q_auto:best/rockcms/2022-08/220805-domestic-cat-mjf-1540-382ba2.jpg'}/>
         </section>
-        <InfoPet handleVaccine={submitVaccine}/>
+        <EditInfoPet
+        data={mockPet}
+        handleVaccine={submitVaccine}/>
         <SaveNcancelButton />
       </Form>
     </section>

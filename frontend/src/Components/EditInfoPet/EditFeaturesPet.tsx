@@ -1,7 +1,23 @@
 import { IconText } from '../IconText/iconText'
-import styles from './FeaturesPet.module.css'
+import styles from './EditFeaturesPet.module.css'
 
-export const FeaturesPet = () => {
+type EditFeaturesPetProps = {
+  currentFeatures: {
+    feature1: boolean
+    feature2: boolean
+    feature3: boolean
+    feature4: boolean
+    feature5: boolean
+    feature6: boolean
+    feature7: boolean
+    feature8: boolean
+    feature9: boolean
+    feature10: boolean
+    feature11: boolean
+  }
+}
+
+export const EditFeaturesPet: React.FC<EditFeaturesPetProps> = ({currentFeatures}) => {
 
 
   return (
@@ -16,7 +32,8 @@ export const FeaturesPet = () => {
         svgName='feature1-symbol.svg'/>
         </label>
         <input
-        type="checkbox" id='feature1'/>
+        type="checkbox" id='feature1'
+        defaultChecked={currentFeatures.feature1}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature2">
@@ -25,7 +42,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature2-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature2'/>
+        <input type="checkbox" id='feature2'
+        defaultChecked={currentFeatures.feature2}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature3">
@@ -34,7 +52,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature3-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature3'/>
+        <input type="checkbox" id='feature3'
+        defaultChecked={currentFeatures.feature3}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature4">
@@ -43,7 +62,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature4-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature4'/>
+        <input type="checkbox" id='feature4'
+        defaultChecked={currentFeatures.feature4}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature5">
@@ -52,7 +72,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature5-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature5'/>
+        <input type="checkbox" id='feature5'
+        defaultChecked={currentFeatures.feature5}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature6">
@@ -61,7 +82,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature6-symbol.svg'/>
           </label>
-        <input type="checkbox" id='feature6'/>
+        <input type="checkbox" id='feature6'
+        defaultChecked={currentFeatures.feature6}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature7">
@@ -70,7 +92,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature7-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature7'/>
+        <input type="checkbox" id='feature7'
+        defaultChecked={currentFeatures.feature7}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature8">
@@ -79,7 +102,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature8-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature8'/>
+        <input type="checkbox" id='feature8'
+        defaultChecked={currentFeatures.feature8}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature9">
@@ -88,7 +112,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature9-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature9'/>
+        <input type="checkbox" id='feature9'
+        defaultChecked={currentFeatures.feature9}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature10">
@@ -97,7 +122,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature10-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature10'/>
+        <input type="checkbox" id='feature10'
+        defaultChecked={currentFeatures.feature10}/>
       </div>
       <div className={styles.flex_seperate}>
         <label htmlFor="feature11">
@@ -106,7 +132,8 @@ export const FeaturesPet = () => {
         fontSize={1}
         svgName='feature11-symbol.svg'/>
         </label>
-        <input type="checkbox" id='feature11'/>
+        <input type="checkbox" id='feature11'
+        defaultChecked={currentFeatures.feature11}/>
       </div>
     </section>
   )

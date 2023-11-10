@@ -16,6 +16,7 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import axios from 'axios'
 import { SearchPage2, defaultLoader } from './Pages/SearchPage2/searchPage2.tsx';
+import { EditPetProfile, petDataLoader } from './Pages/EditPetProfile/editPetProfile.tsx';
 
 //* URL for API
 export const baseAPI = axios.create({
@@ -72,15 +73,20 @@ const router = createBrowserRouter([
         element: <PetProfileShelter />
       },
       {
-        path: "create",
+        path: "createpet",
         element: <CreatePetProfile />
+      },
+      {
+        path: "editpet",
+        element: <EditPetProfile />,
+        // loader: petDataLoader
       },
     ]
   }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <RouterProvider router={router} />
-  // </React.StrictMode>
+  </React.StrictMode>
 )
