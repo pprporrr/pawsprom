@@ -20,27 +20,25 @@ async def create_pet_vaccination(request: Request):
         data = await request.json()
         
         pet_petID = data.get("petID")
-        vaccinations = data.get("vaccinations")
+        vaccination_names = data.get("vaccinationName", [])
+        vaccination_dates = data.get("vaccinationDate", [])
         
-        if None in (pet_petID, vaccinations):
+        if None in (pet_petID, vaccination_names, vaccination_dates):
             return create_error_response("missing required fields")
         
-        createVaccineQuery = "INSERT INTO petVaccinations (pet_petID, vaccinationName, vaccinationDate) VALUES (%s, %s, %s)"
+        if len(vaccination_names) != len(vaccination_dates):
+            return create_error_response("vaccinationName and vaccinationDate lists must be of the same length")
+        
+        create_vaccine_query = "INSERT INTO petVaccinations (pet_petID, vaccinationName, vaccinationDate) VALUES (%s, %s, %s)"
         async with db_connector.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                for vaccination in vaccinations:
-                    vaccinationName = vaccination.get("vaccinationName")
-                    vaccinationDate = vaccination.get("vaccinationDate")
-                    
-                    if None in (vaccinationName, vaccinationDate):
-                        return create_error_response("missing required fields in vaccination")
-                    
-                    await cursor.execute(createVaccineQuery, (pet_petID, vaccinationName, vaccinationDate))
+                for name, date in zip(vaccination_names, vaccination_dates):
+                    await cursor.execute(create_vaccine_query, (pet_petID, name, date))
         
-        checkVaccineQuery = "SELECT * FROM petVaccinations WHERE pet_petID = %s"
-        checkVaccineResult = await db_connector.execute_query(checkVaccineQuery, (pet_petID,))
+        check_vaccine_query = "SELECT * FROM petVaccinations WHERE pet_petID = %s"
+        check_vaccine_result = await db_connector.execute_query(check_vaccine_query, (pet_petID,))
         
-        if not checkVaccineResult:
+        if not check_vaccine_result:
             return create_error_response("failed to create pet vaccination records")
         
         return create_success_response("created pet vaccination records")
