@@ -85,7 +85,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
             </div>)}
             { imageIDs.length > 1 && (
             <button className={styles.arrowLeft} onClick={prevSlide}>
-                <img src="left-arrow.svg"></img>
+                <img src="/left-arrow.svg"></img>
             </button>)}
             {imageURLs.map((image, index) => {
 
@@ -101,7 +101,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({imageIDs, baseAPI, avai
             })}
             { imageIDs.length > 1 && (
             <button className={styles.arrowRight} onClick={nextSlide}>
-                <img src="right-arrow.svg"></img>
+                <img src="/right-arrow.svg"></img>
             </button>)}
             { imageIDs.length > 1 && (
                 <div className={styles.dotIndicators}>

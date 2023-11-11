@@ -67,7 +67,7 @@ export const DeleteButton: React.FC<DeleteButtonProps>  = ({ onClick, apiRespons
     return (
         <div>
             <button className={styles.buttonDeco} onClick={handleClick}>
-                <object data='delete-symbol.svg'></object>
+                <object data='/delete-symbol.svg'></object>
             </button>
             <ConfirmDelete 
             isOpen={isConfirmOpen}

@@ -160,7 +160,7 @@ export const UserProfile = () => {
                     height='fit-content'
                     bg='#FFE9DA'
                     border='none'
-                    url="https://www.google.com"
+                    url= {`petprofileowned/${petData.petName}`}
                     key={petData.breed + petData.petName} 
                     data={petData}
                     userData={userPetData}/>

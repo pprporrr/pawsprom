@@ -67,7 +67,7 @@ const router = createBrowserRouter([
         loader: shelterLoader
       },
       {
-        path: "petprofileowned/",
+        path: "petprofileowned/:petname",
         element: <PetProfileOwned />
       },
       {

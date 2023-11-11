@@ -25,16 +25,16 @@ export const Features: React.FC<FeaturesProps> = ({features}) => {
     ]
 
     const featuresImg = [
-        "feature1-symbol.svg",
-        "feature2-symbol.svg",
-        "feature3-symbol.svg",
-        "feature4-symbol.svg",
-        "feature5-symbol.svg",
-        "feature6-symbol.svg",
-        "feature7-symbol.svg",
-        "feature8-symbol.svg",
-        "feature9-symbol.svg",
-        "feature10-symbol.svg"
+        "/feature1-symbol.svg",
+        "/feature2-symbol.svg",
+        "/feature3-symbol.svg",
+        "/feature4-symbol.svg",
+        "/feature5-symbol.svg",
+        "/feature6-symbol.svg",
+        "/feature7-symbol.svg",
+        "/feature8-symbol.svg",
+        "/feature9-symbol.svg",
+        "/feature10-symbol.svg"
     ]
 
     //* receive 'features' then map it and display according to the the value

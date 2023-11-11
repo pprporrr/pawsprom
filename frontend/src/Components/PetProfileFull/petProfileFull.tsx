@@ -153,17 +153,17 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 								<div className={styles.NameText}>
 									<h2>{data.petName}</h2>
 								</div>
-								<IconText text={data.age + ' years old' } fontSize={1.2} svgName='age-symbol.svg'></IconText>
-								<IconText text={dateOfBirth} fontSize={1.2} svgName='birthday-symbol.svg'></IconText>
-								<IconText text={data.gender} fontSize={1.2} svgName='gender-symbol.svg'></IconText>
-								<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='weight-symbol.svg'></IconText>
-								<IconText text={data.color} fontSize={1.2} svgName='color-symbol.svg'></IconText>
+								<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/age-symbol.svg'></IconText>
+								<IconText text={dateOfBirth} fontSize={1.2} svgName='/birthday-symbol.svg'></IconText>
+								<IconText text={data.gender} fontSize={1.2} svgName='/gender-symbol.svg'></IconText>
+								<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='/weight-symbol.svg'></IconText>
+								<IconText text={data.color} fontSize={1.2} svgName='/color-symbol.svg'></IconText>
 							</div>
 					</div>
 					{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
-						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='owner-symbol.svg'></IconText>
-						<IconText text={dateOfBirth} fontSize={1.2} svgName='phone-symbol.svg'></IconText>
-						<IconText text={data.address} fontSize={1.2} svgName='location-symbol.svg'></IconText>
+						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
+						<IconText text={dateOfBirth} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
+						<IconText text={data.address} fontSize={1.2} svgName='/location-symbol.svg'></IconText>
 					</div>}
 				<div className={styles.descriptionBox}>
 					<h3>Bio</h3>

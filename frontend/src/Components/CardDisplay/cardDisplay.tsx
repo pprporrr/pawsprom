@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, redirect, useNavigate } from 'react-router-dom'
 import styles from './cardDisplay.module.css'
 import { CardInfo } from './cardInfo'
 import { FeaturesIcon } from './featuresIcon'
@@ -77,7 +77,7 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   }
     
   const handleClick = () => {
-    window.location.href = url
+    navigate(`/${url}`)
   }
 
   useEffect(() => {
