@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
 
 from APIs.userAPIs import router as user_router
@@ -10,8 +11,7 @@ from APIs.vaccinationAPIs import router as vaccination_router
 from APIs.adoptionApplicationAPIs import router as adoptionApplication_router
 
 origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "*"
 ]
 
 app = FastAPI()
@@ -32,6 +32,4 @@ app.include_router(image_router, prefix="/imageAPI", tags=["imageAPIs"])
 app.include_router(vaccination_router, prefix="/vaccinationAPI", tags=["vaccinationAPIs"])
 app.include_router(adoptionApplication_router, prefix="/adoptionAPI", tags=["adoptionAPIs"])
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+handler = Mangum(app)

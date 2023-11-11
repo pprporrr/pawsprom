@@ -33,13 +33,3 @@ services:
       - PMA_HOST=mysql
       - MYSQL_ROOT_PASSWORD=rootpw
     restart: always
-  
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./backend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "80:80"
-    depends_on:
-      - fastapi
-    restart: always
