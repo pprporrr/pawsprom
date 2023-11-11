@@ -56,10 +56,11 @@ export async function defaultLoader() {
 
     let resPets = await baseAPI.post('/petAPI/search-pet/ids/')
     let defaultPets = resPets.data.data
-
+    
     resPets = await baseAPI.post('/petAPI/info-short/', 
-        {petIDs: defaultPets})
+    {petIDs: defaultPets})
     defaultPets = resPets.data.data
+    console.log(defaultPets)
 
     let resShelter = await baseAPI.post('/shelterAPI/list-shelter/')
     
@@ -211,6 +212,7 @@ export const SearchPage2 = () => {
           />
           <div className={styles.cardsWrapper}>
           {pets.map((petData: singleResult) => {
+            console.log(petData)
             return (  
             <StyledCardDisplay
             url="https://www.google.com"

@@ -5,6 +5,7 @@ import { baseAPI } from '../../main';
 export async function action({ request }: { request: any }) {
   const formData = await request.formData()
   const updates = Object.fromEntries(formData)
+  // console.log(updates) 
   await baseAPI.post('/userAPI/login/', updates)
     .then((response) => {
       localStorage.setItem('ID', JSON.stringify({

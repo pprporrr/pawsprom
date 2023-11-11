@@ -1,7 +1,10 @@
 import styles from './NavBar.module.css'
 import { Link, useLoaderData } from 'react-router-dom'
 
-type LoaderState = {username:string, role:string}
+type LoaderState = {
+  username:string,
+  role:string
+}
 
 export async function loader() {
   const local = localStorage.getItem('ID')

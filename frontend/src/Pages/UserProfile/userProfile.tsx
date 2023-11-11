@@ -2,6 +2,7 @@ import styles from './userProfile.module.css'
 import { useRef } from 'react'
 import { useLoaderData, Link } from 'react-router-dom'
 import { StyledCardDisplay } from '../../Components/CardDisplay/Card.styles' 
+import { baseAPI } from '../../main'
 
 type LoaderState = {
   username:string
@@ -38,152 +39,6 @@ type singleResult = {
 }
 
 export async function loader() {
-  const response = {
-    'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
-            'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
-            'Boxer','Dachshund'],
-    'Cat': ['Siamese','Maine Coon','Persian','Ragdoll','British Shorthair',
-            'Bengal','Sphynx','Abyssinian','Scottish Fold','Burmese'],
-  
-    'color' : ['Black','White','Gray','Brown','Orange']}
-      // ! test
-  const resOptions: any = response
-  const pets = Object.entries(resOptions)
-      .filter(([key, value]) => key != 'color')
-
-  const defaultSpecies = pets.map(([key, _]) => ({
-      label: key,
-      value: key
-    }))
-  const defaultBreed = pets
-    .map(([_, value]) => value).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-  const defaultColor = Object.entries(resOptions)
-    .filter(([key, _]) => key === 'color')
-    .map(([_, value]) => (value)).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-    // ! test
-  const defaultPets = [{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Labrador',
-    age: 1,
-    availabilityStatus: 'Available',
-    imageIDs: [1],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy Paws',
-    phone: '0922607795',
-    address: 'bangkok soi 1 thailand pathumwan'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Shiba',
-    availabilityStatus: 'Available',
-    age: 5,
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Hapy Paws',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-}
-]
-
   const local = localStorage.getItem('ID')
   let username: string = ""
   let firstName: string = ""
@@ -205,11 +60,38 @@ export async function loader() {
   catch (error) {
     console.error('Error parsing localStorage data:', error)
   }
+  const req = {"username": username, "userRole": role}
+  const response = await baseAPI.post('/petAPI/dashboard/info/', req)
+  const defaultPets = response.data.data
+  // console.log(defaultPets)
+  
+  const resOptions: any = response
+  const pets = Object.entries(resOptions)
+      .filter(([key, value]) => key != 'color')
+  const defaultSpecies = pets.map(([key, _]) => ({
+      label: key,
+      value: key
+    }))
+  const defaultBreed = pets
+    .map(([_, value]) => value).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+  const defaultColor = Object.entries(resOptions)
+    .filter(([key, _]) => key === 'color')
+    .map(([_, value]) => (value)).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+
   return {username, firstName, lastName, phoneNumber, address, role,
           species: defaultSpecies, 
           breed: defaultBreed,
           color: defaultColor,
-          pets: defaultPets};
+          pets: defaultPets
+};
 }
 
 const sideScroll = (
@@ -233,7 +115,12 @@ export const UserProfile = () => {
   const cardWrapper = useRef(null);
   const requestCardWrapper = useRef(null);
   const { username, firstName, lastName, phoneNumber,address,pets} = useLoaderData() as LoaderState
-
+  const userPetData = {
+    "username" : username,
+    "phone": phoneNumber,
+    "address": address}
+  const petsOwnedLength = pets.Owned.length
+  const petsReqLength = pets.Requested.length
   return (
     <div className={styles.container}>
       <section className={styles.profile_info}>
@@ -252,7 +139,7 @@ export const UserProfile = () => {
       </section>
       <section className={styles.owned_pet}>
         <h3>Pets</h3>
-        { username === '' ? 
+        { petsOwnedLength === 0 ? 
           (
             <Link to='/'>
               <button>&#43;</button> 
@@ -264,7 +151,9 @@ export const UserProfile = () => {
             <div className={styles.cards_container}>
               <button onClick={() => {sideScroll(cardWrapper.current,1,350,-10)}}>l</button>
               <div className={styles.cards_wrapper} ref={cardWrapper}>
-                {pets.map((petData: singleResult)=>{
+                {pets.Owned.map((petData: singleResult)=>{
+                  // console.log(userPetData)
+                  // console.log(petData)
                   return (
                     <StyledCardDisplay 
                     width='16rem'
@@ -273,7 +162,8 @@ export const UserProfile = () => {
                     border='none'
                     url="https://www.google.com"
                     key={petData.breed + petData.petName} 
-                    data={petData}/>
+                    data={petData}
+                    userData={userPetData}/>
                   )
                 })}
               </div>
@@ -288,19 +178,19 @@ export const UserProfile = () => {
       </section>
       <section className={styles.requested_pet}>
         <h3>Request</h3>
-        { username === '' ? 
+        { petsReqLength === 0 ? 
           (
             <Link to='/'>
               <button>&#43;</button> 
               <p>No request</p>
-          </Link>
+            </Link>
           )
           :
           (
           <div className={styles.request_card_container}>
             <button onClick={() => {sideScroll(requestCardWrapper.current,1,350,-10)}}>l</button>
             <div className={styles.cards_wrapper} ref={requestCardWrapper}>
-            {pets.map((petData: singleResult)=>{
+            {pets.Requested.map((petData: singleResult)=>{
               return (
                 <StyledCardDisplay 
                 width='16rem'
@@ -309,7 +199,8 @@ export const UserProfile = () => {
                 border='none'
                 url="https://www.google.com"
                 key={petData.breed + petData.petName} 
-                data={petData}/>
+                data={petData}
+                userData={userPetData}/>
               )
             })}
             </div>

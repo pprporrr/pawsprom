@@ -8,7 +8,10 @@ export const EditUser = () => {
       <h1>Edit User Profile</h1>
       <Form method='post' className={styles.create_form}>
         <div className={styles.profile_container}>
-          <img className={styles.profile_image} src="/testpic.jpg" alt="" />
+          <label htmlFor="profile_image">
+						<img className={styles.photo_icon} src="/change-pic-button.svg" alt="" />
+            <img className={styles.profile_image} src="/testpic.jpg" alt="" />
+          </label>
           <input type="file" id='profile_image' hidden />
         </div>
         <div className={styles.input_container}>
@@ -35,7 +38,7 @@ export const EditUser = () => {
         </div>
         <div className={styles.button_container}>
           <input type="button" className={styles.cancel_btn} value={"Cancel"} />
-          <input type="submit" className={styles.submit_btn} />
+          <input type="submit" className={styles.submit_btn}  value={"Save"}/>
         </div>
       </Form>
     </div>

@@ -2,14 +2,16 @@ import styles from './shelterProfile.module.css'
 import { useRef } from 'react'
 import { useLoaderData, Link } from 'react-router-dom'
 import { StyledCardDisplay } from '../../Components/CardDisplay/Card.styles'
+import { baseAPI } from '../../main'
 
 type LoaderState = {
-  username:string,
-  shelterName:string,
-  shelterAddress:string,
-  sheltercontactInfo:string,
-  shelterphoneNumber:string,
+  username:string
+  shelterName:string
+  shelterAddress:string
+  sheltercontactInfo:string
+  shelterphoneNumber:string
   role:string
+  pets:any
 }
 
 type singleResult = {
@@ -37,151 +39,6 @@ type singleResult = {
 }
 
 export async function loader() {
-  const response = {
-    'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
-            'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
-            'Boxer','Dachshund'],
-    'Cat': ['Siamese','Maine Coon','Persian','Ragdoll','British Shorthair',
-            'Bengal','Sphynx','Abyssinian','Scottish Fold','Burmese'],
-  
-    'color' : ['Black','White','Gray','Brown','Orange']}
-      // ! test
-  const resOptions: any = response
-  const pets = Object.entries(resOptions)
-      .filter(([key, value]) => key != 'color')
-
-  const defaultSpecies = pets.map(([key, _]) => ({
-      label: key,
-      value: key
-    }))
-  const defaultBreed = pets
-    .map(([_, value]) => value).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-  const defaultColor = Object.entries(resOptions)
-    .filter(([key, _]) => key === 'color')
-    .map(([_, value]) => (value)).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-    // ! test
-  const defaultPets = [{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Labrador',
-    age: 1,
-    availabilityStatus: 'Available',
-    imageIDs: [1],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy Paws',
-    phone: '0922607795',
-    address: 'bangkok soi 1 thailand pathumwan'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Shiba',
-    availabilityStatus: 'Available',
-    age: 5,
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Hapy Paws',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-},{
-    petName: 'Max',
-    species: 'Dog',
-    breed: 'Siba',
-    availabilityStatus: 'Available',
-    imageIDs: [2],
-    features: {
-    feature1: true,
-    feature2: false,
-    feature3: true,
-    feature4: false,
-    feature5: true,
-    feature6: false,
-    feature7: false,
-    feature8: false,
-    feature9: false,
-    feature10: false,
-    feature11: false,
-    },
-    name: 'Happy',
-    phone: '0922607795',
-    address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-}
-]
   const local = localStorage.getItem('ID')
   let username: string = ""
   let shelterName: string = ""
@@ -203,12 +60,40 @@ export async function loader() {
   catch (error) {
     console.error('Error parsing localStorage data:', error)
   }
+  const req = {"username": username, "userRole": role}
+  const response = await baseAPI.post('/petAPI/dashboard/info/', req)
+  const defaultPets = response.data.data
+  console.log(defaultPets)
+
+  const resOptions: any = response
+  const pets = Object.entries(resOptions)
+      .filter(([key, value]) => key != 'color')
+
+  const defaultSpecies = pets.map(([key, _]) => ({
+      label: key,
+      value: key
+    }))
+  const defaultBreed = pets
+    .map(([_, value]) => value).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+  const defaultColor = Object.entries(resOptions)
+    .filter(([key, _]) => key === 'color')
+    .map(([_, value]) => (value)).flat()
+    .map((value) => ({
+      label: value,
+      value: value
+    }))
+
   return { username, shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber, role, 
     species: defaultSpecies, 
     breed: defaultBreed,
     color: defaultColor,
     pets: defaultPets};
 }
+
 const sideScroll = (
   element: HTMLDivElement,
   speed: number,
@@ -230,21 +115,27 @@ export const ShelterProfile = () => {
   const cardWrapper = useRef(null);
   const requestCardWrapper = useRef(null);
   const { username, shelterName, shelterAddress, sheltercontactInfo,shelterphoneNumber, pets} = useLoaderData() as LoaderState
+  const shelterPetData = {
+    "username" : shelterName,
+    "phone": shelterphoneNumber,
+    "address": shelterAddress}
+  const petsAvailableLength = pets.Available.length
+  const petsReqLength = pets.Requested.length
   return (
     <div className={styles.container}>
       <section className={styles.profile_info}>
         <img className={styles.profile_pic} src="/testpic.jpg" alt="profile" />
         <div className={styles.user_info}>
           <h2>{shelterName}</h2>
-          <p>{shelterAddress}</p>
-          <p>{shelterphoneNumber}</p>
+          <p><img src="/location-symbol.svg" alt="" />{shelterAddress}</p>
+          <p><img src="/phone-symbol.svg" alt="" />{shelterphoneNumber}</p>
           {/* <p>{sheltercontactInfo}</p> */}
           {/* <p>number pets</p> */}
         </div>
       </section>
       <section className={styles.owned_pet}>
         <h3>Pets</h3>
-        { username === '' ? 
+        { petsAvailableLength === 0 ? 
           (
             <Link to='/'>
               <button>&#43;</button> 
@@ -256,7 +147,7 @@ export const ShelterProfile = () => {
             <div className={styles.cards_container}>
               <button onClick={() => {sideScroll(cardWrapper.current,1,350,-10)}}>l</button>
               <div className={styles.cards_wrapper} ref={cardWrapper}>
-                {pets.map((petData: singleResult)=>{
+                {pets.Available.map((petData: singleResult)=>{
                   return (
                     <StyledCardDisplay 
                     width='16rem'
@@ -265,7 +156,8 @@ export const ShelterProfile = () => {
                     border='none'
                     url="https://www.google.com"
                     key={petData.breed + petData.petName} 
-                    data={petData}/>
+                    data={petData}
+                    userData={shelterPetData}/>
                   )
                 })}
               </div>
@@ -280,7 +172,7 @@ export const ShelterProfile = () => {
       </section>
       <section className={styles.request_for_pet}>
       <h3>Requests waiting for</h3>
-        { username === '' ? 
+        { petsReqLength === 0 ? 
           (
             <Link to='/'>
               <button>&#43;</button> 
@@ -292,7 +184,7 @@ export const ShelterProfile = () => {
           <div className={styles.request_card_container}>
             <button onClick={() => {sideScroll(requestCardWrapper.current,1,350,-10)}}>l</button>
             <div className={styles.cards_wrapper} ref={requestCardWrapper}>
-            {pets.map((petData: singleResult)=>{
+            {pets.Requested.map((petData: singleResult)=>{
               return (
                 <StyledCardDisplay 
                 width='16rem'
@@ -301,7 +193,8 @@ export const ShelterProfile = () => {
                 border='none'
                 url="https://www.google.com"
                 key={petData.breed + petData.petName} 
-                data={petData}/>
+                data={petData}
+                userData={shelterPetData}/>
               )
             })}
             </div>
