@@ -21,8 +21,7 @@ import { EditPetProfile } from './Pages/EditPetProfile/editPetProfile.tsx';
 
 //* URL for API
 export const baseAPI = axios.create({
-  // baseURL: "http://44.203.125.116:8000/"
-  baseURL: "http://10.26.2.180"
+  baseURL: "http://54.234.114.224:8000"
 });
 
 const router = createBrowserRouter([

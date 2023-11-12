@@ -135,11 +135,11 @@ export const SearchPage2 = () => {
           {pets.map((petData: singleResult) => {
             console.log(petData)
             return (  
-            <StyledCardDisplay
-            url={`petprofileothers/${petData.petName}`}
-            key={petData.breed + petData.petName} 
-            data={petData}
-            />
+              <StyledCardDisplay
+              url={`petprofileothers/${petData.petName}`}
+              key={petData.breed + petData.petName} 
+              data={petData}
+              />
             )})}
           </div>
         </>)}
@@ -158,7 +158,7 @@ export const SearchPage2 = () => {
           phone={shelterData.shelterphoneNumber}
           address={shelterData.shelterAddress}
           key={shelterData.shelterID + shelterData.shelterName} 
-          url={`petprofileothers/${shelterData.petName}`}
+          url={`shelterprofile/${shelterData.shelterID}`}
           ></ShelterCard>
           )
         })) :
