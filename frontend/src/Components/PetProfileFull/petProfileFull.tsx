@@ -8,6 +8,7 @@ import { AdoptionButton } from '../AdoptionButton/adoptionButton.tsx'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
 import { RequestDisplay } from '../RequestDisplay/requestDisplay.tsx'
+import { useNavigate } from 'react-router-dom'
 
 
 interface PetProfileFullProps {
@@ -69,6 +70,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	// response from api when click delete button
 	const [apiResponseDEL, setAPIResponseDEL] = useState(null)
 	const [apiResponseADOPT, setAPIResponseADOPT] = useState(null)
+	const navigate = useNavigate()
 	
 
 	//* sending request to API from button (start) ================================= 
@@ -82,10 +84,20 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
         .then(response => {
             console.log('response from api', response.data.success)
 			setAPIResponseDEL(response.data.success)
+			if (response.data.success === true) {
+				navigateAfterDelay()
+			}
         })
         .catch(error => {
             console.error(error);
         })
+	}
+
+	const navigateAfterDelay = () => {
+		setTimeout(() => {
+		navigate("userprofile/:username")
+		  // navigate(`userprofile/${username}`)
+		}, 2000)
 	}
 
 	//* adopt button
@@ -116,11 +128,6 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 
 	//* sending request to API from button (end) =================================
 	
-	//* reset var
-	// useEffect(() => {
-	// 	setAPIResponseDEL(null)
-	// 	setAPIResponseADOPT(null)
-    // }, []
 
 	useEffect(() => {
 
@@ -128,72 +135,75 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 
 
 	return (
-		<div className={styles.cardWrapper}>
-			<section className={styles.topContainer}>
-				<div className={styles.titleContainer}>
-					<h1 className={styles.title}>Pet Profile</h1>
-					<div style={{ width: '2.813rem', height: '2.813rem' }}>
-						<img src="../../cat.svg" alt="edit-symbol" />
-					</div>
-					<p className={styles.title}>Edit pet profile</p>
-					<div  style={{ width: '1.563rem', height: '1.563rem' }}>
-						<img src="../../edit-symbol.svg" alt="edit-symbol" />
-					</div>
-				</div>
-			</section>
-			<section className={styles.firstRowWrapper}>
-					<div className={styles.imageAndInfo}>
-						<ImageSlider
-						imageIDs={data.imageIDs} 
-						baseAPI={baseAPI} 
-						availabilityStatus={data.availabilityStatus}
-						></ImageSlider>
-							<div className={styles.infoText}>
-								<h3>{data.breed}</h3>
-								<div className={styles.NameText}>
-									<h2>{data.petName}</h2>
-								</div>
-								<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/age-symbol.svg'></IconText>
-								<IconText text={dateOfBirth} fontSize={1.2} svgName='/birthday-symbol.svg'></IconText>
-								<IconText text={data.gender} fontSize={1.2} svgName='/gender-symbol.svg'></IconText>
-								<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='/weight-symbol.svg'></IconText>
-								<IconText text={data.color} fontSize={1.2} svgName='/color-symbol.svg'></IconText>
-							</div>
-					</div>
-					{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
-						<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
-						<IconText text={dateOfBirth} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
-						<IconText text={data.address} fontSize={1.2} svgName='/location-symbol.svg'></IconText>
-					</div>}
-				<div className={styles.descriptionBox}>
-					<h3>Bio</h3>
-					<p>{data.description}</p>
-				</div>
-			</section>
-			
-			<div className={styles.secondRowWrapper}>
-			<section className={styles.vaccineContainer}>
-				<h2>Vaccine Records</h2>
-				<VaccineRecords 
-				vaccinationName={data.vaccinationName} 
-				vaccinationDate={vaccineDateObjects}></VaccineRecords>
-			</section>
-			<section className={styles.featuresContainer}>
-				<h2>Features</h2>
-				<Features features={data.features}></Features>
-			</section>
-			</div>
-			<div>
-			<section className={styles.bottomContainer}>
-				{page === 'PetProfileOwned' && <DeleteButton 
-				onClick={handleDeleteClick}
-				apiResponse={apiResponseDEL}/>}
-				{page === 'PetProfileOthers' && <AdoptionButton 
-				onClick={handleAdoptionClick}
-				apiResponse={apiResponseADOPT}/>}
-			</section>
-			{page === 'PetProfileShelter' && <RequestDisplay baseAPI={baseAPI} petID={petID} adoptionApplications={data.adoptionApplications}></RequestDisplay>}
-			</div>
+	<div className={styles.cardWrapper}>
+	<section className={styles.topContainer}>
+	<div className={styles.titleContainer}>
+		<h1 className={styles.title}>Pet Profile</h1>
+		<div style={{ width: '2.813rem', height: '2.813rem' }}>
+			<img src="../../cat.svg" alt="edit-symbol" />
 		</div>
+		<p className={styles.title}>Edit pet profile</p>
+		<div  style={{ width: '1.563rem', height: '1.563rem' }}>
+			<img src="../../edit-symbol.svg" alt="edit-symbol" />
+		</div>
+	</div>
+	</section>
+	<section className={styles.firstRowWrapper}>
+	<div className={styles.imageAndInfo}>
+		<ImageSlider
+		imageIDs={data.imageIDs} 
+		baseAPI={baseAPI} 
+		availabilityStatus={data.availabilityStatus}
+		></ImageSlider>
+		<div className={styles.infoText}>
+			<h3>{data.breed}</h3>
+			<div className={styles.NameText}>
+				<h2>{data.petName}</h2>
+			</div>
+			<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/age-symbol.svg'></IconText>
+			<IconText text={dateOfBirth} fontSize={1.2} svgName='/birthday-symbol.svg'></IconText>
+			<IconText text={data.gender} fontSize={1.2} svgName='/gender-symbol.svg'></IconText>
+			<IconText text={data.weight + ' kg'} fontSize={1.2} svgName='/weight-symbol.svg'></IconText>
+			<IconText text={data.color} fontSize={1.2} svgName='/color-symbol.svg'></IconText>
+		</div>
+	</div>
+	{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
+		<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
+		<IconText text={dateOfBirth} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
+		<IconText text={data.address} fontSize={1.2} svgName='/location-symbol.svg'></IconText>
+	</div>}
+	<div className={styles.descriptionBox}>
+		<h3>Bio</h3>
+		<p>{data.description}</p>
+	</div>
+	</section>
+	
+	<div className={styles.secondRowWrapper}>
+	<section className={styles.vaccineContainer}>
+		<h2>Vaccine Records</h2>
+		<VaccineRecords 
+		vaccinationName={data.vaccinationName} 
+		vaccinationDate={vaccineDateObjects}></VaccineRecords>
+	</section>
+	<section className={styles.featuresContainer}>
+		<h2>Features</h2>
+		<Features features={data.features}></Features>
+	</section>
+	</div>
+	<div>
+	<section className={styles.bottomContainer}>
+		{page === 'PetProfileOwned' && <DeleteButton 
+		onClick={handleDeleteClick}
+		apiResponse={apiResponseDEL}/>}
+		{page === 'PetProfileOthers' && <AdoptionButton 
+		onClick={handleAdoptionClick}
+		apiResponse={apiResponseADOPT}/>}
+	</section>
+	{page === 'PetProfileShelter' && <RequestDisplay 
+	baseAPI={baseAPI} petID={petID} 
+	adoptionApplications={data.adoptionApplications}
+	></RequestDisplay>}
+	</div>
+	</div>
 	)
 }

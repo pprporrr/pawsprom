@@ -28,7 +28,7 @@ export const  mockPet = {
     "shelterID": 501,
     "vaccinationName": [
         "Lyme Disease",
-        "]GOGO",
+        "GOGO",
         "test"
     ],
     "vaccinationDate": [
@@ -41,3 +41,74 @@ export const  mockPet = {
     "address": "123 Main St, City",
     "adoptionApplications": {}
 }
+
+export const defaultPets = [{
+            petName: 'Max',
+            species: 'Dog',
+            breed: 'Labrador',
+            age: 1,
+            availabilityStatus: 'Available',
+            imageIDs: [1],
+            features: {
+            feature1: true,
+            feature2: false,
+            feature3: true,
+            feature4: false,
+            feature5: true,
+            feature6: false,
+            feature7: false,
+            feature8: false,
+            feature9: false,
+            feature10: false,
+            feature11: false,
+            },
+            name: 'Happy Paws',
+            phone: '0922607795',
+            address: 'bangkok soi 1 thailand pathumwan'
+        }, {
+            petName: 'Max',
+            species: 'Dog',
+            breed: 'Shiba',
+            availabilityStatus: 'Available',
+            age: 5,
+            imageIDs: [2],
+            features: {
+            feature1: true,
+            feature2: false,
+            feature3: true,
+            feature4: false,
+            feature5: true,
+            feature6: false,
+            feature7: false,
+            feature8: false,
+            feature9: false,
+            feature10: false,
+            feature11: false,
+            },
+            name: 'Hapy Paws',
+            phone: '0922607795',
+            address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+        },, {
+            petName: 'Max',
+            species: 'Dog',
+            breed: 'Siba',
+            availabilityStatus: 'Available',
+            imageIDs: [2],
+            features: {
+            feature1: true,
+            feature2: false,
+            feature3: true,
+            feature4: false,
+            feature5: true,
+            feature6: false,
+            feature7: false,
+            feature8: false,
+            feature9: false,
+            feature10: false,
+            feature11: false,
+            },
+            name: 'Happy',
+            phone: '0922607795',
+            address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
+        },
+]

@@ -1,15 +1,23 @@
 import styles from './searchShelter.module.css'
 import { baseAPI } from '../../main';
+import { useState } from 'react';
 
 type SearchShelterProps = {
   handleShelter: (shelters: any) => void
 }
 
 export const SearchShelter: React.FC<SearchShelterProps> = ({handleShelter}) => {
+  const [inputText, setInputText] = useState<string>()
+
   const handleChange = async(event: any) => {
     const target = event.target as HTMLInputElement;
-    let response = await getShelter(target.value)
-    handleShelter(response)
+    setInputText(target.value)
+
+    // when search nothing
+    if (target.value === '') {
+      let response = await getShelter('')
+      handleShelter(response)
+    } 
   }
 
   const getShelter = async(inputText: string) => {
@@ -26,7 +34,14 @@ export const SearchShelter: React.FC<SearchShelterProps> = ({handleShelter}) => 
         } catch (error) {
           console.log((error as Error).message)
   }}
-  
+
+  const handleSearch = async() => {
+    if (inputText !== undefined) {
+      let response = await getShelter(inputText)
+      handleShelter(response)
+    }
+  }
+
   return (
     <div className={styles.searchWrapper}>
     <div className={styles.barWrapper}>
@@ -38,8 +53,8 @@ export const SearchShelter: React.FC<SearchShelterProps> = ({handleShelter}) => 
     >
     </input>
     </div>
-    <img className={styles.searchImg}
-    src="search-symbol.svg"/>
+    <button className={styles.searchButton} 
+    onClick={handleSearch}></button>
     </div>
   );
 }

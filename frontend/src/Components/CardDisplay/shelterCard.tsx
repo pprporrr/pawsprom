@@ -9,7 +9,7 @@ type ShelterCardProps = {
 }
 
 export const ShelterCard: React.FC<ShelterCardProps> = ({url, name, phone, address}) => {
-    let imageURL = 'https://www.hindustantimes.com/ht-img/img/2023/08/25/1600x900/international_dog_day_1692974397743_1692974414085.jpg'
+    let imageURL = '/shelter-image.jpg'
 
     const handleClick = () => {
         window.location.href = url

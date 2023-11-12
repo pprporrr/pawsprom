@@ -6,7 +6,7 @@ function App() {
   return (
     <div className={styles.main_container}>
       <NavBar/>
-      <Outlet/>
+      <Outlet />
       {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/petprofileowned" element={<PetProfileOwned />} />

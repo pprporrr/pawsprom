@@ -2,7 +2,6 @@ import styles from './searchPage2.module.css'
 import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { NewSearchBar } from '../../Components/newSearch/newSearchBar';
-// import { CardDisplay } from '../../Components/CardDisplay/cardDisplay';
 import { ToggleButton } from '../../Components/Searchbar/toggleButton';
 import { SearchShelter } from '../../Components/newSearch/searchShelter';
 import { ShelterCard } from '../../Components/CardDisplay/shelterCard';
@@ -11,25 +10,20 @@ import { baseAPI } from '../../main';
 
 export async function defaultLoader() {
 
+    // // ! test
+    // const response = {
+    // 'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
+    //     'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
+    //     'Boxer','Dachshund'],
+    // 'Cat': ['Siamese','Maine Coon','Persian','Ragdoll','British Shorthair',
+    //     'Bengal','Sphynx','Abyssinian','Scottish Fold','Burmese'],
+
+    // 'color' : ['Black','White','Gray','Brown','Orange']}
+
+    // const resOptions: any = response
+
     let response = await baseAPI.post('/petAPI/drop-down/')
-
-    console.log(response)
-
-            // ! test
-            // const response = {
-            // 'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
-            //     'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
-            //     'Boxer','Dachshund'],
-            // 'Cat': ['Siamese','Maine Coon','Persian','Ragdoll','British Shorthair',
-            //     'Bengal','Sphynx','Abyssinian','Scottish Fold','Burmese'],
-        
-            // 'color' : ['Black','White','Gray','Brown','Orange']}
-            // const resOptions: any = response
-            
-
     const resOptions: any = response.data.data
-    
-
     const pets = Object.entries(resOptions)
             .filter(([key, value]) => key != 'color')
 
@@ -67,84 +61,11 @@ export async function defaultLoader() {
     let defaultShelters = resShelter.data.data
     console.log(defaultShelters)
 
-
-        //     // ! test
-
-        //     const defaultPets = [{
-        //     petName: 'Max',
-        //     species: 'Dog',
-        //     breed: 'Labrador',
-        //     age: 1,
-        //     availabilityStatus: 'Available',
-        //     imageIDs: [1],
-        //     features: {
-        //     feature1: true,
-        //     feature2: false,
-        //     feature3: true,
-        //     feature4: false,
-        //     feature5: true,
-        //     feature6: false,
-        //     feature7: false,
-        //     feature8: false,
-        //     feature9: false,
-        //     feature10: false,
-        //     feature11: false,
-        //     },
-        //     name: 'Happy Paws',
-        //     phone: '0922607795',
-        //     address: 'bangkok soi 1 thailand pathumwan'
-        // }, {
-        //     petName: 'Max',
-        //     species: 'Dog',
-        //     breed: 'Shiba',
-        //     availabilityStatus: 'Available',
-        //     age: 5,
-        //     imageIDs: [2],
-        //     features: {
-        //     feature1: true,
-        //     feature2: false,
-        //     feature3: true,
-        //     feature4: false,
-        //     feature5: true,
-        //     feature6: false,
-        //     feature7: false,
-        //     feature8: false,
-        //     feature9: false,
-        //     feature10: false,
-        //     feature11: false,
-        //     },
-        //     name: 'Hapy Paws',
-        //     phone: '0922607795',
-        //     address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-        // },, {
-        //     petName: 'Max',
-        //     species: 'Dog',
-        //     breed: 'Siba',
-        //     availabilityStatus: 'Available',
-        //     imageIDs: [2],
-        //     features: {
-        //     feature1: true,
-        //     feature2: false,
-        //     feature3: true,
-        //     feature4: false,
-        //     feature5: true,
-        //     feature6: false,
-        //     feature7: false,
-        //     feature8: false,
-        //     feature9: false,
-        //     feature10: false,
-        //     feature11: false,
-        //     },
-        //     name: 'Happy',
-        //     phone: '0922607795',
-        //     address: '209 Mantika Bangbon 3 Rd. Bangbon Bnagkok 10150'
-        // },
-    //]
         return {    species: defaultSpecies, 
             breed: defaultBreed,
             color: defaultColor,
             pets: defaultPets,
-            shelters: defaultShelters
+            shelters: defaultShelters,
         }
     
 }

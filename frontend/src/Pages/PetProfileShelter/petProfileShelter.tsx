@@ -92,19 +92,19 @@ const [adoptiondata, setAdoptionData] = useState("");
 
 return (
     <div className={styles.bgContainer}>
-    { data != undefined && <PetProfileFull
+    {/* { data != undefined && <PetProfileFull
     petID={petID} 
     page={petPage}
     data= {data}
     baseAPI={baseAPI} 
-    ></PetProfileFull>}
+    ></PetProfileFull>} */}
     {/* //! for testing */}
-    {/* <PetProfileFull
+    <PetProfileFull
     petID={petID} 
     page={petPage}
     data= {Data}
     baseAPI={baseAPI} 
-    ></PetProfileFull> */}
+    ></PetProfileFull>
     </div>
 )
 }

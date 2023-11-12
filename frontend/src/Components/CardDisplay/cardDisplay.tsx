@@ -43,19 +43,12 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   const navigate = useNavigate()
   const [petData, setPetData] = useState(data)
   const [imageURL, setImageURL] = useState<string>()
-  const errorImage = "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+  const errorImage = 'pet-image.jpg'
 
-  async function requestImage(imageIDs: number[]) {
+  async function requestImage(imageIDs: number[] | number) {
     // const imageURL = `/imageAPI/get-petImage/${imageID}/`
     let imageURL = `/imageAPI/get-petImage/1/`
-    // const pullImage = baseAPI.get('/imageAPI/get-petImage/1/')
-
-    // // ! test
-    // if (imageID === 2) {
-    //     setImageURL('https://www.thesprucepets.com/thmb/17UY4UpiMekV7WpeXDziXsnt7q4=/1646x0/filters:no_upscale():strip_icc()/GettyImages-145577979-d97e955b5d8043fd96747447451f78b7.jpg')
-    // } else {
-    //     setImageURL('https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.668xw:1.00xh;0.119xw,0&resize=1200:*')
-    // }
+    // const pullImage = await baseAPI.get('/imageAPI/get-petImage/1/')
 
     try {
       const response: AxiosResponse<Blob> = await 
@@ -81,12 +74,12 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   }
 
   useEffect(() => {
-    // requestImage(data.imageIDs)
-    // if (data.imageIDs.length !== 0) {
-    //     requestImage(data.imageIDs[0])
-    // } else {
-    //     setImageURL(errorImage)
-    // }  
+    requestImage(data.imageIDs)
+    if (data.imageIDs.length !== 0) {
+        requestImage(data.imageIDs[0])
+    } else {
+        setImageURL(errorImage)
+    }  
   }, [])
 
 

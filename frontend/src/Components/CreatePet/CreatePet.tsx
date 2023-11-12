@@ -14,14 +14,13 @@ export const CreatePet = () => {
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // TODO: post picture
-    const { name, dob, age, address, gender, weight, breed, bio, color, species,
+    const { name, dob, age, gender, weight, breed, bio, color, species,
       feature1, feature2, feature3, feature4, feature5, feature6, feature7,
       feature8, feature9, feature10, feature11, 
       photoUpload1, photoUpload2, photoUpload3, booklet} = event.target as typeof event.target & {
       name: { value: string }
       dob: { value: string }
       age: { value: number }
-      address: { value: string }
       gender: { value: string }
       weight: { value: number }
       breed: { value: string }
@@ -62,23 +61,23 @@ export const CreatePet = () => {
     await baseAPI.post('/petAPI/create-profile/byUser/',
       {
         petName: name.value, dateofbirth: dob.value,
-        age: age.value, address: address.value,
+        age: age.value,
         gender: gender.value, weight: weight.value,
         breed: breed.value, description: bio.value,
         color: color.value, species: species.value,
         availabilityStatus: 'Available',
         features: {
           feature1: feature1.checked,
-          feature2: feature1.checked,
-          feature3: feature1.checked,
-          feature4: feature1.checked,
-          feature5: feature1.checked,
-          feature6: feature1.checked,
-          feature7: feature1.checked,
-          feature8: feature1.checked,
-          feature9: feature1.checked,
-          feature10: feature1.checked,
-          feature11: feature1.checked,
+          feature2: feature2.checked,
+          feature3: feature3.checked,
+          feature4: feature4.checked,
+          feature5: feature5.checked,
+          feature6: feature6.checked,
+          feature7: feature7.checked,
+          feature8: feature8.checked,
+          feature9: feature9.checked,
+          feature10: feature10.checked,
+          feature11: feature11.checked,
         },
         userID: 202,
       })

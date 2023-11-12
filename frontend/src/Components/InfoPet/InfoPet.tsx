@@ -40,11 +40,10 @@ export const InfoPet: React.FC<InfoPetProps> = ({handleVaccine}) => {
           <label htmlFor="breed">Breed</label>
           <input type="text" id='breed'/>
         </div>
-        <div className={styles.address_con}>
+        {/* <div className={styles.address_con}>
           <label htmlFor="address">Address *</label>
-          {/* <input type="text" id='bio'/> */}
           <textarea id='address'required></textarea>
-        </div>
+        </div> */}
         <div className={styles.color_con}>
           <label htmlFor="color">Color</label>
           <input type="text" id='color'/>

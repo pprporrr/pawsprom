@@ -26,3 +26,16 @@
     flex-direction: column; 
 }
 
+.searchButton {
+    background-image: url('/search-symbol.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    height: 50%;
+    width: 50%;
+    justify-self: flex-start;
+    align-self: end;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+

@@ -9,15 +9,16 @@
 
 
 :root {
-  /* color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87); */
-  background-color: #fff8e0;
+  /* color-scheme: light dark; */
+  /* color: rgba(255, 255, 255, 0.87); */
+  /* height: 100dvh; */
 
-  /* height: 100%; */
+
 }
 
 body {
-  min-width: 1024px;
+  height: 100vh;
+  background-color: #fff8e0;
 }
 
 h1 {

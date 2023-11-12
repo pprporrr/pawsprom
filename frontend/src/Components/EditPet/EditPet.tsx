@@ -1,6 +1,5 @@
 import styles from './EditPet.module.css'
 import { EditPhoto } from './EditPhoto'
-
 import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 import { FormEvent, useState } from 'react'
 import { Form, useLoaderData, useNavigate } from 'react-router-dom'
@@ -8,31 +7,46 @@ import { baseAPI } from '../../main'
 import { InfoPet } from '../InfoPet/InfoPet'
 import { EditInfoPet } from '../EditInfoPet/editInfoPet'
 import { mockPet } from '../mockData/mockData'
+import cloneDeep from 'lodash/cloneDeep'
 
+type InputFormat = {
+  petName: string,
+  dateofbirth: string,
+  age: number, 
+  gender: string, 
+  weight: number,
+  breed: string, 
+  description?: string,
+  color: string,
+  species: string,
+}
 
 export const EditPet = () => {
   const navigate = useNavigate()
   const [VaccineName, setVaccineName] = useState<string[]>()
-  const [VaccineDate, setVaccineDate] = useState<Date[]>()
+  const [VaccineDate, setVaccineDate] = useState<string[]>()
+  const inputData: any = cloneDeep(mockPet)
+  const [noRecord, setNoRecord] = useState<boolean>(false)
   
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // const currentData: any = useLoaderData()
-    // TODO: post picture
-    const { name, dob, age, address, gender, weight, breed, bio, color, species,
+    
+    const { petName, dateofbirth, age, gender, weight, breed, description, color, species,
       feature1, feature2, feature3, feature4, feature5, feature6, feature7,
       feature8, feature9, feature10, feature11, 
-      photoUpload1, photoUpload2, photoUpload3, booklet} = event.target as typeof event.target & {
-      name: { value: string }
-      dob: { value: string }
-      age: { value: number }
-      address: { value: string }
-      gender: { value: string }
-      weight: { value: number }
-      breed: { value: string }
-      bio: { value: string }
-      color: { value: string }
-      species: { value: string }
+      photoUpload1, photoUpload2, photoUpload3, booklet
+
+      } = event.target as typeof event.target & {
+      petName: { value: string, id: keyof InputFormat }
+      dateofbirth: { value: string, id: keyof InputFormat}
+      age: { value: number, id: keyof InputFormat }
+      gender: { value: string, id: keyof InputFormat }
+      weight: { value: number, id: keyof InputFormat }
+      breed: { value: string, id: keyof InputFormat }
+      description: { value: string, id: keyof InputFormat }
+      color: { value: string, id: keyof InputFormat }
+      species: { value: string, id: keyof InputFormat }
       feature1: { checked: boolean }
       feature2: { checked: boolean }
       feature3: { checked: boolean }
@@ -49,73 +63,99 @@ export const EditPet = () => {
       photoUpload3: { files: any }
       booklet: { files: any }
     }
-    
-    //! vvvvv check vvvv
 
-    let photoList = [photoUpload1.files[0], 
-    photoUpload2.files[0], photoUpload3.files[0]]
-
-    const formData = new FormData();
-    for (let i = 0; i < 3; i++) {
-      if (photoList[i] !== undefined){
-        formData.append('imageFiles', photoList[i])
+    // * check string if no input
+    const checkList: InputFormat = {petName: petName.value, 
+    dateofbirth: dateofbirth.value, age: age.value,
+    gender: gender.value, weight: weight.value, 
+    breed: breed.value, description: description.value, 
+    color: color.value, species: species.value}
+    const nameList: (keyof InputFormat)[] = ['petName','dateofbirth', 'age', 
+      'gender', 'weight', 'breed', 'description', 'color', 'species']
+      // ! test
+    const petID = 103
+    let tempData: any= {petID: petID}
+    for (let i = 0; i < Object.keys(checkList).length; i++) {
+      if (checkList[nameList[i]] === '') {
+        if (inputData[nameList[i]] !== undefined) {
+        tempData = { ...tempData, [nameList[i]]:inputData[nameList[i]]}
+      }
+      } else {
+        tempData = { ...tempData, [nameList[i]]: checkList[nameList[i]]}
       }
     }
 
+    //* check vaccination
+    let inputVaccine: any = []
+    let inputVaccineDate: any = []
+    if (VaccineName !== undefined && VaccineName.length === 0) {
+      if (noRecord === false){
+        inputVaccine = mockPet['vaccinationName']
+        inputVaccineDate = mockPet['vaccinationDate']
+      } 
+    } else {
+      if (VaccineName === undefined) {
+        inputVaccine = mockPet['vaccinationName']
+        inputVaccineDate = mockPet['vaccinationDate']
+      } else {
+        if (noRecord === false) {
+        inputVaccine = VaccineName
+        inputVaccineDate = VaccineDate
+        } else {
+        inputVaccine = []
+        inputVaccineDate = []
+    }}}
+    
+    //* check fetaures
+    let tempFeatures = {
+      feature1: feature1.checked, feature2: feature2.checked, 
+      feature3: feature3.checked, feature4: feature4.checked, 
+      feature5: feature5.checked, feature6: feature6.checked,
+      feature7: feature7.checked, feature8: feature8.checked,
+      feature9: feature9.checked, feature10: feature10.checked,
+      feature11: feature11.checked}
+    tempData = { ...tempData, features: tempFeatures}
+
+    //* check images
+    const formData = new FormData()
+    let EditPhoto = [photoUpload1.files[0], photoUpload2.files[0], photoUpload3.files[0]]
+
+    for (let i=0; i<EditPhoto.length; i++)
+    if (EditPhoto[i] !== undefined) {
+      formData.append('imageFiles', EditPhoto[i])
+    }
+    if (inputVaccine[0] === inputVaccine[1]) {
+      inputVaccine = inputVaccine.slice(1)
+      inputVaccineDate = inputVaccineDate.slice(1)
+    }
+
+    //! vvvvv check vvvv
     // * ================= API ======================
     // * post general info 
-    await baseAPI.post('/petAPI/create-profile/byUser/',
-      {
-        petName: name.value, dateofbirth: dob.value,
-        age: age.value, address: address.value,
-        gender: gender.value, weight: weight.value,
-        breed: breed.value, description: bio.value,
-        color: color.value, species: species.value,
-        availabilityStatus: 'Available',
-        features: {
-          feature1: feature1.checked,
-          feature2: feature1.checked,
-          feature3: feature1.checked,
-          feature4: feature1.checked,
-          feature5: feature1.checked,
-          feature6: feature1.checked,
-          feature7: feature1.checked,
-          feature8: feature1.checked,
-          feature9: feature1.checked,
-          feature10: feature1.checked,
-          feature11: feature1.checked,
-        },
-        userID: 202,
-      })
+    await baseAPI.put('/petAPI/update-profile/',
+      tempData)
       .then((response) => {
         console.log(response.data)
-      })
-      
+    })
+
     //* post images
     //! test
-    let petID = 102
+    if (Object.entries(formData).length !== 0) {
     await baseAPI.post(`/imageAPI/upload-petImage/${petID}/`,
-      formData)
+    formData)
       .then((response) => {
         console.log(response.data)
-    })
+    })}
 
-    if (VaccineDate !== undefined) {
-    const formattedDate = []
-    for (let i = 0; i < VaccineDate.length; i++) {
-      formattedDate.push(VaccineDate[i].toISOString().split('T')[0])
-    }
     //* post vaccine
-    await baseAPI.post(`/vaccinationAPI/vaccination/`,
-      { petID: petID,
-        vaccinationName: VaccineName,
-        vaccinationDate: formattedDate,})
-      .then((response) => {
-        console.log(response.data)
-    })
-
-    }
-
+    // await baseAPI.post(`/vaccinationAPI/vaccination/`,
+    //   { petID: petID,
+    //     vaccinationName: inputVaccine,
+    //     vaccinationDate: inputVaccineDate,})
+    //   .then((response) => {
+    //     console.log(response.data)
+    // })
+  
     navigateAfterDelay()
   }
   // * ================= API ======================
@@ -127,30 +167,35 @@ export const EditPet = () => {
       }, 2000)
     }
 
-    const submitVaccine = async(vaccines: string[], dates: Date[]) => {
-      setVaccineDate(dates)
-      setVaccineName(vaccines)
+    const submitVaccine = async(vaccines: string[], dates: string[]) => {
+        setVaccineDate(dates)
+        setVaccineName(vaccines)
+      }
+
+    const handleRecord = async(noRecord: boolean) => {
+      setNoRecord(noRecord)
     }
     
 
   return (
-    <section className={styles.create_pet_container}>
-      <h1 className={styles.head}>Create Pet Profile</h1>
-      <Form onSubmit={evt => { sendForm(evt) }}>
-        <section className={styles.photo_area}>
-          <EditPhoto id={'photoUpload1'}
-          currentPhoto={'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}/>
-          <EditPhoto id={'photoUpload2'}
-          currentPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/1200px-RedCat_8727.jpg'}/>
-          <EditPhoto id={'photoUpload3'}
-          currentPhoto={'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1240w,f_auto,q_auto:best/rockcms/2022-08/220805-domestic-cat-mjf-1540-382ba2.jpg'}/>
-        </section>
-        <EditInfoPet
-        data={mockPet}
-        handleVaccine={submitVaccine}/>
-        <SaveNcancelButton />
-      </Form>
+  <section className={styles.create_pet_container}>
+    <h1 className={styles.head}>Create Pet Profile</h1>
+    <Form onSubmit={evt => { sendForm(evt) }}>
+    <section className={styles.photo_area}>
+      <EditPhoto id={'photoUpload1'}
+      currentPhoto={'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'}/>
+      <EditPhoto id={'photoUpload2'}
+      currentPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/1200px-RedCat_8727.jpg'}/>
+      <EditPhoto id={'photoUpload3'}
+      currentPhoto={'https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1240w,f_auto,q_auto:best/rockcms/2022-08/220805-domestic-cat-mjf-1540-382ba2.jpg'}/>
     </section>
+    <EditInfoPet
+    data={mockPet}
+    handleVaccine={submitVaccine}
+    handleRecord={handleRecord}/>
+    <SaveNcancelButton />
+    </Form>
+  </section>
   )
 }
 function async() {
