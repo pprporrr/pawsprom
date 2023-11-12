@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import ErrorPage from './Pages/Error/ErrorPage.tsx'
 import { Home } from './Pages/Home/home.tsx';
-import { PetProfileOwned } from './Pages/PetProfileOwned/petProfileOwned.tsx';
+import { PetProfileOwned, loader as ownedLoader } from './Pages/PetProfileOwned/petProfileOwned.tsx';
 import { PetProfileOthers } from "./Pages/PetProfileOthers/petProfileOthers.tsx";
 import { PetProfileShelter } from "./Pages/PetProfileShelter/petProfileShelter.tsx";
 import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx';
@@ -21,7 +21,8 @@ import { EditPetProfile } from './Pages/EditPetProfile/editPetProfile.tsx';
 
 //* URL for API
 export const baseAPI = axios.create({
-  baseURL: "http://54.234.114.224:8000"
+  // baseURL: "http://44.203.125.116:8000/"
+  baseURL: "http://pawsprom-elb-974966248.us-east-1.elb.amazonaws.com"
 });
 
 const router = createBrowserRouter([
@@ -61,20 +62,21 @@ const router = createBrowserRouter([
         // loader: userLoader
       },
       {
-        path: "shelterprofile/:username",
+        path: "shelterprofile/:shelterID",
         element: <ShelterProfile />,
         loader: shelterLoader
       },
       {
-        path: "petprofileowned/:petname",
-        element: <PetProfileOwned />
+        path: "petprofileowned/:petID",
+        element: <PetProfileOwned />,
+        // loader: ownedLoader
       },
       {
-        path: "petprofileothers/:petname",
+        path: "petprofileothers/:petID",
         element: <PetProfileOthers />
       },
       {
-        path: "petprofileshelter/:petname",
+        path: "petprofileshelter/:petID",
         element: <PetProfileShelter />
       },
       {

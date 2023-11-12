@@ -10,6 +10,7 @@ export async function action({ request }: { request: any }) {
     .then((response) => {
       localStorage.setItem('ID', JSON.stringify({
         username: response.data.data.username,
+        userID:response.data.data.userID,
         role: response.data.data.userRole,
         firstName: response.data.data.firstName,
         lastName: response.data.data.lastName,

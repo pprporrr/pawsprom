@@ -3,9 +3,9 @@ import { EditPet } from '../../Components/EditPet/EditPet'
 import { baseAPI } from '../../main'
 // import { useLoaderData } from 'react-router-dom'
 
-export async function petDataLoader() {
+export async function petDataLoader({params}:any) {
     
-    const petID = 103
+    const petID = params.petID
     let response = await baseAPI.post('/petAPI/info-long/', { petID })
     console.log(response.data.data)
     return null

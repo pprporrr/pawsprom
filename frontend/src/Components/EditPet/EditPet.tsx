@@ -20,7 +20,7 @@ type InputFormat = {
   species: string,
 }
 
-export const EditPet = () => {
+export const EditPet = ({params}:any) => {
   const navigate = useNavigate()
   const [VaccineName, setVaccineName] = useState<string[]>()
   const [VaccineDate, setVaccineDate] = useState<string[]>()
@@ -73,7 +73,7 @@ export const EditPet = () => {
     const nameList: (keyof InputFormat)[] = ['petName','dateofbirth', 'age', 
       'gender', 'weight', 'breed', 'description', 'color', 'species']
       // ! test
-    const petID = 103
+    const petID = params.petID
     let tempData: any= {petID: petID}
     for (let i = 0; i < Object.keys(checkList).length; i++) {
       if (checkList[nameList[i]] === '') {
