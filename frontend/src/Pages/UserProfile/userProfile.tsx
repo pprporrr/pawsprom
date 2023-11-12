@@ -36,6 +36,7 @@ type singleResult = {
   name: string
   phone: string
   address: string
+  petID: number
 }
 
 export async function loader() {
@@ -127,9 +128,9 @@ export const UserProfile = () => {
         <img className={styles.profile_pic} src="/testpic.jpg" alt="profile" />
         <div className={styles.user_info}>
           <h2>{username}</h2>
-          <p>{firstName} {lastName}</p>
-          <p>{address}</p>
-          <p>{phoneNumber}</p>
+          <p><img src="/user-symbol.svg" alt="" />{firstName} {lastName}</p>
+          <p><img src="/location-symbol.svg" alt="" />{address}</p>
+          <p><img src="/phone-symbol.svg" alt="" />{phoneNumber}</p>
           {/* <p>number pets</p> */}
         </div>
         <Link to={`/edit/${username}`}>
@@ -197,7 +198,7 @@ export const UserProfile = () => {
                 height='fit-content'
                 bg='#FFE9DA'
                 border='none'
-                url="https://www.google.com"
+                url={`/petprofileshelter/${petData.petID}`}
                 key={petData.breed + petData.petName} 
                 data={petData}
                 userData={userPetData}/>
