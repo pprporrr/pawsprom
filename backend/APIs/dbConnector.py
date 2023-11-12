@@ -8,7 +8,7 @@ class DBConnector:
         self.password = password
         self.database = database
         self.pool = None
-
+    
     async def connect(self):
         self.pool = await aiomysql.create_pool(
             host=self.host,
@@ -18,12 +18,12 @@ class DBConnector:
             db=self.database,
             autocommit=True
         )
-
+    
     async def disconnect(self):
         if self.pool is not None:
             self.pool.close()
             await self.pool.wait_closed()
-
+    
     async def execute_query(self, query, *args):
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cursor:
@@ -32,10 +32,10 @@ class DBConnector:
 
 def get_db_connector():
     db_config = {
-        "host": "mysql",
+        "host": "pawsprom-rds.caqsi1ddqvvg.us-east-1.rds.amazonaws.com",
         "port": 3306,
-        "user": "project",
-        "password": "project",
-        "database": "project"
+        "user": "admin",
+        "password": "pawsprom-rds",
+        "database": "pawsprom"
     }
     return DBConnector(**db_config)

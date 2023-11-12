@@ -319,6 +319,7 @@ async def get_pet_profile_long(request: Request):
                 "availabilityStatus": getPetDetailsResult[0][11],
                 "vaccinationRecord": getPetDetailsResult[0][12],
                 "shelterID": getPetDetailsResult[0][13],
+                "vaccinationIDs": [row[0] for row in getPetVaccinesResult],
                 "vaccinationName": [row[2] for row in getPetVaccinesResult],
                 "vaccinationDate": [row[3] for row in getPetVaccinesResult],
                 "name": getShelterResult[0][1],
