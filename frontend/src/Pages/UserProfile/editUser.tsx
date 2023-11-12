@@ -1,6 +1,6 @@
 import { baseAPI } from '../../main'
 import styles from './editUser.module.css'
-import { Form, redirect } from 'react-router-dom'
+import { Form, redirect, useNavigate } from 'react-router-dom'
 
 export async function action({ request }: { request: any }) {
   const formData = await request.formData()
@@ -27,7 +27,7 @@ export async function action({ request }: { request: any }) {
 }
 
 export const EditUser = () => {
-  
+  const navaigate = useNavigate()
   return (
     <div className={styles.container}>
       <h1>Edit User Profile</h1>
@@ -62,7 +62,7 @@ export const EditUser = () => {
           </div>
         </div>
         <div className={styles.button_container}>
-          <input type="button" className={styles.cancel_btn} value={"Cancel"} />
+          <input type="button" onClick={() => {navaigate(-1)}} className={styles.cancel_btn} value={"Cancel"} />
           <input type="submit" className={styles.submit_btn}  value={"Save"}/>
         </div>
       </Form>

@@ -47,26 +47,28 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   const errorImage = '/pet-image.jpg'
 
   async function requestImage(imageIDs: number) {
-    // const imageURL = `/imageAPI/get-petImage/${imageID}/`
     let imageURL = `/imageAPI/get-petImage/${imageIDs}/`
     // const pullImage = await baseAPI.get('/imageAPI/get-petImage/1/')
 
     try {
       const response: AxiosResponse<Blob> = await 
       baseAPI.get(imageURL)
-      console.log(response)
+      console.log(response.data)
+      const blobURL = URL.createObjectURL(response.data)
+      setImageURL(blobURL)
       // console.log(response.status)
 
-      if (response.status === 200) {
-          const blobURL = URL.createObjectURL(response.data)
-          // console.log(blobURL)
-          setImageURL(blobURL)
-      } else {
-          setImageURL(errorImage)  
-      }
+      // if (response.status === 200) {
+      //     const blobURL = URL.createObjectURL(response.data)
+      //     // console.log(blobURL)
+      //     setImageURL(blobURL)
+      // } else {
+      //     setImageURL(errorImage)  
+      // }
 
     } catch (error) {
-      throw error
+      console.error('Error fetching image:', error);
+      setImageURL(errorImage)  
     }
   }
     

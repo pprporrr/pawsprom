@@ -18,6 +18,7 @@ type LoaderState = {
 }
 
 type singleResult = {
+  petID: number
   petName: string
   species: string
   breed: string
@@ -197,7 +198,7 @@ export const ShelterProfile = () => {
                     height='fit-content'
                     bg='#FFE9DA'
                     border='none'
-                    url={`petprofileshelter/${petData.petName}`}
+                    url={`petprofileshelter/${petData.petID}`}
                     key={petData.breed + petData.petName} 
                     data={petData}
                     userData={shelterPetData}/>
@@ -230,7 +231,7 @@ export const ShelterProfile = () => {
                     height='fit-content'
                     bg='#FFE9DA'
                     border='none'
-                    url={`petprofileshelter/${petData.petName}`}
+                    url={`petprofileshelter/${petData.petID}`}
                     key={petData.breed + petData.petName} 
                     data={petData}
                     userData={shelterPetData}/>
@@ -268,7 +269,7 @@ export const ShelterProfile = () => {
               height='fit-content'
               bg='#FFE9DA'
               border='none'
-              url={`petprofileshelter/${petData.petName}`}
+              url={`petprofileshelter/${petData.petID}`}
               key={petData.breed + petData.petName} 
               data={petData}
               userData={shelterPetData}/>
