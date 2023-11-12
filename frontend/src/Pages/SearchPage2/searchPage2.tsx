@@ -25,7 +25,7 @@ export async function defaultLoader() {
     let response = await baseAPI.post('/petAPI/drop-down/')
     const resOptions: any = response.data.data
     const pets = Object.entries(resOptions)
-            .filter(([key, value]) => key != 'color')
+            .filter(([key, _]) => key != 'color')
 
     const defaultSpecies = pets.map(([key, _]) => ({
             label: key,

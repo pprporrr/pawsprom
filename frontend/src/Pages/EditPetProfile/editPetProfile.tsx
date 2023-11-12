@@ -1,7 +1,7 @@
-import styles from'./editPetProfile.module.css'
+// import styles from'./editPetProfile.module.css'
 import { EditPet } from '../../Components/EditPet/EditPet'
 import { baseAPI } from '../../main'
-import { useLoaderData } from 'react-router-dom'
+// import { useLoaderData } from 'react-router-dom'
 
 export async function petDataLoader() {
     

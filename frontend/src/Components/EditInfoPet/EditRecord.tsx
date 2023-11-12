@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styles from './EditRecord.module.css'
 
 type EditRecordProps = {
@@ -12,7 +11,7 @@ type EditRecordProps = {
 
 export const EditRecord: React.FC<EditRecordProps> = 
 ({id, index, onVaccineChange, onDateChange, currentDate, currentVaccine}) => {
-  const [vaccineName, setVaccineName] = useState<string | null>(currentVaccine)
+  // const [vaccineName, setVaccineName] = useState<string | null>(currentVaccine)
 
   function onChangeVaccine() {
     let ele = document.getElementById('vaccine' + id) as HTMLInputElement | null

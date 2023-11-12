@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select, { OptionProps, components } from "react-select";
 import styles from './newDropdown.module.css'
 import { SelectedFilter } from "../../newSearch/newFilter";
@@ -69,7 +69,7 @@ export type OptionsProps = {
 
 export const NewDropDown: React.FC<OptionsProps> = (
     {options, category, currentOption, handleSelect}) => {
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+    // const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [currentValue, setCurrentValue] = useState<any>(currentOption?.map((value: string) => ({
         label: value,
         value: value,
@@ -77,8 +77,8 @@ export const NewDropDown: React.FC<OptionsProps> = (
 
     const handleSelectChange = (options: any) => {
         if (Array.isArray(options)) {
-            setSelectedOptions(options.map(
-                (option) => option.value))
+            // setSelectedOptions(options.map(
+            //     (option) => option.value))
 
             setCurrentValue(options.map((value: string) => ({
                     label: value,

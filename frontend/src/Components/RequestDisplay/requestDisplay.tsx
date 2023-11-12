@@ -1,6 +1,6 @@
 import styles from './requestDisplay.module.css'
 import { IconText } from '../IconText/iconText'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { AxiosInstance } from 'axios'
 
 type RequestDisplayProps = {
@@ -86,8 +86,8 @@ export const RequestDisplay: React.FC<RequestDisplayProps> = (
             return <div key={key} className={styles.singleRequest}>
             <div className={styles.leftInfo}>
                 <h3>{adoptionApplications[key].firstName + " " + adoptionApplications[key].lastName}</h3>
-                <IconText text={adoptionApplications[key].phoneNo} fontSize={1} svgName='phone-symbol.svg'></IconText>
-				<IconText text={adoptionApplications[key].address} fontSize={1} svgName='location-symbol.svg'></IconText>
+                <IconText text={adoptionApplications[key].phoneNo} fontSize={1} svgName='/phone-symbol.svg'></IconText>
+				<IconText text={adoptionApplications[key].address} fontSize={1} svgName='/location-symbol.svg'></IconText>
             </div>
             <div className={styles.pawsBg}></div>
             <div className={styles.rightInfo}>

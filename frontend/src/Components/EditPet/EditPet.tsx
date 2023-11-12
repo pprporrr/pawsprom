@@ -2,9 +2,8 @@ import styles from './EditPet.module.css'
 import { EditPhoto } from './EditPhoto'
 import { SaveNcancelButton } from '../SaveNcancelButton/SaveNcancelButton'
 import { FormEvent, useState } from 'react'
-import { Form, useLoaderData, useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import { baseAPI } from '../../main'
-import { InfoPet } from '../InfoPet/InfoPet'
 import { EditInfoPet } from '../EditInfoPet/editInfoPet'
 import { mockPet } from '../mockData/mockData'
 import cloneDeep from 'lodash/cloneDeep'
@@ -35,7 +34,8 @@ export const EditPet = () => {
     const { petName, dateofbirth, age, gender, weight, breed, description, color, species,
       feature1, feature2, feature3, feature4, feature5, feature6, feature7,
       feature8, feature9, feature10, feature11, 
-      photoUpload1, photoUpload2, photoUpload3, booklet
+      photoUpload1, photoUpload2, photoUpload3, 
+      //booklet
 
       } = event.target as typeof event.target & {
       petName: { value: string, id: keyof InputFormat }
@@ -197,9 +197,6 @@ export const EditPet = () => {
     </Form>
   </section>
   )
-}
-function async() {
-  throw new Error('Function not implemented.')
 }
 
 

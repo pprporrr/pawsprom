@@ -1,4 +1,4 @@
-import { Features } from '../../FeaturesDisplay/featuresDisplay'
+
 import { IconText } from '../../IconText/iconText'
 import { SelectedFilter } from '../../newSearch/newFilter'
 import styles from './featureSelect.module.css'

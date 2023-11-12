@@ -67,7 +67,7 @@ export async function loader() {
   
   const resOptions: any = response
   const pets = Object.entries(resOptions)
-      .filter(([key, value]) => key != 'color')
+      .filter(([key, _]) => key != 'color')
   const defaultSpecies = pets.map(([key, _]) => ({
       label: key,
       value: key
@@ -149,7 +149,7 @@ export const UserProfile = () => {
           :
           (
             <div className={styles.cards_container}>
-              <button onClick={() => {sideScroll(cardWrapper.current,1,350,-10)}}>l</button>
+              <button onClick={() => {sideScroll(cardWrapper.current!,1,350,-10)}}>l</button>
               <div className={styles.cards_wrapper} ref={cardWrapper}>
                 {pets.Owned.map((petData: singleResult)=>{
                   // console.log(userPetData)
@@ -167,7 +167,7 @@ export const UserProfile = () => {
                   )
                 })}
               </div>
-              <button onClick={() => {sideScroll(cardWrapper.current,1,350,13)}}>r</button>
+              <button onClick={() => {sideScroll(cardWrapper.current!,1,350,13)}}>r</button>
               <Link to='/'>
                 <button>&#43;</button> 
                 <p>Adding more pets</p>
@@ -188,7 +188,7 @@ export const UserProfile = () => {
           :
           (
           <div className={styles.request_card_container}>
-            <button onClick={() => {sideScroll(requestCardWrapper.current,1,350,-10)}}>l</button>
+            <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350,-10)}}>l</button>
             <div className={styles.cards_wrapper} ref={requestCardWrapper}>
             {pets.Requested.map((petData: singleResult)=>{
               return (
@@ -204,7 +204,7 @@ export const UserProfile = () => {
               )
             })}
             </div>
-            <button onClick={() => {sideScroll(requestCardWrapper.current,1,350, 10)}}>r</button>
+            <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350, 10)}}>r</button>
           </div>
           )
         }

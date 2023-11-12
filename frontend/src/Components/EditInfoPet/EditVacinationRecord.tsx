@@ -1,6 +1,6 @@
 import styles from './EditVacinationRecord.module.css'
 import { EditRecord } from './EditRecord'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type EditVacinationProps = {
   handleVaccine: (vaccines: string[], dates: string[]) => Promise<void>
@@ -13,7 +13,7 @@ type EditVacinationProps = {
 export const EditVacinationRecord: React.FC<EditVacinationProps> = 
   ({handleVaccine, currentBooklet, 
     currentVaccine, currentDate, handleRecord}) => {
-  const [vaccineRecordList, setVaccineList] = useState([])
+  // const [vaccineRecordList, setVaccineList] = useState([])
   const [vaccineComponents, setVaccineComponents] = useState<string[]>(["init"])
   const [vaccineName, setVaccineName] = useState<string[]>(currentVaccine)
   const [vaccineDate, setVaccineDate] = useState<string[]>(currentDate)

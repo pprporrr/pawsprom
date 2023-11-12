@@ -17,7 +17,9 @@ export const CreatePet = () => {
     const { name, dob, age, gender, weight, breed, bio, color, species,
       feature1, feature2, feature3, feature4, feature5, feature6, feature7,
       feature8, feature9, feature10, feature11, 
-      photoUpload1, photoUpload2, photoUpload3, booklet} = event.target as typeof event.target & {
+      photoUpload1, photoUpload2, photoUpload3,
+      // booklet
+    } = event.target as typeof event.target & {
       name: { value: string }
       dob: { value: string }
       age: { value: number }
@@ -41,7 +43,7 @@ export const CreatePet = () => {
       photoUpload1: { files: any }
       photoUpload2: { files: any }
       photoUpload3: { files: any }
-      booklet: { files: any }
+      // booklet: { files: any }
     }
     
     //! vvvvv check vvvv
@@ -141,9 +143,6 @@ export const CreatePet = () => {
       </Form>
     </section>
   )
-}
-function async() {
-  throw new Error('Function not implemented.')
 }
 
 

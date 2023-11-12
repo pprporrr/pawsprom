@@ -1,6 +1,6 @@
 import styles from './EditPhoto.module.css'
 // import upload_icon from '../../../public/camera-symbol.svg'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 
 type UploadPhotoProps = {
   id: string

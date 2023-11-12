@@ -1,6 +1,6 @@
 import styles from './UploadPhoto.module.css'
 // import upload_icon from '../../../public/camera-symbol.svg'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 
 type UploadPhotoProps = {
   id: string
@@ -8,7 +8,7 @@ type UploadPhotoProps = {
 
 export const UploadPhoto: React.FC<UploadPhotoProps> = ({id}) => {
   // const iconRef = useRef<HTMLInputElement>(null!);
-  const [previewImage, setPreviewImage] = useState(null)
+  // const [previewImage, setPreviewImage] = useState(null)
   const [file, setFile] = useState<string>();
 
   const handleFileChange = (event: any) => {

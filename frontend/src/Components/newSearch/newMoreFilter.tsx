@@ -1,5 +1,4 @@
 import styles from './newMoreFilter.module.css'
-import { useEffect, useState } from 'react'
 import { NewDropDown } from '../FilterSearch/Dropdown/newDropdown'
 import { RangeInput } from '../FilterSearch/RangeInput/rangeInput'
 import { SelectedFilter } from './newFilter'

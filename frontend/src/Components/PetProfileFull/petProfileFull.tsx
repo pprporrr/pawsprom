@@ -41,7 +41,6 @@ interface PetProfileFullProps {
 		// shelterID: number
 		vaccinationName: string[]
 		vaccinationDate: string[]
-		address: string
 		adoptionApplications: {
 			[key:string] : {
 				firstName: string,
@@ -51,6 +50,9 @@ interface PetProfileFullProps {
 				dateofapplication: string,
 			}
 		}
+		name: string,
+		phone: number,
+		address: string
 	}
 
 	baseAPI: AxiosInstance
@@ -168,8 +170,11 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 		</div>
 	</div>
 	{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
-		<IconText text={data.age + ' years old' } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
-		<IconText text={dateOfBirth} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
+		{/* <div onClick={() => navigate(`/userprofile/${userID}`)}> */}
+		<div onClick={() => navigate(`/userprofile/NONGFOAM`)}>
+		<IconText text={data.name } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
+		</div>
+		<IconText text={data.phone} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
 		<IconText text={data.address} fontSize={1.2} svgName='/location-symbol.svg'></IconText>
 	</div>}
 	<div className={styles.descriptionBox}>

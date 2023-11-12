@@ -17,12 +17,12 @@ export async function action({ request }: { request: any }) {
 export const SignUpPage = () => {
   const [password, setPassword] = useState("")
   const [checkPassword, setCheckPassword] = useState("")
-  const PasswordHandler = evt => {
+  const PasswordHandler = (evt: any) => {
     setPassword(evt.target.value)
 
     // console.log(evt.target.value)
   }
-  const CheckPasswordHandler = evt => {
+  const CheckPasswordHandler = (evt: any) => {
     setCheckPassword(evt.target.value)
     if (checkPassword === password && checkPassword !== "") {
       console.log('pass')

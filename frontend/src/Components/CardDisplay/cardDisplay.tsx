@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styles from './cardDisplay.module.css'
 import { CardInfo } from './cardInfo'
 import { FeaturesIcon } from './featuresIcon'
@@ -7,6 +7,7 @@ import { baseAPI } from '../../main'
 import { AxiosResponse } from 'axios'
 
 type cardDisplayProps = {
+  petID: number
   className?: string,
   triggerDefault?: boolean,
   userData?:{
@@ -41,13 +42,13 @@ type cardDisplayProps = {
 
 export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, userData}) => {
   const navigate = useNavigate()
-  const [petData, setPetData] = useState(data)
+  const petData = data
   const [imageURL, setImageURL] = useState<string>()
   const errorImage = '/pet-image.jpg'
 
-  async function requestImage(imageIDs: number[] | number) {
+  async function requestImage(imageIDs: number) {
     // const imageURL = `/imageAPI/get-petImage/${imageID}/`
-    let imageURL = `/imageAPI/get-petImage/1/`
+    let imageURL = `/imageAPI/get-petImage/${imageIDs}/`
     // const pullImage = await baseAPI.get('/imageAPI/get-petImage/1/')
 
     try {
@@ -74,7 +75,6 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   }
 
   useEffect(() => {
-    requestImage(data.imageIDs)
     if (data.imageIDs.length !== 0) {
         requestImage(data.imageIDs[0])
     } else {

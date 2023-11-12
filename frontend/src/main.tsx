@@ -17,7 +17,7 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import axios from 'axios'
 import { SearchPage2, defaultLoader } from './Pages/SearchPage2/searchPage2.tsx';
-import { EditPetProfile, petDataLoader } from './Pages/EditPetProfile/editPetProfile.tsx';
+import { EditPetProfile } from './Pages/EditPetProfile/editPetProfile.tsx';
 
 //* URL for API
 export const baseAPI = axios.create({

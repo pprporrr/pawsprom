@@ -1,17 +1,17 @@
 import styles from './AddVacinationRecord.module.css'
 import { VaccineRecord } from './VaccineRecord'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type AddVacinationProps = {
   handleVaccine: (vaccines: string[], dates: Date[]) => Promise<void>
 }
 
 export const AddVacinationRecord: React.FC<AddVacinationProps> = ({handleVaccine}) => {
-  const [vaccineRecordList, setVaccineList] = useState([])
+  // const [vaccineRecordList, setVaccineList] = useState([])
   const [vaccineComponents, setVaccineComponents] = useState<string[]>(["init"])
   const [vaccineName, setVaccineName] = useState<string[]>([])
   const [vaccineDate, setVaccineDate] = useState<Date[]>([])
-  const [previewImage, setPreviewImage] = useState(null)
+  // const [previewImage, setPreviewImage] = useState(null)
   const [file, setFile] = useState<string>();
 
   const handleFileChange = (event: any) => {

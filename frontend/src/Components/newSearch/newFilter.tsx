@@ -11,9 +11,9 @@ type NewFilterProps = {
 	handlePets: (pets: singleResult[]| string) => void
 }
 
-type FeatureFilter = {
-    [key:string]: boolean
-}
+// type FeatureFilter = {
+//     [key:string]: boolean
+// }
 
 
 export type SelectedFilter = {
@@ -34,10 +34,10 @@ export const NewFilter: React.FC<NewFilterProps> = (
 	const [species, setSpecies] = useState(defaultOptions["species"])
 	const [breed, setBreed] = useState(defaultOptions["breed"])
 	const [color, setColor] = useState(defaultOptions["color"])
-	const [ageRange, setAgeRange] = useState<number[]>([])
-	const [weightRange, setWeightRange] = useState<number[]>([])
+	// const [ageRange, setAgeRange] = useState<number[]>([])
+	// const [weightRange, setWeightRange] = useState<number[]>([])
 	const [selectedOptions, setSelectedOptions] = useState<SelectedFilter>() 
-	const [pets, setPets] = useState<singleResult[]>()
+	const [_, setPets] = useState<singleResult[]>()
     const features = 
         {   'feature1': false,
             'feature2': false,

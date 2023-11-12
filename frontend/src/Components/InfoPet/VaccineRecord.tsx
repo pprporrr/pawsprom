@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import styles from './VaccineRecord.module.css'
 
 interface VaccineRecordProps {
@@ -8,7 +8,7 @@ interface VaccineRecordProps {
 }
 
 export const VaccineRecord: React.FC<VaccineRecordProps> = ({index, onVaccineChange, onDateChange}) => {
-  const [vaccineName, setVaccineName] = useState<string | null>()
+  // const [vaccineName, setVaccineName] = useState<string | null>()
 
   function onChangeVaccine() {
     let ele = document.getElementById('vaccine' + index.toString()) as HTMLInputElement | null

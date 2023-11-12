@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import styles from './dropdown.module.css'
-import { filterListProps } from '../Searchbar/searchBar';
+
+type filterProps = {
+    color?: string[],
+    breed?: string[],
+    species?: string[]
+    // age_range?: number[]
+    // weight_range?: number[]
+    // gender?: string
+}
 
 
 export type InputSearchProps = {
-    category: keyof filterListProps
+    category: keyof filterProps
     options: string[],
-    updateValue: (catergory: keyof filterListProps, selectedValue: any[]) => void
+    updateValue: (catergory: keyof filterProps, selectedValue: any[]) => void
 }
 
 export const Dropdown: React.FC<InputSearchProps> = ({category, options, updateValue}) => {

@@ -40,13 +40,13 @@ export const DropCheckbox: React.FC<InputSearchProps> = ({category, options, upd
             <input
             className={styles.currentDisplay} 
             type="text" 
-            value={selectedNumber === 0? `Select ${category}`  
+            value={selectedNumber === 0? `Select ${category.toString()}`  
             :selectedNumber + " selected"}
             onClick={handleToggleDropdown} 
             readOnly></input>
             {options != undefined && <div className={styles.options}>
             {options.map((option) => {
-                const key = category + "-" + option
+                const key = category.toString() + "-" + option
                 return (
                     
                 <div key={key} className={styles.checkboxWrapper}>
