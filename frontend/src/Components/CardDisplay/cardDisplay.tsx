@@ -1,4 +1,4 @@
-import { Link, redirect, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './cardDisplay.module.css'
 import { CardInfo } from './cardInfo'
 import { FeaturesIcon } from './featuresIcon'
@@ -43,7 +43,7 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
   const navigate = useNavigate()
   const [petData, setPetData] = useState(data)
   const [imageURL, setImageURL] = useState<string>()
-  const errorImage = 'pet-image.jpg'
+  const errorImage = '/pet-image.jpg'
 
   async function requestImage(imageIDs: number[] | number) {
     // const imageURL = `/imageAPI/get-petImage/${imageID}/`

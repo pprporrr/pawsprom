@@ -97,7 +97,7 @@ input:checked~.labels::before {
     position: absolute;
     left: 50%;
     top: 37%;
-    content: url("paw-switch.svg");
+    content: url("/paw-switch.svg");
     opacity: 1;
     transition: all 0.15s ease-in-out;
 }
@@ -106,7 +106,7 @@ input:checked~.labels::before {
     position: absolute;
     left: 50%;
     top: 32%;
-    content: url("shelter-switch.svg");
+    content: url("/shelter-switch.svg");
     opacity: 0;
     transition: all 0.15s ease-in-out;
 }

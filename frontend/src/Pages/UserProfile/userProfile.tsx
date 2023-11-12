@@ -153,7 +153,7 @@ export const UserProfile = () => {
               <div className={styles.cards_wrapper} ref={cardWrapper}>
                 {pets.Owned.map((petData: singleResult)=>{
                   // console.log(userPetData)
-                  // console.log(petData)
+                  console.log(petData)
                   return (
                     <StyledCardDisplay 
                     width='16rem'

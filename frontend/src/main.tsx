@@ -71,11 +71,11 @@ const router = createBrowserRouter([
         element: <PetProfileOwned />
       },
       {
-        path: "petprofileothers",
+        path: "petprofileothers/:petname",
         element: <PetProfileOthers />
       },
       {
-        path: "petprofileshelter",
+        path: "petprofileshelter/:petname",
         element: <PetProfileShelter />
       },
       {

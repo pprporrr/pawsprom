@@ -185,7 +185,7 @@ export const NewFilter: React.FC<NewFilterProps> = (
 				<button className={styles.searchButton}
 					type="submit">
 					<img className={styles.searchImg}
-					src="search-symbol.svg"
+					src="/search-symbol.svg"
 					onClick={handleSearch}/>
 				</button>
 				<button onClick={handleMoreFilter}>More Filter</button>
