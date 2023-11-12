@@ -1,8 +1,9 @@
 import styles from './shelterProfile.module.css'
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useLoaderData, Link } from 'react-router-dom'
 import { StyledCardDisplay } from '../../Components/CardDisplay/Card.styles'
 import { baseAPI } from '../../main'
+import { toNumber } from 'lodash'
 
 type LoaderState = {
   username:string
@@ -12,6 +13,7 @@ type LoaderState = {
   shelterphoneNumber:string
   role:string
   pets:any
+  shelterID: number
 }
 
 type singleResult = {
@@ -38,14 +40,20 @@ type singleResult = {
   address: string
 }
 
-export async function loader() {
+export async function loader({params}:any) {
   const local = localStorage.getItem('ID')
+  const shelterID = toNumber(params.shelterID)
+  // const shelterID = '501'
   let username: string = ""
   let shelterName: string = ""
   let shelterAddress: string = ""
   let sheltercontactInfo: string = ""
   let shelterphoneNumber: string = ""
   let role: string = ""
+  let defaultPets: any = []
+  let defaultSpecies: any = []
+  let defaultBreed: any = []
+  let defaultColor: any = []
   try {
     if (local !== null) {
       const parseData = JSON.parse(local)
@@ -60,34 +68,70 @@ export async function loader() {
   catch (error) {
     console.error('Error parsing localStorage data:', error)
   }
+
   const req = {"username": username, "userRole": role}
-  const response = await baseAPI.post('/petAPI/dashboard/info/', req)
-  const defaultPets = response.data.data
-  console.log(defaultPets)
+  const userReq = {"username": username, "userRole": role,"shelterID": shelterID}
+  console.log(userReq)
+  try {
+    if (role === "ShelterStaff") {
+      const response = await baseAPI.post('/petAPI/dashboard/info/', req)
+      defaultPets = response.data.data
+      console.log(defaultPets)
+      const resOptions: any = response
+      const pets = Object.entries(resOptions)
+          .filter(([key, _]) => key != 'color')
+    
+      defaultSpecies = pets.map(([key, _]) => ({
+          label: key,
+          value: key
+        }))
+      defaultBreed = pets
+        .map(([_, value]) => value).flat()
+        .map((value) => ({
+          label: value,
+          value: value
+        }))
+      defaultColor = Object.entries(resOptions)
+        .filter(([key, _]) => key === 'color')
+        .map(([_, value]) => (value)).flat()
+        .map((value) => ({
+          label: value,
+          value: value
+        }))
+    } else {
+      const response = await baseAPI.post('/petAPI/dashboard/info/', userReq)
+      defaultPets = response.data.data
+      console.log(defaultPets)
+      const resOptions: any = response
+      const pets = Object.entries(resOptions)
+          .filter(([key, _]) => key != 'color')
+    
+      defaultSpecies = pets.map(([key, _]) => ({
+          label: key,
+          value: key
+        }))
+      defaultBreed = pets
+        .map(([_, value]) => value).flat()
+        .map((value) => ({
+          label: value,
+          value: value
+        }))
+      defaultColor = Object.entries(resOptions)
+        .filter(([key, _]) => key === 'color')
+        .map(([_, value]) => (value)).flat()
+        .map((value) => ({
+          label: value,
+          value: value
+        }))
+    }
+  }
+  catch (error) {
+    defaultPets = null
+    console.error("Error wrong user:", error)
+  }
 
-  const resOptions: any = response
-  const pets = Object.entries(resOptions)
-      .filter(([key, _]) => key != 'color')
-
-  const defaultSpecies = pets.map(([key, _]) => ({
-      label: key,
-      value: key
-    }))
-  const defaultBreed = pets
-    .map(([_, value]) => value).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-  const defaultColor = Object.entries(resOptions)
-    .filter(([key, _]) => key === 'color')
-    .map(([_, value]) => (value)).flat()
-    .map((value) => ({
-      label: value,
-      value: value
-    }))
-
-  return { username, shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber, role, 
+  return { username, shelterName, shelterAddress, sheltercontactInfo, shelterphoneNumber, 
+    role, shelterID, 
     species: defaultSpecies, 
     breed: defaultBreed,
     color: defaultColor,
@@ -112,15 +156,16 @@ const sideScroll = (
 
 //todo: add profile pic
 export const ShelterProfile = () => {
+  const [hide, setHide] = useState(true)
   const cardWrapper = useRef(null);
   const requestCardWrapper = useRef(null);
-  const { shelterName, shelterAddress, shelterphoneNumber, pets} = useLoaderData() as LoaderState
+  const { shelterName, shelterAddress, shelterphoneNumber, pets, role, shelterID} = useLoaderData() as LoaderState
   const shelterPetData = {
     "username" : shelterName,
     "phone": shelterphoneNumber,
     "address": shelterAddress}
-  const petsAvailableLength = pets.Available.length
-  const petsReqLength = pets.Requested.length
+  // const petsAvailableLength = pets.Available.length
+  // const petsReqLength = pets.Requested.length
   return (
     <div className={styles.container}>
       <section className={styles.profile_info}>
@@ -129,20 +174,44 @@ export const ShelterProfile = () => {
           <h2>{shelterName}</h2>
           <p><img src="/location-symbol.svg" alt="" />{shelterAddress}</p>
           <p><img src="/phone-symbol.svg" alt="" />{shelterphoneNumber}</p>
-          {/* <p>{sheltercontactInfo}</p> */}
-          {/* <p>number pets</p> */}
         </div>
       </section>
       <section className={styles.owned_pet}>
         <h3>Pets</h3>
-        { petsAvailableLength === 0 ? 
+        { role !== 'ShelterStaff' && pets.Available.length === 0? 
+          (
+            <div className={styles.cards_container}>
+              <button onClick={() => {sideScroll(cardWrapper.current!,1,350,-10)}}>l</button>
+              <div className={styles.cards_wrapper} ref={cardWrapper}>
+                {pets.Available.map((petData: singleResult)=>{
+                  return (
+                    <StyledCardDisplay 
+                    width='16rem'
+                    height='fit-content'
+                    bg='#FFE9DA'
+                    border='none'
+                    url={`petprofileshelter/${petData.petName}`}
+                    key={petData.breed + petData.petName} 
+                    data={petData}
+                    userData={shelterPetData}/>
+                  )
+                })}
+              </div>
+              <button onClick={() => {sideScroll(cardWrapper.current!,1,350,13)}}>r</button>
+            </div>
+          )
+          : role !== 'ShelterStaff' && pets.Available.length !== 0?
+          (
+            <p>Nothing here</p>
+          )
+          : role === 'ShelterStaff' && pets.Available.length === 0?
           (
             <Link to='/'>
               <button>&#43;</button> 
               <p>Start adding your pet!</p>
             </Link>
-          )
-          :
+          ) 
+          : 
           (
             <div className={styles.cards_container}>
               <button onClick={() => {sideScroll(cardWrapper.current!,1,350,-10)}}>l</button>
@@ -168,40 +237,45 @@ export const ShelterProfile = () => {
               </Link>
             </div>
           )
+          
         }
       </section>
-      <section className={styles.request_for_pet}>
+      <section className={styles.request_for_pet} >
       <h3>Requests waiting for</h3>
-        { petsReqLength === 0 ? 
-          (
-            <Link to='/'>
-              <button>&#43;</button> 
-              <p>No request</p>
+      {role !== 'ShelterStaff' ? 
+        (
+          // setHide(false)
+          <>
+          </>
+        )
+        : role === 'ShelterStaff' && pets.Requested.length === 0?
+        (
+          <Link to='/'>
+            <button>&#43;</button> 
+            <p>No request</p>
           </Link>
-          )
-          :
-          (
-          <div className={styles.request_card_container}>
-            <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350,-10)}}>l</button>
-            <div className={styles.cards_wrapper} ref={requestCardWrapper}>
-            {pets.Requested.map((petData: singleResult)=>{
-              return (
-                <StyledCardDisplay 
-                width='16rem'
-                height='fit-content'
-                bg='#FFE9DA'
-                border='none'
-                url={`petprofileshelter/${petData.petName}`}
-                key={petData.breed + petData.petName} 
-                data={petData}
-                userData={shelterPetData}/>
-              )
-            })}
-            </div>
-            <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350, 10)}}>r</button>
+        ) : (
+        <div className={styles.request_card_container}>
+          <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350,-10)}}>l</button>
+          <div className={styles.cards_wrapper} ref={requestCardWrapper}>
+          {pets.Requested.map((petData: singleResult)=>{
+            return (
+              <StyledCardDisplay 
+              width='16rem'
+              height='fit-content'
+              bg='#FFE9DA'
+              border='none'
+              url={`petprofileshelter/${petData.petName}`}
+              key={petData.breed + petData.petName} 
+              data={petData}
+              userData={shelterPetData}/>
+            )
+          })}
           </div>
-          )
-        }
+          <button onClick={() => {sideScroll(requestCardWrapper.current!,1,350, 10)}}>r</button>
+        </div>
+        )
+      }
       </section>
     </div>
   )

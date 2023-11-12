@@ -7,7 +7,7 @@ import { baseAPI } from '../../main'
 import { AxiosResponse } from 'axios'
 
 type cardDisplayProps = {
-  petID: number
+  // petID: number
   className?: string,
   triggerDefault?: boolean,
   userData?:{

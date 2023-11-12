@@ -10,7 +10,7 @@ import { baseAPI } from '../../main';
 
 export async function defaultLoader() {
 
-    // // ! test
+    // ! test
     // const response = {
     // 'Dog': ['Labrador Retriever','German Shepherd','Golden Retriever',
     //     'Bulldog','Poodle','Beagle','Rottweiler','Yorkshire Terrier',
@@ -21,7 +21,7 @@ export async function defaultLoader() {
     // 'color' : ['Black','White','Gray','Brown','Orange']}
 
     // const resOptions: any = response
-
+    //!
     let response = await baseAPI.post('/petAPI/drop-down/')
     const resOptions: any = response.data.data
     const pets = Object.entries(resOptions)
@@ -54,23 +54,24 @@ export async function defaultLoader() {
     resPets = await baseAPI.post('/petAPI/info-short/', 
     {petIDs: defaultPets})
     defaultPets = resPets.data.data
-    console.log(defaultPets)
+    // console.log(defaultPets)
 
     let resShelter = await baseAPI.post('/shelterAPI/list-shelter/')
     
     let defaultShelters = resShelter.data.data
     console.log(defaultShelters)
 
-        return {    species: defaultSpecies, 
-            breed: defaultBreed,
-            color: defaultColor,
-            pets: defaultPets,
-            shelters: defaultShelters,
-        }
+    return {species: defaultSpecies, 
+        breed: defaultBreed,
+        color: defaultColor,
+        pets: defaultPets,
+        shelters: defaultShelters,
+    }
     
 }
 
 export type singleResult = {
+  petID: number
   petName: string
   species: string
   breed: string
@@ -136,7 +137,7 @@ export const SearchPage2 = () => {
             console.log(petData)
             return (  
             <StyledCardDisplay
-            url={`petprofileothers/${petData.petName}`}
+            url={`petprofileothers/${petData.petID}`}
             key={petData.breed + petData.petName} 
             data={petData}
             />
@@ -158,7 +159,7 @@ export const SearchPage2 = () => {
           phone={shelterData.shelterphoneNumber}
           address={shelterData.shelterAddress}
           key={shelterData.shelterID + shelterData.shelterName} 
-          url={`petprofileothers/${shelterData.petName}`}
+          url={`shelterprofile/${shelterData.shelterID}`}
           ></ShelterCard>
           )
         })) :

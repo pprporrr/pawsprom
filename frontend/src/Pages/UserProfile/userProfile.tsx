@@ -63,7 +63,7 @@ export async function loader() {
   const req = {"username": username, "userRole": role}
   const response = await baseAPI.post('/petAPI/dashboard/info/', req)
   const defaultPets = response.data.data
-  // console.log(defaultPets)
+  console.log(defaultPets)
   
   const resOptions: any = response
   const pets = Object.entries(resOptions)
@@ -141,7 +141,7 @@ export const UserProfile = () => {
         <h3>Pets</h3>
         { petsOwnedLength === 0 ? 
           (
-            <Link to='/'>
+            <Link to='/createpet'>
               <button>&#43;</button> 
               <p>Start adding your pet!</p>
             </Link>
@@ -160,7 +160,7 @@ export const UserProfile = () => {
                     height='fit-content'
                     bg='#FFE9DA'
                     border='none'
-                    url= {`petprofileowned/${petData.petName}`}
+                    url= {`petprofileowned/${petData.petID}`}
                     key={petData.breed + petData.petName} 
                     data={petData}
                     userData={userPetData}/>
@@ -168,7 +168,7 @@ export const UserProfile = () => {
                 })}
               </div>
               <button onClick={() => {sideScroll(cardWrapper.current!,1,350,13)}}>r</button>
-              <Link to='/'>
+              <Link to='/createpet'>
                 <button>&#43;</button> 
                 <p>Adding more pets</p>
               </Link>
