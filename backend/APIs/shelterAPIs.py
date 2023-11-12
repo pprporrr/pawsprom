@@ -45,7 +45,7 @@ async def create_shelter(request: Request):
     finally:
         await db_connector.disconnect()
 
-@router.get("/shelter/", response_model=dict)
+@router.post("/shelter/info/", response_model=dict)
 async def get_shelter_details(request: Request):
     try:
         await db_connector.connect()
