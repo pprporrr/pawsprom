@@ -188,7 +188,8 @@ export const NewFilter: React.FC<NewFilterProps> = (
 					src="search-symbol.svg"
 					onClick={handleSearch}/>
 				</button>
-				<button onClick={handleMoreFilter}>More Filter</button>
+				<button onClick={handleMoreFilter}
+				className={styles.moreFilter}>More Filter</button>
 				<Popup open={isConfirmOpen}>
 					<NewMoreFilter
 						color={color}

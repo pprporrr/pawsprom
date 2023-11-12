@@ -72,7 +72,7 @@ export const NewDropDown: React.FC<OptionsProps> = (
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [currentValue, setCurrentValue] = useState<any>(currentOption?.map((value: string) => ({
         label: value,
-        value: value
+        value: value,
     })))
 
     const handleSelectChange = (options: any) => {
@@ -95,6 +95,7 @@ export const NewDropDown: React.FC<OptionsProps> = (
     <div>
         <p>{category[0].toLocaleUpperCase() + category.slice(1)}</p>
         <Select
+        className={`${styles.dropdown} ${styles.BorderSelect}`}
         defaultValue={currentValue}
         isMulti
         closeMenuOnSelect={false}
