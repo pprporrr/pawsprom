@@ -154,7 +154,7 @@ export const ShelterProfile = () => {
                     height='fit-content'
                     bg='#FFE9DA'
                     border='none'
-                    url="https://www.google.com"
+                    url={`petprofileshelter/${petData.petName}`}
                     key={petData.breed + petData.petName} 
                     data={petData}
                     userData={shelterPetData}/>
@@ -191,7 +191,7 @@ export const ShelterProfile = () => {
                 height='fit-content'
                 bg='#FFE9DA'
                 border='none'
-                url="https://www.google.com"
+                url={`petprofileshelter/${petData.petName}`}
                 key={petData.breed + petData.petName} 
                 data={petData}
                 userData={shelterPetData}/>

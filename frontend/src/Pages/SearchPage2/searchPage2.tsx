@@ -136,7 +136,7 @@ export const SearchPage2 = () => {
             console.log(petData)
             return (  
             <StyledCardDisplay
-            url="https://www.google.com"
+            url={`petprofileothers/${petData.petName}`}
             key={petData.breed + petData.petName} 
             data={petData}
             />
@@ -158,7 +158,7 @@ export const SearchPage2 = () => {
           phone={shelterData.shelterphoneNumber}
           address={shelterData.shelterAddress}
           key={shelterData.shelterID + shelterData.shelterName} 
-          url="https://www.google.com"
+          url={`petprofileothers/${shelterData.petName}`}
           ></ShelterCard>
           )
         })) :
