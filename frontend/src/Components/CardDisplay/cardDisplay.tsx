@@ -54,7 +54,7 @@ export const CardDisplay: React.FC<cardDisplayProps> = ({className, data, url, u
     try {
       const response: AxiosResponse<Blob> = await 
       baseAPI.get(imageURL)
-      // console.log(response)
+      console.log(response)
       // console.log(response.status)
 
       if (response.status === 200) {

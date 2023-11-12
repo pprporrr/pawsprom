@@ -4,10 +4,10 @@ import App from './App.tsx'
 import ErrorPage from './Pages/Error/ErrorPage.tsx'
 import { Home } from './Pages/Home/home.tsx';
 import { PetProfileOwned, loader as ownedLoader } from './Pages/PetProfileOwned/petProfileOwned.tsx';
-import { PetProfileOthers } from "./Pages/PetProfileOthers/petProfileOthers.tsx";
-import { PetProfileShelter } from "./Pages/PetProfileShelter/petProfileShelter.tsx";
+import { PetProfileOthers, loader as otherPetLoader } from "./Pages/PetProfileOthers/petProfileOthers.tsx";
+import { PetProfileShelter, loader as  shelterPetLoader } from "./Pages/PetProfileShelter/petProfileShelter.tsx";
 import { CreatePetProfile } from './Pages/CreatePetProfile/createPetProfile.tsx';
-import { EditUser } from './Pages/UserProfile/editUser.tsx';
+import { EditUser, action as editAction } from './Pages/UserProfile/editUser.tsx';
 import { LoginPage, action as loginAction } from "./Pages/Login/LoginPage.tsx";
 import { SignUpPage, action as signUpAction } from './Pages/SignUpPage/SignUpPage.tsx';
 import { UserProfile, loader as userLoader } from './Pages/UserProfile/userProfile.tsx';
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       {
         path: "edit/:username",
         element: <EditUser />,
-        // loader: userLoader
+        action: editAction
       },
       {
         path: "shelterprofile/:shelterID",
@@ -69,15 +69,17 @@ const router = createBrowserRouter([
       {
         path: "petprofileowned/:petID",
         element: <PetProfileOwned />,
-        // loader: ownedLoader
+        loader: ownedLoader
       },
       {
         path: "petprofileothers/:petID",
-        element: <PetProfileOthers />
+        element: <PetProfileOthers />,
+        loader: otherPetLoader
       },
       {
         path: "petprofileshelter/:petID",
-        element: <PetProfileShelter />
+        element: <PetProfileShelter />,
+        loader: shelterPetLoader
       },
       {
         path: "createpet",

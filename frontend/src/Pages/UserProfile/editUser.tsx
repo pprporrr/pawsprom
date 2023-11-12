@@ -1,8 +1,33 @@
+import { baseAPI } from '../../main'
 import styles from './editUser.module.css'
-import { Form } from 'react-router-dom'
+import { Form, redirect } from 'react-router-dom'
+
+export async function action({ request }: { request: any }) {
+  const formData = await request.formData()
+  let updates = Object.fromEntries(formData)
+  const local:any = localStorage.getItem('ID')
+  const username = JSON.parse(local).username
+  const userID = JSON.parse(local).userID
+  updates =  {...updates, "userID":userID}
+  console.log(updates) 
+  await baseAPI.put('/userAPI/user/', updates)
+    .then((response) => {
+      console.log(response)
+      localStorage.setItem('ID', JSON.stringify({
+        username: updates.username,
+        userID: userID,
+        role: "User",
+        firstName: updates.firstName,
+        lastName: updates.lastName,
+        phoneNumber: updates.phoneNumber,
+        address: updates.address
+    }))
+  })
+  return redirect(`/userprofile/${username}`)
+}
 
 export const EditUser = () => {
-
+  
   return (
     <div className={styles.container}>
       <h1>Edit User Profile</h1>
@@ -33,7 +58,7 @@ export const EditUser = () => {
           </div>
           <div className={styles.address_signup}>
             <label htmlFor="address_signup">Address</label>
-            <input type="text" id='address_signup' name='address' required />
+            <input type="text" id='address_signup' name='address'/>
           </div>
         </div>
         <div className={styles.button_container}>

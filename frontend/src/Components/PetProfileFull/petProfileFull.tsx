@@ -38,7 +38,7 @@ interface PetProfileFullProps {
 		}
 		availabilityStatus: string
 		vaccinationRecord: null
-		// shelterID: number
+		shelterID: number
 		vaccinationName: string[]
 		vaccinationDate: string[]
 		adoptionApplications: {
@@ -61,7 +61,7 @@ interface PetProfileFullProps {
 
 // TODO: fix svg file , now using img calling svg
 export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data, baseAPI}) => {
-
+	const [hide, setHide] = useState(false)
 	// * receive 'page' to identify visibility of components (button)
 	//* 'data' is the data fetch from API
 	//* 'baseAPI' base URL of API (AxiosInstance)
@@ -74,7 +74,15 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	const [apiResponseADOPT, setAPIResponseADOPT] = useState(null)
 	const navigate = useNavigate()
 	
-
+  useEffect(() => {
+    // console.log(shelterInfo.shelterName)
+    if ( localStorage.getItem('ID') === null) {
+      setHide(true)
+    }
+    else {
+      setHide(false)
+    }
+  })
 	//* sending request to API from button (start) ================================= 
 
 	//* delete button
@@ -115,8 +123,8 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 		
 		console.log('send adoption request')
 		// ! test
-		const petID = 103
-		const userID = 201
+		const local:any = localStorage.getItem('ID')
+		const userID = JSON.parse(local).userID
 		baseAPI.post('/adoptionAPI/create-application/', { petID, userID, dateofapplication: formattedDate })
         .then(response => {
 			console.log(response.data)
@@ -131,9 +139,10 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	//* sending request to API from button (end) =================================
 	
 
-	useEffect(() => {
+	// useEffect(() => {
 
-    }, [data]);
+	// }, [data]);
+
 
 
 	return (
@@ -171,7 +180,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	</div>
 	{ page === 'PetProfileOthers' && <div className={styles.moreInfo}>
 		{/* <div onClick={() => navigate(`/userprofile/${userID}`)}> */}
-		<div onClick={() => navigate(`/userprofile/NONGFOAM`)}>
+		<div onClick={() => navigate(`/shelterprofile/${data.shelterID}`)}>
 		<IconText text={data.name } fontSize={1.2} svgName='/owner-symbol.svg'></IconText>
 		</div>
 		<IconText text={data.phone} fontSize={1.2} svgName='/phone-symbol.svg'></IconText>
@@ -196,7 +205,7 @@ export const PetProfileFull: React.FC<PetProfileFullProps> = ({petID, page, data
 	</section>
 	</div>
 	<div>
-	<section className={styles.bottomContainer}>
+	<section className={styles.bottomContainer} style={{display: hide ? "none":"block"}}>
 		{page === 'PetProfileOwned' && <DeleteButton 
 		onClick={handleDeleteClick}
 		apiResponse={apiResponseDEL}/>}

@@ -41,6 +41,22 @@
   padding-right: 0.5rem;
 }
 
+.user_info{
+  display: flex;
+  flex-direction: column;
+}
+.user_info > h2{
+  margin-bottom: 0.7rem;
+}
+.user_info > p{
+  display: flex;
+  color: #53A3D0;
+}
+.user_info > p > img{
+  margin: 0;
+  padding-right: 0.4rem;
+}
+
 .owned_pet{
   display: grid;
   width: 100%;

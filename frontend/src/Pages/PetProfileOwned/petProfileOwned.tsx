@@ -2,19 +2,24 @@ import styles from './petProfileOwned.module.css'
 import { PetProfileFull } from '../../Components/PetProfileFull/petProfileFull'
 import { useEffect, useState } from 'react';
 import { baseAPI } from '../../main';
+import { useLoaderData } from 'react-router-dom';
 
-// export async function loader(){
-//   const petID = params.petID
+type LoaderState = {
+  petID: number
+}
 
-//   return {
-//     petID
-//   }
-// }
+export async function loader({params}:any){
+  const petID = params.petID
 
-export const PetProfileOwned = ({params}:any) => {
+  return {
+    petID
+  }
+}
+
+export const PetProfileOwned = () => {
 
   const petPage = 'PetProfileOwned';
-  // const {petID} = useLoaderData() as LoaderState
+  const {petID} = useLoaderData() as LoaderState
 
   // ! var for testing purpose ========================================
   // const shelterID = 503;
@@ -80,7 +85,6 @@ export const PetProfileOwned = ({params}:any) => {
   const [data, setData] = useState()
   // * for adoption button by P'Porpor ======================================
   // const petID = 103
-  const petID = params.petID
 
   // *---------------- POST to API ----------------* //
   useEffect(() => {
